@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/bypass",
+      "destination": "https://api.nexadev.my.id/api/bypass"
+    }
+  ]
+}
