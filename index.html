@@ -1055,7 +1055,8 @@ header { position: relative; display: flex; align-items: center; justify-content
   const ENGINES = [
     { id: 1, name: "Engine 1" },
     { id: 2, name: "Engine 2" },
-    { id: 3, name: "Engine 3" }
+    { id: 3, name: "Engine 3" },
+    { id: 4, name: "Engine 4" }
   ];
 
   const SAFELINK_DOMAINS = [
@@ -1283,9 +1284,9 @@ header { position: relative; display: flex; align-items: center; justify-content
 
     let engineOrder = [...ENGINES];
     if (isSafeLink) {
-      engineOrder = [ENGINES[0], ENGINES[1], ENGINES[2]]; 
+      engineOrder = [ENGINES[0], ENGINES[1], ENGINES[2], ENGINES[3]]; 
     } else {
-      engineOrder = [ENGINES[2]]; 
+      engineOrder = [ENGINES[2], ENGINES[3]]; 
     }
 
     for (const engine of engineOrder) {
@@ -1917,6 +1918,9 @@ header { position: relative; display: flex; align-items: center; justify-content
       let j;
       try { j = JSON.parse(text); } catch (e) { throw new Error('response server bukan gambar atau JSON'); }
       if (j && j.status === false) throw new Error(j.message || j.error || 'server nolak request');
+      if (j && (j.status === 601 || /limit/i.test(String(j.reason || '')))) {
+        throw new Error('limit harian HD habis, coba lagi besok ya');
+      }
       const target = (j && j.result !== undefined) ? j.result : j;
       const found = findUrl(target);
       if (!found) {
