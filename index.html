@@ -818,7 +818,7 @@ header { position: relative; display: flex; align-items: center; justify-content
           <div class="input-row">
             <div class="input-wrap">
               <svg class="ic"><use href="#i-key"/></svg>
-              <input id="urlInput" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://sfl.gl/..." />
+              <input id="urlInput" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://..." />
             </div>
             <button type="button" id="pasteBtn" class="paste-btn"><svg class="ic"><use href="#i-paste"/></svg> Tempel</button>
           </div>
@@ -968,7 +968,7 @@ header { position: relative; display: flex; align-items: center; justify-content
         <div class="tab-panel" data-panel="tools" role="tabpanel">
           <!-- MENU TOOLS (bisa pilih lebih dari satu) -->
           <div class="tool-menu">
-            <div class="tool-menu-label">PILIH TOOLS (SATU PER SATU)</div>
+            <div class="tool-menu-label">PILIH TOOLS!</div>
             <div class="tool-chips">
               <button type="button" class="tool-chip" data-tool="vote" aria-pressed="false"><svg class="ic"><use href="#i-bolt"/></svg> WA Vote</button>
               <button type="button" class="tool-chip active" data-tool="hd" aria-pressed="true"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 16l3-4 2 2 2-3 3 5"/></svg> HD Upscale</button>
@@ -996,7 +996,7 @@ header { position: relative; display: flex; align-items: center; justify-content
           <div class="tools-header">
             <div class="modal-tag">EGAA TOOLS</div>
             <h2 class="tools-title">HD Image Upscale</h2>
-            <p class="tools-sub">Upscale foto jadi HD, bandingin pakai garis geser</p>
+            <p class="tools-sub">Upscale foto jadi HD</p>
           </div>
           <div id="hdFileBox">
             <label id="hdDrop" class="hd-drop" for="hdFile" tabindex="0">
@@ -1026,7 +1026,7 @@ header { position: relative; display: flex; align-items: center; justify-content
               <span class="hd-tag hd-tag-r">HD</span>
               <div id="hdHandle" class="hd-handle" role="slider" tabindex="0" aria-label="Geser bandingkan asli dan HD" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><span>&lsaquo;&rsaquo;</span></div>
             </div>
-            <p class="hd-hint">Geser garis buat bandingin asli vs HD</p>
+            <p class="hd-hint">Geser garis Buat Bandingin Before dan After</p>
           </div>
         </div>
         </div>
@@ -1777,8 +1777,8 @@ header { position: relative; display: flex; align-items: center; justify-content
       file: [['2', '2x']]
     };
     const ENGINE_LABEL = {
-      file: 'Engine: Upscale V2 · upload file',
-      link: 'Engine: AI Enhance V2 · pakai link'
+      file: 'Engine: Upscale · upload file',
+      link: 'Engine: AI Enhance · pakai link'
     };
     const OUT_KEYS = ['result', 'result_url', 'resultUrl', 'output', 'hasil', 'image', 'image_url', 'imageUrl', 'download', 'downloadUrl', 'url', 'link', 'data'];
 
@@ -1984,7 +1984,7 @@ header { position: relative; display: flex; align-items: center; justify-content
       if (!file) { tLine('✗ Foto belum dipilih', 'err'); return; }
 
       tLine('> HD Upscale siap...', 'hi');
-      tLine('→ engine : Upscale V2', 'muted');
+      tLine('→ engine : Upscale', 'muted');
       tLine('→ scale  : ' + scale + 'x', 'muted');
       setBusy(true);
 
