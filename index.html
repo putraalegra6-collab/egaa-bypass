@@ -1881,13 +1881,16 @@ header { position: relative; display: flex; align-items: center; justify-content
       submitText.textContent = on ? 'Lagi ngupscale...' : 'Upscale Sekarang';
     }
 
+    function toSrc(str) {
+      const t = String(str).trim();
+      if (/^(https?:\/\/|data:image\/)/i.test(t)) return t;
+      if (t.startsWith('/')) return 'https://api.zyvor.my.id' + t;
+      if (t.length > 100 && /^[A-Za-z0-9+/=\s]+$/.test(t)) return 'data:image/png;base64,' + t.replace(/\s/g, '');
+      return null;
+    }
     function findUrl(node, depth = 0) {
       if (node == null || depth > 6) return null;
-      if (typeof node === 'string') {
-        if (/^(https?:\/\/|data:image\/)/i.test(node)) return node;
-        if (node.length > 500 && /^[A-Za-z0-9+/=\s]+$/.test(node)) return 'data:image/png;base64,' + node.replace(/\s/g, '');
-        return null;
-      }
+      if (typeof node === 'string') return toSrc(node);
       if (typeof node !== 'object') return null;
       const keys = [...OUT_KEYS.filter(k => k in node), ...Object.keys(node).filter(k => !OUT_KEYS.includes(k))];
       for (const k of keys) {
@@ -1914,10 +1917,12 @@ header { position: relative; display: flex; align-items: center; justify-content
       let j;
       try { j = JSON.parse(text); } catch (e) { throw new Error('response server bukan gambar atau JSON'); }
       if (j && j.status === false) throw new Error(j.message || j.error || 'server nolak request');
-      const found = findUrl(j);
+      const target = (j && j.result !== undefined) ? j.result : j;
+      const found = findUrl(target);
       if (!found) {
-        const fields = (j && typeof j === 'object') ? Object.keys(j).join(', ') : typeof j;
-        throw new Error('link hasil tidak ketemu (field: ' + fields + ')');
+        const msg = (j && j.message) ? ' — server bilang: ' + String(j.message).slice(0, 140) : '';
+        const snippet = JSON.stringify(target);
+        throw new Error('format hasil belum dikenali' + msg + ' (result: ' + String(snippet).slice(0, 120) + ')');
       }
       return { src: found, isBlob: false };
     }
