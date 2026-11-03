@@ -1,8 +1,8 @@
 // Proxy bypass: key disimpan di Environment Variables, gak kelihatan di browser
 const ENGINES = {
-  1: { key: 'KYZZZ_API_KEY', build: (u, k) => `https://api.kyzzz.xyz/api/bypass/sfl?url=${encodeURIComponent(u)}&apikey=${encodeURIComponent(k)}` },
-  2: { key: 'KYZZZ_API_KEY', build: (u, k) => `https://api.kyzzz.xyz/api/bypass/safelinku?url=${encodeURIComponent(u)}&apikey=${encodeURIComponent(k)}` },
-  3: { key: 'NEXA_KEY',      build: (u, k) => `https://api.nexadev.my.id/api/bypass?key=${encodeURIComponent(k)}&url=${encodeURIComponent(u)}` }
+  1: { key: 'kyzz6883923832417', build: (u, k) => `https://api.kyzzz.xyz/api/bypass/sfl?url=${encodeURIComponent(u)}&apikey=${encodeURIComponent(k)}` },
+  2: { key: 'kyzz6883923832417', build: (u, k) => `https://api.kyzzz.xyz/api/bypass/safelinku?url=${encodeURIComponent(u)}&apikey=${encodeURIComponent(k)}` },
+  3: { key: 'Egaa',      build: (u, k) => `https://api.nexadev.my.id/api/bypass?key=${encodeURIComponent(k)}&url=${encodeURIComponent(u)}` }
 };
 module.exports = async (req, res) => {
   const eng = ENGINES[String((req.query || {}).engine || '')];
