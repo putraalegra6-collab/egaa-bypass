@@ -1878,6 +1878,10 @@ header { position: relative; display: flex; align-items: center; justify-content
         tLine('✓ HD berhasil, geser garis buat bandingin', 'ok');
       } catch (err) {
         if (err.name === 'AbortError') tLine('✗ timeout, server kelamaan (coba lagi)', 'err');
+        else if (/failed to fetch|networkerror|load failed/i.test(err.message)) {
+          tLine('✗ koneksi ke server putus sebelum hasil balik', 'err');
+          tLine('⚠ kemungkinan server kehabisan waktu (upscale butuh lebih lama)', 'warn');
+        }
         else tLine('✗ ' + err.message, 'err');
       } finally {
         clearTimeout(timer);
