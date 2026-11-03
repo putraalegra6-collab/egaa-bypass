@@ -1,8 +1,8 @@
 // Proxy bypass: key dibaca dari Environment Variables Vercel, TIDAK ditulis di kode
 const ENGINES = {
-  1: { envName: 'KYZZZ_API_KEY', build: (u, k) => `https://api.kyzzz.xyz/api/bypass/sfl?url=${encodeURIComponent(u)}&apikey=${encodeURIComponent(k)}` },
-  2: { envName: 'KYZZZ_API_KEY', build: (u, k) => `https://api.kyzzz.xyz/api/bypass/safelinku?url=${encodeURIComponent(u)}&apikey=${encodeURIComponent(k)}` },
-  3: { envName: 'NEXA_KEY',      build: (u, k) => `https://api.nexadev.my.id/api/bypass?key=${encodeURIComponent(k)}&url=${encodeURIComponent(u)}` }
+  1: { envName: 'kyzz753322904388', build: (u, k) => `https://api.kyzzz.xyz/api/bypass/sfl?url=${encodeURIComponent(u)}&apikey=${encodeURIComponent(k)}` },
+  2: { envName: 'kyzz753322904388', build: (u, k) => `https://api.kyzzz.xyz/api/bypass/safelinku?url=${encodeURIComponent(u)}&apikey=${encodeURIComponent(k)}` },
+  3: { envName: 'RS-8zsQKpR^',      build: (u, k) => `https://api.nexadev.my.id/api/bypass?key=${encodeURIComponent(k)}&url=${encodeURIComponent(u)}` }
 };
 module.exports = async (req, res) => {
   const eng = ENGINES[String((req.query || {}).engine || '')];
