@@ -4,5 +4,10 @@
       "source": "/api/bypass",
       "destination": "https://api.nexadev.my.id/api/bypass"
     }
-  ]
+  ],
+  "functions": {
+    "api/hd-upscale.js": {
+      "maxDuration": 60
+    }
+  }
 }
