@@ -818,7 +818,7 @@ header { position: relative; display: flex; align-items: center; justify-content
           <div class="input-row">
             <div class="input-wrap">
               <svg class="ic"><use href="#i-key"/></svg>
-              <input id="urlInput" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://..." />
+              <input id="urlInput" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://sfl.gl/..." />
             </div>
             <button type="button" id="pasteBtn" class="paste-btn"><svg class="ic"><use href="#i-paste"/></svg> Tempel</button>
           </div>
@@ -968,7 +968,7 @@ header { position: relative; display: flex; align-items: center; justify-content
         <div class="tab-panel" data-panel="tools" role="tabpanel">
           <!-- MENU TOOLS (bisa pilih lebih dari satu) -->
           <div class="tool-menu">
-            <div class="tool-menu-label">PILIH TOOLS</div>
+            <div class="tool-menu-label">PILIH TOOLS (SATU PER SATU)</div>
             <div class="tool-chips">
               <button type="button" class="tool-chip" data-tool="vote" aria-pressed="false"><svg class="ic"><use href="#i-bolt"/></svg> WA Vote</button>
               <button type="button" class="tool-chip active" data-tool="hd" aria-pressed="true"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 16l3-4 2 2 2-3 3 5"/></svg> HD Upscale</button>
@@ -996,7 +996,7 @@ header { position: relative; display: flex; align-items: center; justify-content
           <div class="tools-header">
             <div class="modal-tag">EGAA TOOLS</div>
             <h2 class="tools-title">HD Image Upscale</h2>
-            <p class="tools-sub">Upscale foto jadi HD</p>
+            <p class="tools-sub">Upscale foto jadi HD, bandingin pakai garis geser</p>
           </div>
           <div id="hdFileBox">
             <label id="hdDrop" class="hd-drop" for="hdFile" tabindex="0">
@@ -1026,7 +1026,7 @@ header { position: relative; display: flex; align-items: center; justify-content
               <span class="hd-tag hd-tag-r">HD</span>
               <div id="hdHandle" class="hd-handle" role="slider" tabindex="0" aria-label="Geser bandingkan asli dan HD" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><span>&lsaquo;&rsaquo;</span></div>
             </div>
-            <p class="hd-hint">Geser garis buat bandingin before dan after</p>
+            <p class="hd-hint">Geser garis buat bandingin asli vs HD</p>
           </div>
         </div>
         </div>
@@ -1039,8 +1039,8 @@ header { position: relative; display: flex; align-items: center; justify-content
   const VOTE_GATE = { sendPw: '' };
   const CREDIT_PHOTO_URL = "https://files.catbox.moe/xpdkbo.jpg";
   /* LOGO: isi link foto di sini (kosongin "" = pakai huruf E) */
-  const HEADER_LOGO_URL = "";
-  const SPLASH_LOGO_URL = "";
+  const HEADER_LOGO_URL = "https://ganga--link--ghhzdp9sv8hk.code.run/i/xt2s632r";
+  const SPLASH_LOGO_URL = "https://ganga--link--ghhzdp9sv8hk.code.run/i/jwor0voh";
   (function applyLogo() {
     [['brandMark', HEADER_LOGO_URL], ['splashMark', SPLASH_LOGO_URL]].forEach(([id, url]) => {
       const el = document.getElementById(id);
@@ -1252,7 +1252,13 @@ header { position: relative; display: flex; align-items: center; justify-content
         headers: { 'Accept': 'application/json' },
         signal: ctrl.signal
       });
-      if (!res.ok) { const e = new Error(`status ${res.status}`); e.status = res.status; throw e; }
+      if (!res.ok) {
+        let body = '';
+        try { body = (await res.text()).slice(0, 120); } catch (e) {}
+        const e = new Error(`status ${res.status}` + (body ? ' — ' + body : ''));
+        e.status = res.status;
+        throw e;
+      }
       let data = null;
       try { data = await res.json(); } catch (e) {}
       const dest = extractDestination(data);
@@ -1876,14 +1882,17 @@ header { position: relative; display: flex; align-items: center; justify-content
     }
 
     function findUrl(node, depth = 0) {
-      if (node == null || depth > 4) return null;
-      if (typeof node === 'string') return /^(https?:\/\/|data:image\/)/i.test(node) ? node : null;
+      if (node == null || depth > 6) return null;
+      if (typeof node === 'string') {
+        if (/^(https?:\/\/|data:image\/)/i.test(node)) return node;
+        if (node.length > 500 && /^[A-Za-z0-9+/=\s]+$/.test(node)) return 'data:image/png;base64,' + node.replace(/\s/g, '');
+        return null;
+      }
       if (typeof node !== 'object') return null;
-      for (const k of OUT_KEYS) {
-        if (k in node) {
-          const f = findUrl(node[k], depth + 1);
-          if (f) return f;
-        }
+      const keys = [...OUT_KEYS.filter(k => k in node), ...Object.keys(node).filter(k => !OUT_KEYS.includes(k))];
+      for (const k of keys) {
+        const f = findUrl(node[k], depth + 1);
+        if (f) return f;
       }
       return null;
     }
@@ -1906,7 +1915,10 @@ header { position: relative; display: flex; align-items: center; justify-content
       try { j = JSON.parse(text); } catch (e) { throw new Error('response server bukan gambar atau JSON'); }
       if (j && j.status === false) throw new Error(j.message || j.error || 'server nolak request');
       const found = findUrl(j);
-      if (!found) throw new Error('link hasil tidak ketemu di response');
+      if (!found) {
+        const fields = (j && typeof j === 'object') ? Object.keys(j).join(', ') : typeof j;
+        throw new Error('link hasil tidak ketemu (field: ' + fields + ')');
+      }
       return { src: found, isBlob: false };
     }
 
@@ -1981,7 +1993,7 @@ header { position: relative; display: flex; align-items: center; justify-content
         const out = await readOutput(res);
         tLine('> hasil diterima, nyiapin preview...', 'muted');
         await showResult(fileUrl, out);
-        tLine('✓ HD berhasil');
+        tLine('✓ HD berhasil, geser garis buat bandingin', 'ok');
       } catch (err) {
         if (err.name === 'AbortError') tLine('✗ timeout, server kelamaan (coba lagi)', 'err');
         else if (/failed to fetch|networkerror|load failed/i.test(err.message)) {
@@ -2197,13 +2209,6 @@ header { position: relative; display: flex; align-items: center; justify-content
       'Asia/Ujung_Pandang': { name: 'Makassar', lat: -5.14, lon: 119.43 },
       'Asia/Jayapura': { name: 'Jayapura', lat: -2.53, lon: 140.72 }
     };
-    async function getWeather(lat, lon) {
-      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code&timezone=auto`;
-      const r = await fetch(url);
-      if (!r.ok) throw new Error('weather');
-      const j = await r.json();
-      return { temp: Math.round(j.current.temperature_2m), code: j.current.weather_code };
-    }
     function getGps() {
       return new Promise((resolve, reject) => {
         if (!navigator.geolocation) return reject(new Error('no-geo'));
@@ -2213,41 +2218,25 @@ header { position: relative; display: flex; align-items: center; justify-content
         );
       });
     }
-    async function getIp() {
-      const r = await fetch('https://ipapi.co/json/');
-      if (!r.ok) throw new Error('ip');
-      const j = await r.json();
-      if (typeof j.latitude !== 'number') throw new Error('ip-noloc');
-      return { lat: j.latitude, lon: j.longitude, name: j.city || '' };
-    }
-    async function getCityName(lat, lon) {
-      try {
-        const r = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=id`);
-        const j = await r.json();
-        return j.city || j.locality || j.principalSubdivision || '';
-      } catch { return ''; }
-    }
-    async function locate() {
-      try {
-        const g = await getGps();
-        return { lat: g.lat, lon: g.lon, name: await getCityName(g.lat, g.lon) };
-      } catch {}
-      try {
-        const ip = await getIp();
-        return { lat: ip.lat, lon: ip.lon, name: ip.name };
-      } catch {}
-      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
-      if (CITY[tz]) return CITY[tz];
-      throw new Error('no-location');
+    async function fetchWeather(query) {
+      const r = await fetch('/api/weather' + query);
+      if (!r.ok) throw new Error('weather');
+      return r.json();
     }
     async function refresh() {
       try {
-        const loc = await locate();
-        const w = await getWeather(loc.lat, loc.lon);
-        tempEl.textContent = w.temp + '°C';
-        placeEl.textContent = loc.name || 'Lokasi kamu';
-        icoEl.innerHTML = ICONS[iconFor(w.code)];
-      } catch {
+        let data = null;
+        try {
+          const g = await getGps();
+          data = await fetchWeather('?lat=' + g.lat + '&lon=' + g.lon);
+        } catch (e) {}
+        if (!data) data = await fetchWeather('');
+        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+        const fallbackName = CITY[tz] ? CITY[tz].name : '';
+        tempEl.textContent = Math.round(data.temp) + '°C';
+        placeEl.textContent = data.city || fallbackName || 'Lokasi kamu';
+        icoEl.innerHTML = ICONS[iconFor(data.code)];
+      } catch (e) {
         tempEl.textContent = '--°C';
         placeEl.textContent = 'Cuaca tidak tersedia';
         icoEl.innerHTML = ICONS.cloud;
