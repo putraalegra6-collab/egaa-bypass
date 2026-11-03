@@ -4,7 +4,10 @@ module.exports = async (req, res) => {
   let body = req.body;
   if (typeof body === 'string') { try { body = JSON.parse(body); } catch (e) { body = {}; } }
   const { type, password } = body || {};
-  const expected = type === 'send' ? process.env.SEND_PASSWORD : process.env.OPEN_PASSWORD;
+  const expected =
+    type === 'send' ? process.env.SEND_PASSWORD :
+    type === 'webtozip' ? process.env.WEBTOZIP_PASSWORD :
+    process.env.OPEN_PASSWORD;
   if (!expected) return res.status(500).json({ ok: false, error: 'password belum diset di server' });
   if (typeof password !== 'string' || password !== expected) return res.status(401).json({ ok: false });
   return res.status(200).json({ ok: true });
