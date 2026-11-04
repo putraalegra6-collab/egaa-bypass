@@ -786,6 +786,16 @@ header { position: relative; display: flex; align-items: center; justify-content
 @keyframes brutPress { 0%, 100% { box-shadow: 8px 8px 0 #111; } 50% { box-shadow: 3px 3px 0 #111; } }
 :root[data-theme="brutal"] .splash-bar span { background: repeating-linear-gradient(45deg, #111 0 10px, #FFC93C 10px 20px); background-size: 28px 28px; animation: barFill 1.7s cubic-bezier(.6,0,.2,1) .25s forwards, stripeMove .5s linear infinite; }
 :root[data-theme="brutal"] .splash-word span { text-shadow: 3px 3px 0 #FF5CA8; }
+
+/* ===== WA REACTION TOOL ===== */
+.react-emoji-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.react-emoji { width: 42px; height: 42px; border-radius: 12px; border: var(--bw) solid var(--line-strong); background: var(--surface-2); color: var(--text); font-size: 20px; cursor: pointer; display: grid; place-items: center; transition: transform .1s, background .2s, border-color .2s; }
+.react-emoji:hover { transform: translateY(-2px); }
+.react-emoji.active { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
+.react-emoji:active { transform: scale(.94); }
+.react-input-emoji { text-align: center; font-size: 20px; }
+.react-target { margin-top: 10px; padding: 10px 12px; border: var(--bw) dashed var(--line-strong); border-radius: var(--radius-sm); font-family: var(--mono); font-size: 11px; color: var(--muted); word-break: break-all; background: var(--surface-2); }
+
 </style>
 </head>
 <body>
@@ -1057,6 +1067,7 @@ header { position: relative; display: flex; align-items: center; justify-content
               <button type="button" class="tool-chip" data-tool="vote" aria-pressed="false"><svg class="ic"><use href="#i-bolt"/></svg> WA Vote</button>
               <button type="button" class="tool-chip active" data-tool="hd" aria-pressed="true"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 16l3-4 2 2 2-3 3 5"/></svg> HD Upscale</button>
               <button type="button" class="tool-chip" data-tool="zip" aria-pressed="false">WebToZip</button>
+              <button type="button" class="tool-chip" data-tool="react" aria-pressed="false"><svg class="ic"><use href="#i-hb"/></svg> WA Reaction</button>
             </div>
           </div>
           <!-- SECTION: WA VOTE -->
@@ -1144,6 +1155,35 @@ header { position: relative; display: flex; align-items: center; justify-content
             </div>
             <p class="hd-hint">Geser Garis buat Bandingin. before•After</p>
           </div>
+        </div>
+
+        <!-- SECTION: WA REACTION -->
+        <div class="tool-sec" data-sec="react">
+          <div class="tools-header">
+            <div class="modal-tag">EGAA TOOLS</div>
+            <h2 class="tools-title">WhatsApp Channel Reaction</h2>
+            <p class="tools-sub">Kirim reaksi ke postingan channel WhatsApp</p>
+          </div>
+
+          <label class="tools-label" for="reactUrl">
+            <svg class="ic"><use href="#i-link"/></svg> URL POSTINGAN CHANNEL
+          </label>
+          <input id="reactUrl" class="tools-input" type="url" placeholder="https://whatsapp.com/channel/.../123" autocomplete="off" spellcheck="false" />
+
+          <label class="tools-label" for="reactEmoji">
+            <svg class="ic"><use href="#i-bolt"/></svg> EMOJI REAKSI
+          </label>
+          <input id="reactEmoji" class="tools-input react-input-emoji" type="text" placeholder="👍" value="👍" maxlength="8" autocomplete="off" />
+
+          <div id="reactEmojiRow" class="react-emoji-row"></div>
+
+          <button id="reactSubmit" class="tools-submit" type="button">
+            <svg class="ic"><use href="#i-bolt"/></svg>
+            <span id="reactSubmitText">Kirim Reaksi</span>
+          </button>
+
+          <div id="reactTarget" class="react-target hidden"></div>
+          <div id="reactTerminal" class="tools-terminal" aria-live="polite"></div>
         </div>
         </div>
       </div>
@@ -1778,6 +1818,7 @@ header { position: relative; display: flex; align-items: center; justify-content
     const sendBtn = $('voteSubmit');
     let unlocked = false;
     let zipUnlocked = false;
+    let reactUnlocked = false;
     let sendOk = false;
     let pending = null;
     let checking = false;
@@ -1862,6 +1903,20 @@ header { position: relative; display: flex; align-items: center; justify-content
           });
           return;
         }
+        if (chip.dataset.tool === 'react' && !reactUnlocked) {
+          openLock({
+            type: 'react',
+            title: 'TOOL TERKUNCI',
+            sub: 'Masukin password buat buka WA Reaction',
+            onOk: (pw) => {
+              window.__reactPw = pw;
+              window.__reactUnlocked = true;
+              window.dispatchEvent(new Event('egaa-react-unlock'));
+              activate(chip);
+            }
+          });
+          return;
+        }
         activate(chip);
       });
     });
@@ -1891,7 +1946,14 @@ header { position: relative; display: flex; align-items: center; justify-content
     lockInput.addEventListener('keydown', e => {
       if (e.key === 'Enter') { e.preventDefault(); tryUnlock(); }
     });
-    document.addEventListener('egaa-modal-close', () => { unlocked = false; zipUnlocked = false; closeLock(); });
+    document.addEventListener('egaa-modal-close', () => {
+      unlocked = false;
+      zipUnlocked = false;
+      reactUnlocked = false;
+      window.__reactUnlocked = false;
+      window.__reactPw = '';
+      closeLock();
+    });
   })();
 
   /* ================= 8c. HD IMAGE UPSCALE ================= */
@@ -2144,6 +2206,164 @@ header { position: relative; display: flex; align-items: center; justify-content
 
     submitBtn.addEventListener('click', runHd);
     setMode('file');
+  })();
+
+  /* ================= 8c-2. WA REACTION ================= */
+  (function initReactTool() {
+    const REACT_API = '/api/react';
+    const QUICK = ['👍','❤️','😂','😮','😢','🙏','🔥','👏'];
+    const urlEl = $('reactUrl');
+    const emojiEl = $('reactEmoji');
+    const rowEl = $('reactEmojiRow');
+    const submitBtn = $('reactSubmit');
+    const submitText = $('reactSubmitText');
+    const term = $('reactTerminal');
+    const targetEl = $('reactTarget');
+    let busy = false;
+    let reactUnlocked = false;
+
+    function tClear() { term.innerHTML = ''; term.classList.add('show'); }
+    function tLine(msg, cls = '') {
+      const d = document.createElement('div');
+      d.className = 'log ' + cls;
+      d.textContent = msg;
+      term.appendChild(d);
+      term.scrollTop = term.scrollHeight;
+    }
+    // Ambil list emoji dari input, pisah koma
+    function getEmojiList() {
+      return emojiEl.value
+        .split(',')
+        .map(s => s.trim())
+        .filter(Boolean);
+    }
+
+    // Cek apakah emoji ada di list
+    function hasEmoji(em) {
+      return getEmojiList().includes(em);
+    }
+
+    // Toggle emoji: kalau udah ada → hapus, kalau belum → tambah
+    function toggleEmoji(em) {
+      const list = getEmojiList();
+      const idx = list.indexOf(em);
+      if (idx >= 0) {
+        list.splice(idx, 1);
+      } else {
+        list.push(em);
+      }
+      emojiEl.value = list.join(',');
+      renderQuick();
+    }
+
+    function renderQuick() {
+      rowEl.innerHTML = '';
+      QUICK.forEach(em => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'react-emoji' + (hasEmoji(em) ? ' active' : '');
+        b.textContent = em;
+        b.title = hasEmoji(em) ? 'Klik buat hapus' : 'Klik buat tambah';
+        b.addEventListener('click', () => toggleEmoji(em));
+        rowEl.appendChild(b);
+      });
+    }
+    emojiEl.addEventListener('input', renderQuick);
+    renderQuick();
+
+    function setBusy(on) {
+      busy = on;
+      submitBtn.disabled = on;
+      submitBtn.classList.toggle('spinning', on);
+      submitText.textContent = on ? 'Mengirim...' : 'Kirim Reaksi';
+    }
+
+    const URL_RE = /^https:\/\/(www\.)?whatsapp\.com\/channel\/[A-Za-z0-9]+\/\d+\/?$/i;
+
+    async function runReact(password) {
+      if (busy) return;
+      tClear();
+      targetEl.classList.add('hidden');
+      const url = urlEl.value.trim();
+      const emoji = (emojiEl.value.trim() || '👍');
+      const emojiList = getEmojiList();
+
+      if (!url) { tLine('✗ URL channel belum diisi', 'err'); return; }
+      if (!URL_RE.test(url)) {
+        tLine('✗ Format URL tidak valid', 'err');
+        tLine('  Harus: https://whatsapp.com/channel/<id>/<nomor>', 'muted');
+        return;
+      }
+      if (emojiList.length === 0) {
+        tLine('✗ Pilih minimal 1 emoji', 'err');
+        return;
+      }
+
+      tLine('> Egaa Reaction siap...', 'hi');
+      tLine('→ target : ' + url, 'muted');
+      tLine('→ reaksi : ' + emojiList.join(', ') + ' (' + emojiList.length + ' emoji)', 'muted');
+      await new Promise(r => setTimeout(r, 150));
+      tLine('> connecting ke server API...', 'muted');
+
+      setBusy(true);
+      try {
+        const res = await fetch(REACT_API, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({ url, reaction: emoji, password })
+        });
+        let data = null;
+        try { data = await res.json(); } catch (e) {}
+        if (!res.ok) {
+          tLine('✗ HTTP ' + res.status + (data && data.error ? ' — ' + data.error : ''), 'err');
+          return;
+        }
+        if (data && data.status === true) {
+          tLine('✓ reaction accepted', 'ok');
+          tLine('─────────────────────────────', 'muted');
+          if (data.message) tLine('message  : ' + data.message, 'info');
+          if (data.reaction) tLine('reaction : ' + data.reaction, 'info');
+          if (Array.isArray(data.reactions)) tLine('list     : ' + data.reactions.join(', '), 'info');
+          if (data.total_emojis !== undefined) tLine('emojis   : ' + data.total_emojis, 'info');
+          if (data.task_status) tLine('status   : ' + data.task_status, 'ok');
+          if (data.response_time) tLine('time     : ' + data.response_time, 'muted');
+          tLine('─────────────────────────────', 'muted');
+          tLine('✓ ' + (data.message || 'Reaksi terkirim'), 'ok');
+          targetEl.textContent = 'Target: ' + (data.target || url);
+          targetEl.classList.remove('hidden');
+        } else {
+          tLine('✗ ' + ((data && data.error) || 'gagal mengirim reaksi'), 'err');
+        }
+      } catch (err) {
+        tLine('✗ network / proxy error', 'err');
+        tLine('  ' + err.message, 'err');
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    // Sinkron dengan unlock dari chip
+    window.addEventListener('egaa-react-unlock', () => {
+      reactUnlocked = window.__reactUnlocked === true;
+    });
+
+    // Tombol kirim: cek dulu udah di-unlock atau belum
+    submitBtn.addEventListener('click', (e) => {
+      if (!window.__reactUnlocked) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        tClear();
+        tLine('✗ Tool belum dibuka. Klik chip "WA Reaction" dulu, masukin password', 'err');
+        return;
+      }
+      runReact(window.__reactPw || '');
+    });
+
+    document.addEventListener('egaa-modal-close', () => {
+      reactUnlocked = false;
+      window.__reactUnlocked = false;
+      window.__reactPw = '';
+    });
   })();
 
   /* ================= 8d. WEBTOZIP (daftar file, lihat code, pilih, download) ================= */
