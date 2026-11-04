@@ -223,21 +223,23 @@ function normAnswer(kind, raw) {
 function makeChallenge() {
   const exp = String(Date.now() + VERIFY_TTL_MS);
   let kind, prompt, answer;
-  if (crypto.randomInt(2) === 0) {
+  if (crypto.randomInt(3) < 2) {
+    // matematika campuran: (a × b) ÷ c + d × e − f, hasil selalu bulat & positif
     kind = 'math';
-    const op = ['+', '-', '×'][randInt(0, 2)];
-    let a = randInt(2, 30);
-    let b = randInt(2, 12);
-    if (op === '+') answer = a + b;
-    else if (op === '-') { if (b > a) [a, b] = [b, a]; answer = a - b; }
-    else answer = a * b;
-    prompt = `Berapa hasil dari ${a} ${op} ${b}?`;
-    answer = String(answer);
+    const c = randInt(2, 12);
+    const k = randInt(3, 15);
+    const a = c * k;
+    const b = randInt(6, 19);
+    const d = randInt(7, 24);
+    const e = randInt(3, 12);
+    const f = randInt(5, 20);
+    answer = String((a * b) / c + d * e - f);
+    prompt = `Hitung: (${a} × ${b}) ÷ ${c} + ${d} × ${e} − ${f} = ?`;
   } else {
     kind = 'code';
     const chars = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
     answer = '';
-    for (let i = 0; i < 6; i++) answer += chars[randInt(0, chars.length - 1)];
+    for (let i = 0; i < 8; i++) answer += chars[randInt(0, chars.length - 1)];
     prompt = `Ketik ulang kode ini: ${answer}`;
   }
   return { kind, prompt, token: `${kind}.${exp}.${signAnswer(kind, exp, answer)}` };
