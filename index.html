@@ -814,6 +814,13 @@ header { position: relative; display: flex; align-items: center; justify-content
 .tt-images { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 6px; }
 .tt-images:empty { display: none; }
 .tt-img img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: var(--radius-sm); border: var(--bw) solid var(--line); display: block; }
+
+/* ===== TIKTOK DOWNLOAD (v2) ===== */
+.tt-btn { font-family: inherit; cursor: pointer; }
+.tt-btn:disabled { opacity: .5; cursor: not-allowed; }
+.tt-btn-sm { height: 36px; width: 100%; margin-top: 6px; font-size: 12px; }
+.tt-img { display: flex; flex-direction: column; }
+.tt-images { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
 </style>
 </head>
 <body>
@@ -1204,9 +1211,10 @@ header { position: relative; display: flex; align-items: center; justify-content
                 <div id="ttStats" class="tt-stats"></div>
               </div>
               <div class="tt-actions">
-                <a id="ttDlVideo" class="tt-btn" target="_blank" rel="noopener noreferrer">Download Video</a>
-                <a id="ttDlMusic" class="tt-btn" target="_blank" rel="noopener noreferrer">Download Musik</a>
-                <a id="ttDlCover" class="tt-btn" target="_blank" rel="noopener noreferrer">Download Cover</a>
+                <button id="ttDlVideo" class="tt-btn" type="button">Download No Watermark</button>
+                <button id="ttDlMusic" class="tt-btn" type="button">Download MP3</button>
+                <button id="ttDlCover" class="tt-btn" type="button">Download Foto</button>
+                <button id="ttDlAll" class="tt-btn" type="button" hidden>Download Semua Foto</button>
               </div>
               <div id="ttImages" class="tt-images"></div>
             </div>
@@ -2244,11 +2252,16 @@ header { position: relative; display: flex; align-items: center; justify-content
     const author = $('ttAuthor');
     const desc = $('ttDesc');
     const stats = $('ttStats');
-    const dlVideo = $('ttDlVideo');
-    const dlMusic = $('ttDlMusic');
-    const dlCover = $('ttDlCover');
+    const btnVideo = $('ttDlVideo');
+    const btnMusic = $('ttDlMusic');
+    const btnCover = $('ttDlCover');
+    const btnAll = $('ttDlAll');
     const imagesBox = $('ttImages');
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+
     let busy = false;
+    let dlBusy = false;
+    let cur = null;
 
     function tClear() { term.innerHTML = ''; term.classList.add('show'); }
     function tLine(msg, cls = '') {
@@ -2263,6 +2276,10 @@ header { position: relative; display: flex; align-items: center; justify-content
       submitBtn.disabled = on;
       submitBtn.classList.toggle('spinning', on);
     }
+    function setBtns(on) {
+      dlBusy = on;
+      resultBox.querySelectorAll('.tt-btn').forEach(b => { b.disabled = on; });
+    }
     function fmt(n) {
       n = Number(n) || 0;
       if (n >= 1e6) return (n / 1e6).toFixed(1).replace(/\.0$/, '') + 'M';
@@ -2272,13 +2289,60 @@ header { position: relative; display: flex; align-items: center; justify-content
     function dlHref(src, name, inline) {
       return DL + '?src=' + encodeURIComponent(src) + '&name=' + encodeURIComponent(name) + (inline ? '&mode=inline' : '');
     }
-    function setLink(a, src, name) {
-      if (src) { a.href = dlHref(src, name, false); a.hidden = false; }
-      else { a.removeAttribute('href'); a.hidden = true; }
+
+    // Simpan file lewat proxy TANPA pindah halaman: fetch -> blob -> klik link download
+    async function saveFile(src, name) {
+      tLine('> download ' + name + '...', 'muted');
+      const res = await fetch(dlHref(src, name, false));
+      if (!res.ok) throw new Error('gagal ambil file (HTTP ' + res.status + ')');
+      const type = res.headers.get('content-type') || 'application/octet-stream';
+      const total = Number(res.headers.get('content-length')) || 0;
+      let blob;
+      if (res.body && total && typeof res.body.getReader === 'function') {
+        const reader = res.body.getReader();
+        const chunks = [];
+        let got = 0;
+        let lastPct = 0;
+        for (;;) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          chunks.push(value);
+          got += value.length;
+          const pct = Math.floor(got * 100 / total);
+          if (pct >= lastPct + 25) {
+            lastPct = pct;
+            tLine('  ' + name + ' ' + pct + '%', 'muted');
+          }
+        }
+        blob = new Blob(chunks, { type });
+      } else {
+        blob = await res.blob();
+      }
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 60000);
+      tLine('✓ ' + name + ' tersimpan', 'ok');
+    }
+
+    async function guarded(fn) {
+      if (dlBusy) return;
+      setBtns(true);
+      try { await fn(); }
+      catch (err) { tLine('✗ ' + err.message, 'err'); }
+      finally { setBtns(false); }
     }
 
     function render(d) {
-      const base = (d.id || 'tiktok');
+      cur = d;
+      const base = d.id || 'tiktok';
+      const isSlide = d.type === 'slideshow';
+      const imgs = Array.isArray(d.images) ? d.images : [];
+
       author.textContent = d.author && d.author.nickname ? '@' + (d.author.unique_id || d.author.nickname) + ' · ' + d.author.nickname : '';
       desc.textContent = d.title || '';
 
@@ -2291,37 +2355,72 @@ header { position: relative; display: flex; align-items: center; justify-content
           stats.appendChild(s);
         });
 
-      if (d.type === 'video' && d.video) {
-        video.hidden = false; cover.hidden = true;
+      if (!isSlide && d.video) {
+        video.hidden = false;
+        cover.hidden = true;
         video.src = dlHref(d.video, base + '.mp4', true);
-        video.poster = d.cover ? dlHref(d.cover, base + '.jpg', true) : '';
+        video.poster = d.cover ? dlHref(d.cover, base + '_cover.jpg', true) : '';
       } else {
-        video.hidden = true; video.removeAttribute('src'); video.load();
-        if (d.cover) { cover.src = dlHref(d.cover, base + '.jpg', true); cover.hidden = false; }
-        else cover.hidden = true;
+        video.hidden = true;
+        video.removeAttribute('src');
+        video.load();
+        if (!isSlide && d.cover) {
+          cover.src = dlHref(d.cover, base + '_cover.jpg', true);
+          cover.hidden = false;
+        } else {
+          cover.hidden = true;
+        }
       }
 
-      setLink(dlVideo, d.type === 'video' ? d.video : null, base + '.mp4');
-      setLink(dlMusic, d.music, base + '.mp3');
-      setLink(dlCover, d.cover, base + '.jpg');
+      btnVideo.hidden = isSlide || !d.video;
+      btnCover.hidden = isSlide || !d.cover;
+      btnMusic.hidden = !d.music;
+      btnAll.hidden = !(isSlide && imgs.length);
 
       imagesBox.innerHTML = '';
-      (d.images || []).forEach((src, i) => {
-        const a = document.createElement('a');
-        a.className = 'tt-img';
-        a.href = dlHref(src, base + '_' + (i + 1) + '.jpg', false);
-        a.target = '_blank';
-        a.rel = 'noopener noreferrer';
-        const img = document.createElement('img');
-        img.src = dlHref(src, base + '_' + (i + 1) + '.jpg', true);
-        img.alt = 'Foto ' + (i + 1);
-        img.loading = 'lazy';
-        a.appendChild(img);
-        imagesBox.appendChild(a);
-      });
+      if (isSlide) {
+        imgs.forEach((src, i) => {
+          const name = base + '_' + (i + 1) + '.jpg';
+          const card = document.createElement('div');
+          card.className = 'tt-img';
+          const img = document.createElement('img');
+          img.src = dlHref(src, name, true);
+          img.alt = 'Foto ' + (i + 1);
+          img.loading = 'lazy';
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'tt-btn tt-btn-sm';
+          b.textContent = 'Download Foto ' + (i + 1);
+          b.addEventListener('click', () => guarded(() => saveFile(src, name)));
+          card.append(img, b);
+          imagesBox.appendChild(card);
+        });
+      }
 
       resultBox.classList.remove('hidden');
     }
+
+    btnVideo.addEventListener('click', () => guarded(async () => {
+      if (!cur || !cur.video) throw new Error('versi tanpa watermark ga tersedia');
+      await saveFile(cur.video, (cur.id || 'tiktok') + '_no_watermark.mp4');
+    }));
+    btnMusic.addEventListener('click', () => guarded(async () => {
+      if (!cur || !cur.music) throw new Error('musik ga tersedia');
+      await saveFile(cur.music, (cur.id || 'tiktok') + '.mp3');
+    }));
+    btnCover.addEventListener('click', () => guarded(async () => {
+      if (!cur || !cur.cover) throw new Error('foto ga tersedia');
+      await saveFile(cur.cover, (cur.id || 'tiktok') + '_foto.jpg');
+    }));
+    btnAll.addEventListener('click', () => guarded(async () => {
+      const imgs = (cur && cur.images) || [];
+      const base = (cur && cur.id) || 'tiktok';
+      for (let i = 0; i < imgs.length; i++) {
+        await saveFile(imgs[i], base + '_' + (i + 1) + '.jpg');
+        await sleep(700);
+      }
+      tLine('✓ semua foto selesai', 'ok');
+    }));
 
     async function run() {
       if (busy) return;
