@@ -20,6 +20,12 @@
     },
     "api/tiktok-dl.js": {
       "maxDuration": 60
+    },
+    "api/uc.js": {
+      "maxDuration": 60
+    },
+    "api/uc-dl.js": {
+      "maxDuration": 60
     }
   }
 }
