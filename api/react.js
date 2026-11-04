@@ -8,6 +8,8 @@
  * diverifikasi dulu, baru forward ke reactionwa.online pakai key di file ini.
  */
 
+const crypto = require('crypto');
+
 const GEN_KEY_ENDPOINT = 'https://apiv2.reactionwa.online/api/v2/generate_key';
 const API_ENDPOINT = 'https://apiv2.reactionwa.online/api/v2/react';
 const FIREBASE_API_KEY = 'AIzaSyDNbAlgLycK0oRO8I9ja3mPnIccZkOz0M0';
@@ -194,18 +196,96 @@ async function doReact(targetUrl, reactionInput) {
   return { status: false, error: lastError, time: `${Date.now() - startTime}ms` };
 }
 
+// ===== Verifikasi manusia (challenge stateless, ditandatangani HMAC) =====
+const VERIFY_TTL_MS = 2 * 60 * 1000;
+
+function verifySecret() {
+  return process.env.REACT_VERIFY_SECRET || process.env.REACT_PASSWORD || '';
+}
+
+function randInt(min, max) {
+  return crypto.randomInt(min, max + 1);
+}
+
+function signAnswer(kind, expStr, answer) {
+  return crypto.createHmac('sha256', verifySecret()).update(`${kind}|${expStr}|${answer}`).digest('hex');
+}
+
+function normAnswer(kind, raw) {
+  const s = String(raw == null ? '' : raw).trim();
+  if (kind === 'math') {
+    const n = Number(s);
+    return s !== '' && Number.isFinite(n) ? String(n) : '';
+  }
+  return s.toUpperCase().replace(/\s+/g, '');
+}
+
+function makeChallenge() {
+  const exp = String(Date.now() + VERIFY_TTL_MS);
+  let kind, prompt, answer;
+  if (crypto.randomInt(2) === 0) {
+    kind = 'math';
+    const op = ['+', '-', '×'][randInt(0, 2)];
+    let a = randInt(2, 30);
+    let b = randInt(2, 12);
+    if (op === '+') answer = a + b;
+    else if (op === '-') { if (b > a) [a, b] = [b, a]; answer = a - b; }
+    else answer = a * b;
+    prompt = `Berapa hasil dari ${a} ${op} ${b}?`;
+    answer = String(answer);
+  } else {
+    kind = 'code';
+    const chars = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+    answer = '';
+    for (let i = 0; i < 6; i++) answer += chars[randInt(0, chars.length - 1)];
+    prompt = `Ketik ulang kode ini: ${answer}`;
+  }
+  return { kind, prompt, token: `${kind}.${exp}.${signAnswer(kind, exp, answer)}` };
+}
+
+function checkVerify(v) {
+  if (!v || typeof v !== 'object' || typeof v.token !== 'string') return 'verifikasi manusia belum diisi';
+  const parts = v.token.split('.');
+  if (parts.length !== 3) return 'verifikasi tidak valid';
+  const [kind, expStr, sig] = parts;
+  if (kind !== 'math' && kind !== 'code') return 'verifikasi tidak valid';
+  const exp = Number(expStr);
+  if (!Number.isFinite(exp)) return 'verifikasi tidak valid';
+  if (Date.now() > exp) return 'verifikasi kadaluarsa, coba lagi';
+  const ans = normAnswer(kind, v.answer);
+  if (!ans) return 'jawaban verifikasi kosong';
+  const want = Buffer.from(signAnswer(kind, expStr, ans), 'hex');
+  const got = Buffer.from(sig, 'hex');
+  if (want.length !== got.length || !crypto.timingSafeEqual(want, got)) return 'jawaban verifikasi salah';
+  return null;
+}
+
 module.exports = async (req, res) => {
+  if (req.method === 'GET') {
+    const q = req.query || {};
+    if (q.action === 'challenge') {
+      if (!verifySecret()) return res.status(500).json({ status: false, error: 'REACT_PASSWORD belum diset di server' });
+      res.setHeader('Cache-Control', 'no-store');
+      return res.status(200).json({ status: true, ...makeChallenge() });
+    }
+    return res.status(400).json({ status: false, error: 'action tidak dikenal' });
+  }
   if (req.method !== 'POST') return res.status(405).json({ status: false, error: 'method tidak diizinkan' });
 
   let body = req.body;
   if (typeof body === 'string') { try { body = JSON.parse(body); } catch (e) { body = {}; } }
-  const { url, reaction, password } = body || {};
+  const { url, reaction, password, verify } = body || {};
 
   if (!process.env.REACT_PASSWORD) {
     return res.status(500).json({ status: false, error: 'REACT_PASSWORD belum diset di server' });
   }
   if (typeof password !== 'string' || password !== process.env.REACT_PASSWORD) {
     return res.status(401).json({ status: false, error: 'password salah' });
+  }
+
+  const vErr = checkVerify(verify);
+  if (vErr) {
+    return res.status(401).json({ status: false, error: vErr, verify_failed: true });
   }
 
   try {
