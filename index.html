@@ -1275,8 +1275,8 @@ header { position: relative; display: flex; align-items: center; justify-content
               <h2 class="tools-title">Spotify Download</h2>
               <p class="tools-sub">Cari judul lagu atau paste link Spotify, preview dulu, lalu download MP3</p>
             </div>
-            <label class="tools-label" for="spUrl"><svg class="ic"><use href="#i-link"/></svg> JUDUL LAGU / LINK SPOTIFY</label>
-            <input id="spUrl" class="tools-input" type="text" placeholder="dunia / https://open.spotify.com/track/..." autocomplete="off" spellcheck="false" />
+            <label class="tools-label" for="spUrl"><svg class="ic"><use href="#i-link"/></svg> SEARCH LAGU / LINK SPOTIFY</label>
+            <input id="spUrl" class="tools-input" type="text" placeholder="search / https://open.spotify.com/track/..." autocomplete="off" spellcheck="false" />
             <button id="spSubmit" class="tools-submit" type="button">
               <svg class="ic"><use href="#i-bolt"/></svg>
               <span>Cari Lagu</span>
@@ -3637,7 +3637,7 @@ header { position: relative; display: flex; align-items: center; justify-content
       tClear();
       const v = input.value.trim();
       if (!v) {
-        tLine('✗ isi judul lagu atau link Spotify dulu', 'err');
+        tLine('✗ Search lagu atau link Spotify dulu', 'err');
         return;
       }
       if (/open\.spotify\.com/i.test(v) && !SPOTIFY_RE.test(v)) {
