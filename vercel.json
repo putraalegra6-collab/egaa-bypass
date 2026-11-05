@@ -1,14 +1,40 @@
 {
   "functions": {
-    "api/hd-upscale.js": { "maxDuration": 60 },
-    "api/resolve.js": { "maxDuration": 60 },
-    "api/vote.js": { "maxDuration": 60 },
-    "api/webtozip.js": { "maxDuration": 60 },
-    "api/react.js": { "maxDuration": 60 },
-    "api/tiktok.js": { "maxDuration": 60 },
-    "api/tiktok-dl.js": { "maxDuration": 60 },
-    "api/uc.js": { "maxDuration": 60 },
-    "api/uc-dl.js": { "maxDuration": 60 },
-    "api/spotify.js": { "maxDuration": 60 }
-  }
+    "api/hd-upscale.js": {
+      "maxDuration": 60
+    },
+    "api/resolve.js": {
+      "maxDuration": 60
+    },
+    "api/vote.js": {
+      "maxDuration": 60
+    },
+    "api/webtozip.js": {
+      "maxDuration": 60
+    },
+    "api/react.js": {
+      "maxDuration": 60
+    },
+    "api/tiktok.js": {
+      "maxDuration": 60
+    },
+    "api/tiktok-dl.js": {
+      "maxDuration": 60
+    },
+    "api/uc.js": {
+      "maxDuration": 60
+    },
+    "api/uc-dl.js": {
+      "maxDuration": 60
+    },
+    "api/spotify.js": {
+      "maxDuration": 60
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/pinterest",
+      "destination": "/api/tiktok?p=pinterest"
+    }
+  ]
 }
