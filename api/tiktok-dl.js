@@ -1,6 +1,6 @@
 // Proxy file media TikTok. mode=inline untuk preview di browser, default attachment untuk download.
 const { Readable } = require('stream');
-const HOST_OK = /(^|\.)(tikwm\.com|tiktokcdn[\w-]*\.com|tiktokv\.com|byteoversea\.com|tiktok\.com)$/i;
+const HOST_OK = /(^|\.)(tikwm\.com|tiktokcdn[\w-]*\.com|tiktokv\.com|byteoversea\.com|tiktok\.com|pinimg\.com|pinterest\.com)$/i;
 
 module.exports = async (req, res) => {
   const q = req.query || {};
@@ -18,7 +18,7 @@ module.exports = async (req, res) => {
     const up = await fetch(src, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-        'Referer': 'https://www.tikwm.com/',
+        'Referer': /pinimg\.com|pinterest\.com/i.test(host) ? 'https://www.pinterest.com/' : 'https://www.tikwm.com/',
         'Accept': '*/*'
       }
     });
