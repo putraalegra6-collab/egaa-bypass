@@ -1417,14 +1417,6 @@ header { position: relative; display: flex; align-items: center; justify-content
               <svg class="ic"><use href="#i-bolt"/></svg>
               <span id="reactSubmitText">Kirim Reaksi</span>
             </button>
-            <div id="reactVerify" class="react-verify hidden">
-              <div class="react-verify-title">Verifikasi kamu manusia</div>
-              <div id="reactVerifyQ" class="react-verify-q">Lagi ambil tantangan...</div>
-              <input id="reactVerifyAns" class="tools-input" type="text" placeholder="Jawaban kamu" autocomplete="off" spellcheck="false" />
-              <button id="reactVerifyGo" class="tools-submit" type="button" disabled>
-                <span>Verifikasi &amp; Kirim</span>
-              </button>
-            </div>
             <div id="reactTarget" class="react-target hidden"></div>
             <div id="reactTerminal" class="tools-terminal" aria-live="polite"></div>
           </div>
@@ -3130,13 +3122,8 @@ header { position: relative; display: flex; align-items: center; justify-content
     const submitText = $('reactSubmitText');
     const term = $('reactTerminal');
     const targetEl = $('reactTarget');
-    const verifyBox = $('reactVerify');
-    const verifyQ = $('reactVerifyQ');
-    const verifyAns = $('reactVerifyAns');
-    const verifyGo = $('reactVerifyGo');
     let busy = false;
     let pending = null;
-    let challenge = null;
     let cdTimer = null;
 
     function tClear() { term.innerHTML = ''; term.classList.add('show'); }
@@ -3214,39 +3201,9 @@ header { position: relative; display: flex; align-items: center; justify-content
       }
     }
 
-    // ===== Verifikasi manusia =====
-    function showVerify(on) { verifyBox.classList.toggle('hidden', !on); }
-    function resetVerify() {
-      pending = null;
-      challenge = null;
-      verifyAns.value = '';
-      verifyQ.textContent = '';
-      verifyGo.disabled = true;
-      showVerify(false);
-    }
-    async function openVerify() {
-      challenge = null;
-      verifyAns.value = '';
-      verifyGo.disabled = true;
-      verifyQ.textContent = 'Lagi ambil tantangan...';
-      showVerify(true);
-      try {
-        const res = await fetch(REACT_API + '?action=challenge');
-        const j = await res.json().catch(() => null);
-        if (!res.ok || !j || !j.token) throw new Error((j && j.error) || 'gagal ambil tantangan (HTTP ' + res.status + ')');
-        challenge = j;
-        verifyQ.textContent = j.prompt;
-        verifyGo.disabled = false;
-        verifyAns.focus();
-      } catch (err) {
-        verifyQ.textContent = 'Gagal muat verifikasi, coba lagi';
-        tLine('✗ ' + err.message, 'err');
-      }
-    }
-
     const URL_RE = /^https:\/\/(www\.)?whatsapp\.com\/channel\/[A-Za-z0-9]+\/\d+\/?$/i;
 
-    // Tahap 1: validasi input, cek cooldown, lalu minta verifikasi manusia
+    // Tahap 1: validasi input, cek cooldown, lalu kirim langsung
     async function runReact(password) {
       if (busy) return;
       tClear();
@@ -3272,24 +3229,15 @@ header { position: relative; display: flex; align-items: center; justify-content
       tLine('> Egaa Reaction siap...', 'hi');
       tLine('→ target : ' + url, 'muted');
       tLine('→ reaksi : ' + emojiList.join(', ') + ' (' + emojiList.length + ' emoji)', 'muted');
-      tLine('> verifikasi dulu, bro (anti bot)', 'muted');
-
       pending = { url, emoji, password };
-      await openVerify();
+      await submitReact();
     }
 
-    // Tahap 2: kirim setelah jawaban verifikasi diisi
-    async function submitVerified() {
+    async function submitReact() {
       if (busy || !pending) return;
-      if (!challenge) { tLine('✗ tantangan belum siap, tunggu sebentar', 'err'); return; }
-      const ans = verifyAns.value.trim();
-      if (!ans) { tLine('✗ jawab verifikasi dulu', 'err'); return; }
-
       setBusy(true);
-      verifyGo.disabled = true;
-      tLine('> verifikasi dikirim, connecting ke server API...', 'muted');
+      tLine('> connecting ke server API...', 'muted');
 
-      let retryVerify = false;
       let sent = false;
       try {
         const res = await fetch(REACT_API, {
@@ -3298,17 +3246,13 @@ header { position: relative; display: flex; align-items: center; justify-content
           body: JSON.stringify({
             url: pending.url,
             reaction: pending.emoji,
-            password: pending.password,
-            verify: { token: challenge.token, kind: challenge.kind, answer: ans }
+            password: pending.password
           })
         });
         let data = null;
         try { data = await res.json(); } catch (e) {}
 
-        if (!res.ok && data && data.verify_failed) {
-          tLine('✗ ' + data.error + ' — tantangan baru dimuat', 'err');
-          retryVerify = true;
-        } else {
+        {
           sent = true;
           if (!res.ok) {
             tLine('✗ HTTP ' + res.status + (data && data.error ? ' — ' + data.error : ''), 'err');
@@ -3337,20 +3281,10 @@ header { position: relative; display: flex; align-items: center; justify-content
         tLine('  ' + err.message, 'err');
       } finally {
         setBusy(false);
-        if (sent) {
-          startCooldown();
-          resetVerify();
-        } else {
-          verifyGo.disabled = false;
-        }
+        if (sent) startCooldown();
+        pending = null;
       }
-      if (retryVerify) await openVerify();
     }
-
-    verifyGo.addEventListener('click', submitVerified);
-    verifyAns.addEventListener('keydown', e => {
-      if (e.key === 'Enter') { e.preventDefault(); submitVerified(); }
-    });
 
     window.addEventListener('egaa-react-unlock', () => {});
 
@@ -3368,10 +3302,9 @@ header { position: relative; display: flex; align-items: center; justify-content
     document.addEventListener('egaa-modal-close', () => {
       window.__reactUnlocked = false;
       window.__reactPw = '';
-      resetVerify();
+      pending = null;
     });
 
-    resetVerify();
     updateCd();
   })();
 
