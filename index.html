@@ -821,12 +821,20 @@ header { position: relative; display: flex; align-items: center; justify-content
 .tt-btn-sm { height: 36px; width: 100%; margin-top: 6px; font-size: 12px; }
 .tt-img { display: flex; flex-direction: column; }
 .tt-images { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
-.pt-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 6px; margin-top: 10px; }
+.pt-search-row { display: flex; gap: 8px; align-items: stretch; }
+.pt-search-row .tools-input { flex: 1; min-width: 0; }
+.pt-search-btn { width: auto; padding: 0 18px; flex-shrink: 0; }
+.pt-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
 .pt-grid:empty { display: none; }
-.pt-card { position: relative; padding: 0; border: var(--bw) solid var(--line-strong); border-radius: var(--radius-sm); overflow: hidden; background: #000; cursor: pointer; }
+.pt-card { position: relative; padding: 0; border: var(--bw) solid var(--line-strong); border-radius: var(--radius-sm); overflow: hidden; background: #111; cursor: pointer; min-height: 0; }
 .pt-card img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; display: block; }
 .pt-card:active { transform: translate(var(--press-x), var(--press-y)); }
+.pt-card.pt-broken { aspect-ratio: 3 / 4; display: flex; align-items: center; justify-content: center; }
+.pt-err { font-family: var(--mono); font-size: 11px; color: var(--muted); }
 .pt-badge { position: absolute; top: 5px; left: 5px; font-family: var(--mono); font-size: 10px; padding: 2px 6px; border-radius: 999px; background: var(--accent); color: var(--accent-text); }
+.pt-more { margin-top: 10px; }
+.pt-more[hidden] { display: none; }
+.pt-divider { margin: 22px 0 10px; font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: .04em; }
 
 /* ===== UC DOWNLOAD ===== */
 .uc-result { margin-top: 16px; display: flex; flex-direction: column; gap: 12px; }
@@ -847,6 +855,47 @@ header { position: relative; display: flex; align-items: center; justify-content
 .react-verify.hidden { display: none; }
 .react-verify-title { font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 .react-verify-q { font-family: var(--mono); font-size: 15px; font-weight: 700; color: var(--text); }
+
+/* ===== rapihin layout tools (override) ===== */
+.pt-search-row { align-items: center; margin-top: 0; }
+.pt-search-row .tools-input { height: 48px; }
+.pt-search-btn { height: 48px; margin-top: 0; border-radius: 14px; font-size: 14px; padding: 0 20px; }
+.pt-grid, .tt-images { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
+.pt-card, .tt-img { border-radius: 12px; overflow: hidden; }
+.pt-card img, .tt-img img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; display: block; }
+.pt-more { margin-top: 12px; height: 44px; font-size: 13px; }
+.pt-divider { margin: 24px 0 4px; padding-top: 18px; border-top: 1px dashed var(--line-strong); font-size: 10.5px; letter-spacing: 1.2px; color: var(--muted); font-weight: 800; }
+.tt-result { margin-top: 18px; gap: 14px; }
+.tt-preview { border-radius: 14px; }
+.tt-meta { display: flex; flex-direction: column; gap: 6px; }
+.tt-actions { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.tt-actions .tt-btn { height: 44px; border-radius: 12px; font-size: 12.5px; text-align: center; line-height: 1.2; padding: 6px 8px; }
+.tt-actions .tt-btn:last-child:nth-child(odd) { grid-column: 1 / -1; }
+@media (max-width: 360px) {
+  .pt-grid, .tt-images { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tt-actions { grid-template-columns: 1fr; }
+}
+
+/* ===== POLISH v4: rapihin menu tools + kredit ===== */
+.tool-menu { margin-bottom: 18px; }
+.tool-menu-label { margin-bottom: 10px; }
+.tool-chips { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.tool-chip {
+  justify-content: center; text-align: center; height: auto; min-height: 42px;
+  padding: 10px 12px; line-height: 1.2; font-size: 12px; border-radius: 14px;
+  min-width: 0; white-space: normal;
+}
+.tool-chip .ic { flex-shrink: 0; }
+.tool-chip.active { box-shadow: var(--shadow); }
+.credit-wrap { padding: 22px 10px 8px; }
+.modal-title { margin: 10px 0 24px; }
+.credit-name { margin-top: 2px; font-size: 24px; }
+.credit-role { margin-top: 10px; }
+.credit-wa { margin-top: 24px; }
+.credit-done { margin-top: 24px; height: 50px; }
+@media (max-width: 360px) {
+  .tool-chips { grid-template-columns: 1fr; }
+}
 </style>
 <style>.sp-on{outline:var(--bw) solid var(--text);outline-offset:2px}</style>
 </head>
@@ -1257,15 +1306,16 @@ header { position: relative; display: flex; align-items: center; justify-content
               <h2 class="tools-title">Pinterest Download</h2>
               <p class="tools-sub">Cari pin lalu pilih, atau tempel link pin langsung</p>
             </div>
-            <label class="tools-label" for="ptQ"><svg class="ic"><use href="#i-bolt"/></svg> CARI PIN</label>
-            <input id="ptQ" class="tools-input" type="text" placeholder="contoh: anime wallpaper" autocomplete="off" spellcheck="false" />
-            <button id="ptSearch" class="tools-submit" type="button">
-              <svg class="ic"><use href="#i-bolt"/></svg>
-              <span>Cari</span>
-            </button>
-            <div id="ptGrid" class="pt-grid"></div>
 
-            <label class="tools-label" for="ptUrl"><svg class="ic"><use href="#i-link"/></svg> ATAU TEMPEL URL PIN</label>
+            <label class="tools-label" for="ptQ"><svg class="ic"><use href="#i-bolt"/></svg> CARI PIN</label>
+            <div class="pt-search-row">
+              <input id="ptQ" class="tools-input" type="text" placeholder="contoh: meme " autocomplete="off" spellcheck="false" />
+              <button id="ptSearch" class="tools-submit pt-search-btn" type="button">Cari</button>
+            </div>
+            <div id="ptGrid" class="pt-grid"></div>
+            <button id="ptMore" class="tools-submit pt-more" type="button" hidden>Muat lagi</button>
+
+            <div class="pt-divider">ATAU TEMPEL URL PIN</div>
             <input id="ptUrl" class="tools-input" type="url" placeholder="https://pin.it/... atau https://www.pinterest.com/pin/..." autocomplete="off" spellcheck="false" />
             <button id="ptSubmit" class="tools-submit" type="button">
               <svg class="ic"><use href="#i-bolt"/></svg>
@@ -2600,6 +2650,7 @@ header { position: relative; display: flex; align-items: center; justify-content
     const qInput = $('ptQ');
     const searchBtn = $('ptSearch');
     const gridBox = $('ptGrid');
+    const moreBtn = $('ptMore');
     const urlInput = $('ptUrl');
     const submitBtn = $('ptSubmit');
     const term = $('ptTerminal');
@@ -2614,6 +2665,9 @@ header { position: relative; display: flex; align-items: center; justify-content
     let busy = false;
     let dlBusy = false;
     let cur = null;
+    let lastQuery = '';
+    let nextBookmark = '';
+    let seen = new Set();
 
     function tClear() { term.innerHTML = ''; term.classList.add('show'); }
     function tLine(msg, cls = '') {
@@ -2625,7 +2679,7 @@ header { position: relative; display: flex; align-items: center; justify-content
     }
     function setBusy(on) {
       busy = on;
-      [submitBtn, searchBtn].forEach(b => {
+      [submitBtn, searchBtn, moreBtn].forEach(b => {
         b.disabled = on;
         b.classList.toggle('spinning', on);
       });
@@ -2642,6 +2696,7 @@ header { position: relative; display: flex; align-items: center; justify-content
       const m = String(src).match(/\.(jpe?g|png|gif|webp|mp4)(?:\?|$)/i);
       return m ? m[1].toLowerCase().replace('jpeg', 'jpg') : fallback;
     }
+    function textOf(v) { return typeof v === 'string' ? v.trim() : ''; }
     async function fetchJson(url, ms) {
       const ctrl = new AbortController();
       const timer = setTimeout(() => ctrl.abort(), ms);
@@ -2685,7 +2740,7 @@ header { position: relative; display: flex; align-items: center; justify-content
 
     function render(d) {
       cur = d;
-      titleEl.textContent = d.title || 'Pin tanpa judul';
+      titleEl.textContent = textOf(d.title) || 'Pin tanpa judul';
       metaEl.textContent = (d.type === 'video' ? 'VIDEO' : 'GAMBAR') + (d.id ? ' · ID ' + d.id : '');
 
       img.dataset.fb = '';
@@ -2720,70 +2775,89 @@ header { position: relative; display: flex; align-items: center; justify-content
       resultBox.classList.remove('hidden');
     }
 
-    function renderGrid(list) {
-      gridBox.innerHTML = '';
-      if (!list.length) {
-        tLine('… hasil kosong, coba keyword lain', 'muted');
-        return;
-      }
-      list.forEach(item => {
-        const card = document.createElement('button');
-        card.type = 'button';
-        card.className = 'pt-card';
-        const t = document.createElement('img');
-        t.loading = 'lazy';
-        t.alt = item.title || 'Pin';
-        t.src = item.thumb;
-        card.appendChild(t);
-        if (item.type === 'video') {
-          const badge = document.createElement('span');
-          badge.className = 'pt-badge';
-          badge.textContent = 'VIDEO';
-          card.appendChild(badge);
+    // Thumbnail lewat proxy (hotlink Pinterest sering diblok), kalau gagal coba sumber lain
+    function makeCard(item) {
+      const card = document.createElement('button');
+      card.type = 'button';
+      card.className = 'pt-card';
+
+      const srcs = [...new Set([item.thumb, item.image_fallback, item.image].filter(Boolean))];
+      let i = 0;
+      const t = document.createElement('img');
+      t.loading = 'lazy';
+      t.alt = textOf(item.title) || 'Pin';
+      t.onerror = () => {
+        i++;
+        if (i < srcs.length) {
+          t.src = dlHref(srcs[i], 'thumb.jpg', true);
+        } else {
+          t.hidden = true;
+          card.classList.add('pt-broken');
+          const e = document.createElement('span');
+          e.className = 'pt-err';
+          e.textContent = 'gambar gagal';
+          card.appendChild(e);
         }
-        card.addEventListener('click', () => {
-          render(item);
-          resultBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        });
-        gridBox.appendChild(card);
+      };
+      if (srcs.length) t.src = dlHref(srcs[0], 'thumb.jpg', true);
+      else t.onerror();
+      card.appendChild(t);
+
+      if (item.type === 'video') {
+        const badge = document.createElement('span');
+        badge.className = 'pt-badge';
+        badge.textContent = 'VIDEO';
+        card.appendChild(badge);
+      }
+
+      card.addEventListener('click', () => {
+        render(item);
+        resultBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
+      return card;
     }
 
-    btnVideo.addEventListener('click', () => guarded(async () => {
-      if (!cur || !cur.video) throw new Error('video ga tersedia');
-      await saveFile(cur.video, baseName(cur.id) + '.mp4');
-    }));
-    btnImage.addEventListener('click', () => guarded(async () => {
-      if (!cur || !(cur.image || cur.image_fallback)) throw new Error('gambar ga tersedia');
-      const src = cur.image || cur.image_fallback;
-      const name = baseName(cur.id) + '.' + extOf(src, 'jpg');
-      try {
-        await saveFile(src, name);
-      } catch (err) {
-        // resolusi asli kadang ga ada, fallback ke versi standar
-        if (!cur.image_fallback || cur.image_fallback === src) throw err;
-        tLine('> resolusi asli gagal, pakai versi standar', 'muted');
-        await saveFile(cur.image_fallback, name);
-      }
-    }));
+    // Tambah kartu, buang pin yang sudah tampil (biar gak dobel)
+    function addCards(list) {
+      let added = 0;
+      list.forEach(item => {
+        const key = String(item.id);
+        if (seen.has(key)) return;
+        seen.add(key);
+        gridBox.appendChild(makeCard(item));
+        added++;
+      });
+      return added;
+    }
 
-    async function search() {
+    async function search(more = false) {
       if (busy) return;
-      tClear();
-      const q = qInput.value.trim();
+      const q = more ? lastQuery : qInput.value.trim();
       if (!q) {
+        tClear();
         tLine('✗ keyword kosong', 'err');
         return;
       }
-      tLine('> cari pin "' + q + '"...', 'muted');
+      tClear();
+      if (!more) {
+        gridBox.innerHTML = '';
+        seen = new Set();
+        nextBookmark = '';
+        lastQuery = q;
+        moreBtn.hidden = true;
+      }
+      tLine('> cari pin "' + q + '"' + (more ? ' (halaman berikutnya)' : '') + '...', 'muted');
       setBusy(true);
       try {
-        const j = await fetchJson(SEARCH + encodeURIComponent(q), TIMEOUT_MS);
+        const bm = more ? nextBookmark : '';
+        const j = await fetchJson(SEARCH + encodeURIComponent(q) + (bm ? '&bm=' + encodeURIComponent(bm) : ''), TIMEOUT_MS);
         const list = (j.data && j.data.results) || [];
-        renderGrid(list);
-        if (list.length) tLine('✓ ketemu ' + list.length + ' pin, klik buat preview', 'ok');
+        const added = addCards(list);
+        nextBookmark = (j.data && j.data.bookmark) || '';
+        moreBtn.hidden = !nextBookmark || added === 0;
+        if (!seen.size) tLine('… hasil kosong, coba keyword lain', 'muted');
+        else tLine('✓ total ' + seen.size + ' pin' + (added ? ' (+' + added + ' baru)' : ', belum ada yang baru'), 'ok');
       } catch (err) {
-        gridBox.innerHTML = '';
         tLine('✗ ' + err.message, 'err');
       } finally {
         setBusy(false);
@@ -2812,8 +2886,27 @@ header { position: relative; display: flex; align-items: center; justify-content
       }
     }
 
-    searchBtn.addEventListener('click', search);
-    qInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); search(); } });
+    btnVideo.addEventListener('click', () => guarded(async () => {
+      if (!cur || !cur.video) throw new Error('video ga tersedia');
+      await saveFile(cur.video, baseName(cur.id) + '.mp4');
+    }));
+    btnImage.addEventListener('click', () => guarded(async () => {
+      if (!cur || !(cur.image || cur.image_fallback)) throw new Error('gambar ga tersedia');
+      const src = cur.image || cur.image_fallback;
+      const name = baseName(cur.id) + '.' + extOf(src, 'jpg');
+      try {
+        await saveFile(src, name);
+      } catch (err) {
+        // resolusi asli kadang ga ada, fallback ke versi standar
+        if (!cur.image_fallback || cur.image_fallback === src) throw err;
+        tLine('> resolusi asli gagal, pakai versi standar', 'muted');
+        await saveFile(cur.image_fallback, name);
+      }
+    }));
+
+    searchBtn.addEventListener('click', () => search(false));
+    qInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); search(false); } });
+    moreBtn.addEventListener('click', () => search(true));
     submitBtn.addEventListener('click', run);
     urlInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); run(); } });
   })();
