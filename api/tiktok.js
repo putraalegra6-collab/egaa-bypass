@@ -4,6 +4,7 @@ const API = process.env.TIKTOK_API_URL || 'https://www.tikwm.com/api/';
 const TT_RE = /^https?:\/\/(?:[\w-]+\.)*tiktok\.com\//i;
 
 module.exports = async (req, res) => {
+  if (String((req.query || {}).p || '') === 'pinterest') return require('../lib/pinterest').handle(req, res);
   const url = String((req.query || {}).url || '').trim();
   if (!TT_RE.test(url)) return res.status(400).json({ ok: false, error: 'link TikTok tidak valid' });
 
