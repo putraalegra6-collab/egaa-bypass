@@ -6,13 +6,7 @@
     "api/resolve.js": {
       "maxDuration": 60
     },
-    "api/vote.js": {
-      "maxDuration": 60
-    },
     "api/webtozip.js": {
-      "maxDuration": 60
-    },
-    "api/react.js": {
       "maxDuration": 60
     },
     "api/tiktok.js": {
