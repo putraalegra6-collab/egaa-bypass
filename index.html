@@ -1988,7 +1988,7 @@ header { position: relative; display: flex; align-items: center; justify-content
     const UPSCALE_API = '/api/hd-upscale';
     const TIMEOUT_MS = 180000;
     const SCALES = { file: [['2', '2x']], link: [['2', '2x'], ['4', '4x']] };
-    const ENGINE_LABEL = { file: 'Engine: Upscale · drop foto', link: 'Engine: AI Enhance v4 · pakai link' };
+    const ENGINE_LABEL = { file: 'Engine: Upscale', link: 'Engine: AI Enhance' };
     const OUT_KEYS = ['result', 'result_url', 'resultUrl', 'output', 'hasil', 'image', 'image_url', 'imageUrl', 'download', 'downloadUrl', 'url', 'link', 'data'];
 
     const fileBox = $('hdFileBox');
@@ -2205,7 +2205,7 @@ header { position: relative; display: flex; align-items: center; justify-content
         if (!validateUrl(linkUrl)) { tLine('✗ Link tidak valid, harus diawali http:// atau https://', 'err'); return; }
       }
       tLine('> HD Upscale siap...', 'hi');
-      tLine('→ engine : ' + (mode === 'file' ? 'Upscale · drop foto' : 'AI Enhance v4 · link'), 'muted');
+      tLine('→ engine : ' + (mode === 'file' ? 'Upscale' : 'AI Enhance'), 'muted');
       tLine('→ scale  : ' + scale + 'x', 'muted');
       setBusy(true);
       const ctrl = new AbortController();
