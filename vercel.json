@@ -23,6 +23,9 @@
     },
     "api/hd-ai.js": {
       "maxDuration": 60
+    },
+    "api/hd-upscale.js": {
+      "maxDuration": 60
     }
   },
   "rewrites": [
