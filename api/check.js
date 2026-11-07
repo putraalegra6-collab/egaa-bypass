@@ -10,9 +10,7 @@ module.exports = async (req, res) => {
   const { type, password } = body || {};
 
   const expected =
-    type === 'send' ? process.env.SEND_PASSWORD :
     type === 'webtozip' ? process.env.WEBTOZIP_PASSWORD :
-    type === 'react' ? process.env.REACT_PASSWORD :
     process.env.OPEN_PASSWORD;
 
   if (!expected) {
