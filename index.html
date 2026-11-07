@@ -1973,11 +1973,10 @@ header { position: relative; display: flex; align-items: center; justify-content
 
   /* ================= 8c. HD IMAGE UPSCALE ================= */
   (function initHdTool() {
-    const UPSCALE_API = '/api/hd-upscale';
     const AI_API = '/api/hd-ai';
     const TIMEOUT_MS = 180000;
-    const SCALES = { file: [['2', '2x']] };
-    const ENGINE_LABEL = { file: 'Engine: Upscale · upload file', link: 'Engine: AI Enhance · pakai link' };
+    const SCALES = { file: [['2', '2x'], ['4', '4x']] };
+    const ENGINE_LABEL = { file: 'Engine: AI Enhance v4 · upload file' };
     const OUT_KEYS = ['result', 'result_url', 'resultUrl', 'output', 'hasil', 'image', 'image_url', 'imageUrl', 'download', 'downloadUrl', 'url', 'link', 'data'];
 
     const fileBox = $('hdFileBox');
@@ -2181,7 +2180,7 @@ header { position: relative; display: flex; align-items: center; justify-content
       tClear();
       if (!file) { tLine('✗ Foto belum dipilih', 'err'); return; }
       tLine('> HD Upscale siap...', 'hi');
-      tLine('→ engine : Upscale ', 'muted');
+      tLine('→ engine : AI Enhance v4', 'muted');
       tLine('→ scale  : ' + scale + 'x', 'muted');
       setBusy(true);
       const ctrl = new AbortController();
@@ -2189,7 +2188,7 @@ header { position: relative; display: flex; align-items: center; justify-content
       try {
         tLine('> upload ke server...', 'muted');
         const dataUrl = await readAsDataUrl(file);
-        const res = await fetch(UPSCALE_API, {
+        const res = await fetch(AI_API, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ image: dataUrl, scale: scale }),
