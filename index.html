@@ -566,7 +566,7 @@ header { position: relative; display: flex; align-items: center; justify-content
   font-size: 9px; letter-spacing: 3px; color: var(--dim);
 }
 .tools-terminal::after {
-  content: "egaa-vote"; position: absolute; top: 9px; right: 14px;
+  content: "egaa-tools"; position: absolute; top: 9px; right: 14px;
   font-family: var(--mono); font-size: 10px; color: var(--dim);
 }
 .tools-terminal .log { line-height: 1.75; }
@@ -640,7 +640,7 @@ header { position: relative; display: flex; align-items: center; justify-content
 @keyframes voteIn { from { opacity: 0; transform: translateX(14px); filter: blur(2px); } to { opacity: 1; transform: none; filter: none; } }
 .tools-terminal .log.ok { text-shadow: 0 0 10px rgba(52,211,153,.35); }
 .tools-terminal .log.err { text-shadow: 0 0 10px rgba(248,113,113,.3); }
-.tools-terminal::after { content: "egaa-vote"; }
+.tools-terminal::after { content: "egaa-tools"; }
 .tools-terminal.show::before { animation: none; }
 :root[data-theme="brutal"] .tools-terminal .log.ok { text-shadow: none; }
 :root[data-theme="brutal"] .tools-terminal .log.err { text-shadow: none; }
@@ -650,7 +650,7 @@ header { position: relative; display: flex; align-items: center; justify-content
 .tool-menu { margin-bottom: 16px; }
 .tool-menu-label { font-size: 10.5px; font-weight: 800; letter-spacing: 1.2px; color: var(--muted); margin-bottom: 8px; }
 .tool-chips { display: flex; flex-wrap: wrap; gap: 8px; }
-.tool-chip { display: inline-flex; align-items: center; gap: 7px; height: 38px; padding: 0 14px; border-radius: 999px; border: var(--bw) solid var(--line-strong); background: var(--surface-2); color: var(--muted); font-size: 12.5px; font-weight: 800; cursor: pointer; transition: background .2s, color .2s, transform .08s; }
+.tool-chip { display: inline-flex; align-items: center; justify-content: center; gap: 7px; height: 38px; padding: 0 12px; white-space: nowrap; min-width: 0; overflow: hidden; border-radius: 999px; border: var(--bw) solid var(--line-strong); background: var(--surface-2); color: var(--muted); font-size: 12.5px; font-weight: 800; cursor: pointer; transition: background .2s, color .2s, transform .08s; }
 .tool-chip .ic { width: 14px; height: 14px; }
 .tool-chip.active { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
 .tool-chip:active { transform: scale(.97); }
@@ -787,14 +787,6 @@ header { position: relative; display: flex; align-items: center; justify-content
 :root[data-theme="brutal"] .splash-bar span { background: repeating-linear-gradient(45deg, #111 0 10px, #FFC93C 10px 20px); background-size: 28px 28px; animation: barFill 1.7s cubic-bezier(.6,0,.2,1) .25s forwards, stripeMove .5s linear infinite; }
 :root[data-theme="brutal"] .splash-word span { text-shadow: 3px 3px 0 #FF5CA8; }
 
-/* ===== WA REACTION TOOL ===== */
-.react-emoji-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-.react-emoji { width: 42px; height: 42px; border-radius: 12px; border: var(--bw) solid var(--line-strong); background: var(--surface-2); color: var(--text); font-size: 20px; cursor: pointer; display: grid; place-items: center; transition: transform .1s, background .2s, border-color .2s; }
-.react-emoji:hover { transform: translateY(-2px); }
-.react-emoji.active { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
-.react-emoji:active { transform: scale(.94); }
-.react-input-emoji { text-align: center; font-size: 20px; }
-.react-target { margin-top: 10px; padding: 10px 12px; border: var(--bw) dashed var(--line-strong); border-radius: var(--radius-sm); font-family: var(--mono); font-size: 11px; color: var(--muted); word-break: break-all; background: var(--surface-2); }
 
 
 /* ===== TIKTOK DOWNLOAD ===== */
@@ -850,11 +842,6 @@ header { position: relative; display: flex; align-items: center; justify-content
 .uc-media:empty { display: none; }
 .uc-media video, .uc-media img { display: block; width: 100%; max-height: 320px; object-fit: contain; background: #000; border-radius: var(--radius-sm); }
 
-/* ===== WA REACTION: VERIFIKASI MANUSIA ===== */
-.react-verify { margin-top: 12px; padding: 12px; border: var(--bw) dashed var(--line-strong); border-radius: var(--radius-sm); background: var(--surface-2); display: flex; flex-direction: column; gap: 8px; }
-.react-verify.hidden { display: none; }
-.react-verify-title { font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
-.react-verify-q { font-family: var(--mono); font-size: 15px; font-weight: 700; color: var(--text); }
 
 /* ===== rapihin layout tools (override) ===== */
 .pt-search-row { align-items: center; margin-top: 0; }
@@ -1165,33 +1152,13 @@ header { position: relative; display: flex; align-items: center; justify-content
           <div class="tool-menu">
             <div class="tool-menu-label">PILIH TOOLS</div>
             <div class="tool-chips">
-              <button type="button" class="tool-chip" data-tool="vote" aria-pressed="false"><svg class="ic"><use href="#i-bolt"/></svg> WA Vote</button>
               <button type="button" class="tool-chip active" data-tool="hd" aria-pressed="true"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 16l3-4 2 2 2-3 3 5"/></svg> HD Upscale</button>
               <button type="button" class="tool-chip" data-tool="zip" aria-pressed="false">WebToZip</button>
-              <button type="button" class="tool-chip" data-tool="react" aria-pressed="false"><svg class="ic"><use href="#i-hb"/></svg> WA Reaction</button>
               <button type="button" class="tool-chip" data-tool="tiktok" aria-pressed="false">TikTok Download</button>
               <button type="button" class="tool-chip" data-tool="pinterest" aria-pressed="false">Pinterest Download</button>
               <button type="button" class="tool-chip" data-tool="ucdl" aria-pressed="false">UC Download</button>
               <button type="button" class="tool-chip" data-tool="spotify" aria-pressed="false"><svg class="ic"><use href="#i-bolt"/></svg> Spotify Download</button>
             </div>
-          </div>
-
-          <!-- SECTION: WA VOTE -->
-          <div class="tool-sec" data-sec="vote">
-            <div class="tools-header">
-              <div class="modal-tag">EGAA TOOLS</div>
-              <h2 class="tools-title">WhatsApp Channel Vote</h2>
-              <p class="tools-sub">Kirim vote ke channel WhatsApp</p>
-            </div>
-            <label class="tools-label" for="voteUrl"><svg class="ic"><use href="#i-link"/></svg> URL CHANNEL / POST</label>
-            <input id="voteUrl" class="tools-input" type="url" placeholder="https://whatsapp.com/channel/..." autocomplete="off" spellcheck="false" />
-            <label class="tools-label" for="votePesan"><svg class="ic"><use href="#i-bolt"/></svg> TEKS OPSI POLLING (HARUS PERSIS)</label>
-            <input id="votePesan" class="tools-input" type="text" placeholder="Teks opsi persis (cth: Iya / Setuju)" autocomplete="off" />
-            <button id="voteSubmit" class="tools-submit" type="button">
-              <svg class="ic"><use href="#i-bolt"/></svg>
-              <span id="voteSubmitText">Kirim Vote</span>
-            </button>
-            <div id="voteTerminal" class="tools-terminal" aria-live="polite"></div>
           </div>
 
           <!-- SECTION: WEBTOZIP -->
@@ -1397,30 +1364,6 @@ header { position: relative; display: flex; align-items: center; justify-content
             </div>
           </div>
 
-          <!-- SECTION: WA REACTION -->
-          <div class="tool-sec" data-sec="react">
-            <div class="tools-header">
-              <div class="modal-tag">EGAA TOOLS</div>
-              <h2 class="tools-title">WhatsApp Channel Reaction</h2>
-              <p class="tools-sub">Kirim reaksi ke postingan channel WhatsApp</p>
-            </div>
-            <label class="tools-label" for="reactUrl">
-              <svg class="ic"><use href="#i-link"/></svg> URL POSTINGAN CHANNEL
-            </label>
-            <input id="reactUrl" class="tools-input" type="url" placeholder="https://whatsapp.com/channel/.../123" autocomplete="off" spellcheck="false" />
-            <label class="tools-label" for="reactEmoji">
-              <svg class="ic"><use href="#i-bolt"/></svg> EMOJI REAKSI (bisa lebih dari 1, pisah pakai koma)
-            </label>
-            <input id="reactEmoji" class="tools-input react-input-emoji" type="text" placeholder="👍" value="👍" maxlength="120" autocomplete="off" />
-            <div id="reactEmojiRow" class="react-emoji-row"></div>
-            <button id="reactSubmit" class="tools-submit" type="button">
-              <svg class="ic"><use href="#i-bolt"/></svg>
-              <span id="reactSubmitText">Kirim Reaksi</span>
-            </button>
-            <div id="reactTarget" class="react-target hidden"></div>
-            <div id="reactTerminal" class="tools-terminal" aria-live="polite"></div>
-          </div>
-
         </div>
       </div>
     </div>
@@ -1428,7 +1371,7 @@ header { position: relative; display: flex; align-items: center; justify-content
 
 <script>
   /* ================= 1. KONFIG ================= */
-  const VOTE_GATE = { sendPw: '' };
+  const VOTE_GATE = { zipPw: '' };
   const CREDIT_PHOTO_URL = "https://files.catbox.moe/xpdkbo.jpg";
   const HEADER_LOGO_URL = "https://ganga--link--ghhzdp9sv8hk.code.run/i/xt2s632r";
   const SPLASH_LOGO_URL = "https://ganga--link--ghhzdp9sv8hk.code.run/i/jwor0voh";
@@ -1927,97 +1870,6 @@ header { position: relative; display: flex; align-items: center; justify-content
     else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
   });
 
-  /* ================= 8a. WA VOTE ================= */
-  (function initVoteTool() {
-    const voteUrl = $('voteUrl');
-    const votePesan = $('votePesan');
-    const submitBtn = $('voteSubmit');
-    const submitText = $('voteSubmitText');
-    const term = $('voteTerminal');
-    const VOTE_API = '/api/vote';
-
-    function tClear() { term.innerHTML = ''; term.classList.add('show'); }
-    function tLine(msg, cls = '') {
-      const d = document.createElement('div');
-      d.className = 'log ' + cls;
-      d.textContent = msg;
-      term.appendChild(d);
-      term.scrollTop = term.scrollHeight;
-    }
-    const sleep = ms => new Promise(r => setTimeout(r, ms));
-
-    submitBtn.addEventListener('click', async () => {
-      const url = voteUrl.value.trim();
-      const pesan = votePesan.value.trim();
-      const sendPw = VOTE_GATE.sendPw;
-      VOTE_GATE.sendPw = '';
-      tClear();
-      if (!url) { tLine('✗ URL channel belum diisi', 'err'); return; }
-      if (!pesan) { tLine('✗ Teks opsi polling belum diisi', 'err'); return; }
-
-      try {
-        const u = new URL(url);
-        if (!/whatsapp\.com$/i.test(u.hostname) && !/wa\.me$/i.test(u.hostname)) {
-          tLine('⚠ URL bukan dari whatsapp.com (lanjut kirim)', 'warn');
-        }
-      } catch { tLine('✗ Format URL tidak valid', 'err'); return; }
-
-      const kataSalah = ['upp', 'vote', 'support', 'up', 'gas', 'gaskeun'];
-      if (kataSalah.includes(pesan.toLowerCase())) {
-        tLine('⚠ Peringatan: "' + pesan + '" kemungkinan BUKAN teks opsi polling.', 'warn');
-        tLine('  Harus PERSIS sama dengan teks opsi di WhatsApp (cth: "Iya").', 'warn');
-      }
-
-      submitBtn.disabled = true;
-      submitBtn.classList.add('spinning');
-      submitText.textContent = 'Mengirim...';
-      tLine('> Egaa Tools siap...', 'hi');
-      tLine('→ target: ' + url, 'muted');
-      tLine('→ opsi  : "' + pesan + '"', 'muted');
-      await sleep(180);
-      tLine('> connecting to server API...', 'muted');
-      await sleep(220);
-
-      try {
-        const res = await fetch(VOTE_API, {
-          method: 'POST',
-          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-          body: JSON.stringify({ url: url, pesan: pesan, password: sendPw })
-        });
-        let data = null;
-        try { data = await res.json(); } catch (e) {}
-        if (!res.ok) {
-          tLine('✗ HTTP ' + res.status + (data && data.error ? ' — ' + data.error : ''), 'err');
-          return;
-        }
-        if (data && data.status === true) {
-          tLine('✓ request accepted', 'ok');
-          tLine('─────────────────────────────', 'muted');
-          if (data.Creator)               tLine('creator  : ' + data.Creator, 'info');
-          if (data.channel !== undefined) tLine('channel  : ' + data.channel, 'info');
-          if (data.post !== undefined)    tLine('post     : ' + data.post, 'info');
-          if (data.total !== undefined)   tLine('total    : ' + data.total, 'info');
-          if (data.success !== undefined) tLine('success  : ' + data.success, 'ok');
-          if (data.failed !== undefined)  tLine('failed   : ' + data.failed, 'err');
-          if (data.time !== undefined)    tLine('time     : ' + data.time, 'muted');
-          tLine('─────────────────────────────', 'muted');
-          tLine('✓ ' + (data.message || 'Vote berhasil diproses'), 'ok');
-        } else {
-          tLine('✗ ' + ((data && data.error) || 'gagal memproses vote'), 'err');
-          if (data && data.message) tLine('  ' + data.message, 'muted');
-        }
-      } catch (err) {
-        tLine('✗ network / proxy error', 'err');
-        tLine('  ' + err.message, 'err');
-        tLine('⚠ Cek koneksi atau endpoint API (Mungkin kena CORS)', 'warn');
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.classList.remove('spinning');
-        submitText.textContent = 'Kirim Vote';
-      }
-    });
-  })();
-
   /* ================= 8b. MENU TOOLS (password dicek di server) ================= */
   (function initToolMenu() {
     const chips = [...document.querySelectorAll('.tool-chip')];
@@ -2028,11 +1880,7 @@ header { position: relative; display: flex; align-items: center; justify-content
     const lockErr = $('voteLockErr');
     const lockOk = $('voteLockOk');
     const lockCancel = $('voteLockCancel');
-    const sendBtn = $('voteSubmit');
-    let unlocked = false;
     let zipUnlocked = false;
-    let reactUnlocked = false;
-    let sendOk = false;
     let pending = null;
     let checking = false;
 
@@ -2107,51 +1955,9 @@ header { position: relative; display: flex; align-items: center; justify-content
           });
           return;
         }
-        if (chip.dataset.tool === 'vote' && !unlocked) {
-          openLock({
-            type: 'open',
-            title: 'TOOL TERKUNCI',
-            sub: 'Masukin password buat buka WA Vote',
-            onOk: () => { unlocked = true; activate(chip); }
-          });
-          return;
-        }
-        if (chip.dataset.tool === 'react' && !reactUnlocked) {
-          openLock({
-            type: 'react',
-            title: 'TOOL TERKUNCI',
-            sub: 'Masukin password buat buka WA Reaction',
-            onOk: (pw) => {
-              window.__reactPw = pw;
-              window.__reactUnlocked = true;
-              window.dispatchEvent(new Event('egaa-react-unlock'));
-              activate(chip);
-            }
-          });
-          return;
-        }
         activate(chip);
       });
     });
-
-    // Tombol Kirim Vote minta password kirim (dicek server)
-    document.addEventListener('click', e => {
-      const btn = e.target.closest ? e.target.closest('#voteSubmit') : null;
-      if (!btn || sendOk) return;
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      openLock({
-        type: 'send',
-        title: 'KONFIRMASI KIRIM',
-        sub: 'Masukin password buat kirim vote',
-        onOk: (pw) => {
-          VOTE_GATE.sendPw = pw;
-          sendOk = true;
-          btn.click();
-          sendOk = false;
-        }
-      });
-    }, true);
 
     lockOk.addEventListener('click', tryUnlock);
     lockCancel.addEventListener('click', closeLock);
@@ -2160,11 +1966,7 @@ header { position: relative; display: flex; align-items: center; justify-content
       if (e.key === 'Enter') { e.preventDefault(); tryUnlock(); }
     });
     document.addEventListener('egaa-modal-close', () => {
-      unlocked = false;
       zipUnlocked = false;
-      reactUnlocked = false;
-      window.__reactUnlocked = false;
-      window.__reactPw = '';
       closeLock();
     });
   })();
@@ -3107,205 +2909,6 @@ header { position: relative; display: flex; align-items: center; justify-content
 
     submitBtn.addEventListener('click', run);
     urlInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); run(); } });
-  })();
-
-  /* ================= 8c-2. WA REACTION ================= */
-  (function initReactTool() {
-    const REACT_API = '/api/react';
-    const COOLDOWN_MS = 15000;
-    const CD_KEY = 'egaa_react_cd';
-    const QUICK = ['👍','❤️','😂','😮','😢','🙏','🔥','👏'];
-    const urlEl = $('reactUrl');
-    const emojiEl = $('reactEmoji');
-    const rowEl = $('reactEmojiRow');
-    const submitBtn = $('reactSubmit');
-    const submitText = $('reactSubmitText');
-    const term = $('reactTerminal');
-    const targetEl = $('reactTarget');
-    let busy = false;
-    let pending = null;
-    let cdTimer = null;
-
-    function tClear() { term.innerHTML = ''; term.classList.add('show'); }
-    function tLine(msg, cls = '') {
-      const d = document.createElement('div');
-      d.className = 'log ' + cls;
-      d.textContent = msg;
-      term.appendChild(d);
-      term.scrollTop = term.scrollHeight;
-    }
-
-    function getEmojiList() {
-      return emojiEl.value.split(',').map(s => s.trim()).filter(Boolean);
-    }
-    function hasEmoji(em) {
-      return getEmojiList().includes(em);
-    }
-    function toggleEmoji(em) {
-      const list = getEmojiList();
-      const idx = list.indexOf(em);
-      if (idx >= 0) list.splice(idx, 1);
-      else list.push(em);
-      emojiEl.value = list.join(',');
-      renderQuick();
-    }
-    function renderQuick() {
-      rowEl.innerHTML = '';
-      QUICK.forEach(em => {
-        const b = document.createElement('button');
-        b.type = 'button';
-        b.className = 'react-emoji' + (hasEmoji(em) ? ' active' : '');
-        b.textContent = em;
-        b.title = hasEmoji(em) ? 'Klik buat hapus' : 'Klik buat tambah';
-        b.addEventListener('click', () => toggleEmoji(em));
-        rowEl.appendChild(b);
-      });
-    }
-    emojiEl.addEventListener('input', renderQuick);
-    renderQuick();
-
-    // ===== Cooldown 15 detik (disimpan di browser, tahan refresh) =====
-    function cdLeft() {
-      let until = 0;
-      try { until = Number(localStorage.getItem(CD_KEY)) || 0; } catch (e) {}
-      return Math.max(0, until - Date.now());
-    }
-    function cdTick() {
-      const left = cdLeft();
-      if (left > 0) {
-        submitBtn.disabled = true;
-        if (!busy) submitText.textContent = 'Tunggu ' + Math.ceil(left / 1000) + ' detik';
-        return;
-      }
-      if (cdTimer) { clearInterval(cdTimer); cdTimer = null; }
-      if (!busy) { submitBtn.disabled = false; submitText.textContent = 'Kirim Reaksi'; }
-    }
-    function updateCd() {
-      if (cdTimer) { clearInterval(cdTimer); cdTimer = null; }
-      cdTick();
-      if (cdLeft() > 0) cdTimer = setInterval(cdTick, 250);
-    }
-    function startCooldown() {
-      try { localStorage.setItem(CD_KEY, String(Date.now() + COOLDOWN_MS)); } catch (e) {}
-      updateCd();
-    }
-
-    function setBusy(on) {
-      busy = on;
-      submitBtn.classList.toggle('spinning', on);
-      if (on) {
-        submitBtn.disabled = true;
-        submitText.textContent = 'Mengirim...';
-      } else {
-        updateCd();
-      }
-    }
-
-    const URL_RE = /^https:\/\/(www\.)?whatsapp\.com\/channel\/[A-Za-z0-9]+\/\d+\/?$/i;
-
-    // Tahap 1: validasi input, cek cooldown, lalu kirim langsung
-    async function runReact(password) {
-      if (busy) return;
-      tClear();
-      targetEl.classList.add('hidden');
-      const url = urlEl.value.trim();
-      const emoji = (emojiEl.value.trim() || '👍');
-      const emojiList = getEmojiList();
-
-      if (!url) { tLine('✗ URL channel belum diisi', 'err'); return; }
-      if (!URL_RE.test(url)) {
-        tLine('✗ Format URL tidak valid', 'err');
-        tLine('  Harus: https://whatsapp.com/channel/<id>/<nomor>', 'muted');
-        return;
-      }
-      if (emojiList.length === 0) { tLine('✗ Pilih minimal 1 emoji', 'err'); return; }
-
-      const left = cdLeft();
-      if (left > 0) {
-        tLine('✗ tunggu ' + Math.ceil(left / 1000) + ' detik lagi sebelum kirim', 'err');
-        return;
-      }
-
-      tLine('> Egaa Reaction siap...', 'hi');
-      tLine('→ target : ' + url, 'muted');
-      tLine('→ reaksi : ' + emojiList.join(', ') + ' (' + emojiList.length + ' emoji)', 'muted');
-      pending = { url, emoji, password };
-      await submitReact();
-    }
-
-    async function submitReact() {
-      if (busy || !pending) return;
-      setBusy(true);
-      tLine('> connecting ke server API...', 'muted');
-
-      let sent = false;
-      try {
-        const res = await fetch(REACT_API, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-          body: JSON.stringify({
-            url: pending.url,
-            reaction: pending.emoji,
-            password: pending.password
-          })
-        });
-        let data = null;
-        try { data = await res.json(); } catch (e) {}
-
-        {
-          sent = true;
-          if (!res.ok) {
-            tLine('✗ HTTP ' + res.status + (data && data.error ? ' — ' + data.error : ''), 'err');
-          } else if (data && data.status === true) {
-            tLine('✓ reaction accepted', 'ok');
-            tLine('─────────────────────────────', 'muted');
-            if (data.message) tLine('message  : ' + data.message, 'info');
-            if (data.reaction) tLine('reaction : ' + data.reaction, 'info');
-            if (Array.isArray(data.reactions)) tLine('list     : ' + data.reactions.join(', '), 'info');
-            if (data.total_emojis !== undefined) tLine('emojis   : ' + data.total_emojis, 'info');
-            if (data.task_status) tLine('status   : ' + data.task_status, 'ok');
-            if (data.vip_key) tLine('vip key  : ' + data.vip_key, 'muted');
-            if (data.usage_today !== null && data.usage_today !== undefined) tLine('usage    : ' + data.usage_today + ' / ' + (data.limit || 50), 'muted');
-            if (data.response_time) tLine('time     : ' + data.response_time, 'muted');
-            tLine('─────────────────────────────', 'muted');
-            tLine('✓ ' + (data.message || 'Reaksi terkirim'), 'ok');
-            targetEl.textContent = 'Target: ' + (data.target || pending.url);
-            targetEl.classList.remove('hidden');
-          } else {
-            tLine('✗ ' + ((data && data.error) || 'gagal mengirim reaksi'), 'err');
-          }
-        }
-      } catch (err) {
-        sent = true;
-        tLine('✗ network / proxy error', 'err');
-        tLine('  ' + err.message, 'err');
-      } finally {
-        setBusy(false);
-        if (sent) startCooldown();
-        pending = null;
-      }
-    }
-
-    window.addEventListener('egaa-react-unlock', () => {});
-
-    submitBtn.addEventListener('click', (e) => {
-      if (!window.__reactUnlocked) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-        tClear();
-        tLine('✗ Tool belum dibuka. Klik chip "WA Reaction" dulu, masukin password', 'err');
-        return;
-      }
-      runReact(window.__reactPw || '');
-    });
-
-    document.addEventListener('egaa-modal-close', () => {
-      window.__reactUnlocked = false;
-      window.__reactPw = '';
-      pending = null;
-    });
-
-    updateCd();
   })();
 
   /* ================= 8d. WEBTOZIP ================= */
