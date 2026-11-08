@@ -17,6 +17,10 @@
     {
       "source": "/api/pinterest",
       "destination": "/api/tiktok?p=pinterest"
+    },
+    {
+      "source": "/akunlama/:path*",
+      "destination": "https://akunlama.com/api/:path*"
     }
   ]
 }
