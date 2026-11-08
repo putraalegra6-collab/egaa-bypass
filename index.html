@@ -675,6 +675,43 @@ header { position: relative; display: flex; align-items: center; justify-content
 .am-item .am-label { flex: 1; min-width: 0; font-weight: 800; font-size: 14px; }
 .am-item .am-label small { display: block; font-weight: 600; font-size: 11px; color: var(--dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .am-item .tt-btn { flex: none; text-decoration: none; }
+
+/* langkah proses */
+.am-steps { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 14px; }
+.am-steps[hidden] { display: none; }
+.am-step { display: flex; align-items: center; gap: 8px; padding: 9px 10px; font-size: 12px; font-weight: 700; color: var(--dim); background: var(--surface-2); border: var(--bw) solid var(--line); border-radius: var(--radius-sm); transition: color .3s, border-color .3s, background .3s; }
+.am-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--dim); opacity: .4; flex: none; }
+.am-step.active { color: var(--text); border-color: var(--line-strong); }
+.am-step.active .am-dot { background: var(--accent); opacity: 1; animation: amPulse 1s ease-in-out infinite; }
+.am-step.done { color: var(--text); }
+.am-step.done .am-dot { background: var(--ok); opacity: 1; }
+@keyframes amPulse { 50% { transform: scale(1.5); } }
+
+/* hasil: video */
+.am-result { gap: 14px; }
+.am-video { display: flex; flex-direction: column; gap: 10px; }
+.am-player { position: relative; width: 100%; max-width: 280px; margin: 0 auto; aspect-ratio: 9 / 16; border-radius: 18px; overflow: hidden; background: #000; border: var(--bw) solid var(--line-strong); box-shadow: var(--shadow-lg); }
+.am-player video, .am-player img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.am-player .am-fallback { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(0,0,0,.55); color: #fff; font-size: 12px; font-weight: 700; text-align: center; padding: 16px; }
+.am-open { align-self: center; text-decoration: none; }
+
+/* hasil: penulis */
+.am-author { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--surface-2); border: var(--bw) solid var(--line-strong); border-radius: var(--radius-sm); }
+.am-author img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: var(--bw) solid var(--line-strong); flex: none; }
+.am-author .am-name { font-weight: 800; font-size: 13.5px; }
+.am-author .am-user { font-size: 11.5px; color: var(--muted); font-weight: 700; }
+.am-caption { margin-top: 2px; font-size: 12.5px; color: var(--muted); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* hasil: statistik */
+.am-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.am-stat { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 4px; background: var(--surface-2); border: var(--bw) solid var(--line-strong); border-radius: var(--radius-sm); box-shadow: var(--shadow); animation: amIn .45s cubic-bezier(.2,.8,.2,1) both; }
+.am-stat:nth-child(2) { animation-delay: .06s; }
+.am-stat:nth-child(3) { animation-delay: .12s; }
+.am-stat:nth-child(4) { animation-delay: .18s; }
+.am-stat .ic { width: 16px; height: 16px; color: var(--text); }
+.am-stat b { font-family: var(--font-head); font-size: 14px; font-weight: var(--weight); }
+.am-stat small { font-size: 10px; color: var(--dim); font-weight: 700; letter-spacing: .4px; }
+@keyframes amIn { from { opacity: 0; transform: translateY(10px) scale(.96); } to { opacity: 1; transform: none; } }
 .am-result .tt-btn { text-align: center; text-decoration: none; }
 .am-box { white-space: pre-wrap; word-break: break-all; font-family: var(--mono); font-size: 12px; line-height: 1.6; padding: 12px; margin: 0; max-height: 220px; overflow-y: auto; background: var(--bg); color: var(--text); border: var(--bw) solid var(--line-strong); border-radius: var(--radius-sm); }
 .hd-modes { display: flex; gap: 8px; margin-bottom: 12px; }
@@ -935,6 +972,10 @@ header { position: relative; display: flex; align-items: center; justify-content
       <symbol id="i-wand" viewBox="0 0 24 24"><path d="M15 4l5 5L8 21l-5-5L15 4z"/><path d="M14 7l3 3M3 3v3M1.5 4.5h3M19 16v3M17.5 17.5h3"/></symbol>
       <symbol id="i-hb" viewBox="0 0 24 24"><path d="M2 12h4l2.2-5 3.8 10 3-7 2 2h5"/></symbol>
       <symbol id="i-eth" viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="7" rx="1"/><path d="M9 9v5h6V9M12 14v4M7 22h10"/></symbol>
+      <symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></symbol>
+      <symbol id="i-msg" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></symbol>
+      <symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></symbol>
+      <symbol id="i-play" viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></symbol>
       <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
       <symbol id="i-half" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path class="ic-fill" d="M12 3a9 9 0 0 1 0 18z"/></symbol>
       <symbol id="i-wa" viewBox="0 0 24 24"><path fill="currentColor" stroke="none" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></symbol>
@@ -1302,8 +1343,17 @@ header { position: relative; display: flex; align-items: center; justify-content
               <svg class="ic"><use href="#i-bolt"/></svg>
               <span>Cari Preset</span>
             </button>
+            <div id="amSteps" class="am-steps" hidden>
+              <div class="am-step"><span class="am-dot"></span>Cek link</div>
+              <div class="am-step"><span class="am-dot"></span>Ambil video</div>
+              <div class="am-step"><span class="am-dot"></span>Scan komentar</div>
+              <div class="am-step"><span class="am-dot"></span>Cocokin preset</div>
+            </div>
             <div id="amTerminal" class="tools-terminal" aria-live="polite"></div>
             <div id="amResult" class="am-result hidden">
+              <div id="amVideo" class="am-video"></div>
+              <div id="amAuthor" class="am-author"></div>
+              <div id="amStats" class="am-stats"></div>
               <div id="amInfo" class="am-info"></div>
               <div id="amList" class="am-list"></div>
             </div>
@@ -2986,82 +3036,176 @@ header { position: relative; display: flex; align-items: center; justify-content
     const submitBtn = $('amSubmit');
     const submitText = submitBtn.querySelector('span');
     const term = $('amTerminal');
+    const stepsEl = $('amSteps');
     const resBox = $('amResult');
+    const videoEl = $('amVideo');
+    const authorEl = $('amAuthor');
+    const statsEl = $('amStats');
     const infoEl = $('amInfo');
     const listEl = $('amList');
     const AM_API = '/api/am-preset';
     const sleepA = ms => new Promise(r => setTimeout(r, ms));
+    const fmt = n => {
+      n = Number(n) || 0;
+      if (n >= 1e6) return (n / 1e6).toFixed(1).replace('.0', '') + 'M';
+      if (n >= 1e3) return (n / 1e3).toFixed(1).replace('.0', '') + 'K';
+      return String(n);
+    };
 
-    function tClear() { term.innerHTML = ''; term.classList.add('show'); resBox.classList.add('hidden'); infoEl.textContent = ''; listEl.innerHTML = ''; }
-    function tLine(msg, cls = '') { const d = document.createElement('div'); d.className = 'log ' + cls; d.textContent = msg; term.appendChild(d); term.scrollTop = term.scrollHeight; }
+    function tClear() {
+      term.innerHTML = ''; term.classList.remove('show');
+      resBox.classList.add('hidden');
+      videoEl.innerHTML = ''; authorEl.innerHTML = ''; statsEl.innerHTML = ''; infoEl.innerHTML = ''; listEl.innerHTML = '';
+    }
+    function tLine(msg, cls = '') {
+      term.classList.add('show');
+      const d = document.createElement('div'); d.className = 'log ' + cls; d.textContent = msg;
+      term.appendChild(d); term.scrollTop = term.scrollHeight;
+    }
     function isTiktok(u) {
       try { return /(^|\.)tiktok\.com$/i.test(new URL(u).hostname); } catch { return false; }
     }
+    function setSteps(active, done = false) {
+      stepsEl.hidden = false;
+      [...stepsEl.children].forEach((el, i) => {
+        el.classList.toggle('done', done || i < active);
+        el.classList.toggle('active', !done && i === active);
+      });
+    }
+    function countUp(el, to) {
+      const t0 = performance.now(), dur = 900;
+      const step = now => {
+        const p = Math.min(1, (now - t0) / dur);
+        const e = 1 - Math.pow(1 - p, 3);
+        el.textContent = fmt(Math.round(to * e));
+        if (p < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }
+    function mk(tag, cls, text) {
+      const el = document.createElement(tag);
+      if (cls) el.className = cls;
+      if (text != null) el.textContent = text;
+      return el;
+    }
 
-    function renderResult(r) {
-      const presets = (r.presets || []).filter(p => p && p.url);
-      const sumber = { comment: 'komentar', description: 'deskripsi', bio: 'bio akun' }[r.found_in] || r.found_in || '-';
-      const penulis = (r.preset_info && r.preset_info.username) || (r.user && r.user.username) || '-';
-      const video = r.video || {};
+    function renderVideo(v, thumb) {
+      const wrap = mk('div', 'am-player');
+      const fallback = () => {
+        wrap.innerHTML = '';
+        if (thumb) { const img = mk('img'); img.src = thumb; img.referrerPolicy = 'no-referrer'; wrap.appendChild(img); }
+        const f = mk('div', 'am-fallback', 'Preview nggak bisa diputar di sini. Buka di TikTok ya.');
+        wrap.appendChild(f);
+      };
+      if (v.play_url) {
+        const vid = document.createElement('video');
+        vid.controls = true; vid.playsInline = true; vid.preload = 'metadata';
+        vid.setAttribute('referrerpolicy', 'no-referrer');
+        if (thumb) vid.poster = thumb;
+        vid.src = v.play_url;
+        vid.onerror = fallback;
+        wrap.appendChild(vid);
+      } else fallback();
+      videoEl.appendChild(wrap);
+      if (v.url) {
+        const a = mk('a', 'tt-btn am-open', 'Buka di TikTok');
+        a.href = v.url; a.target = '_blank'; a.rel = 'noopener noreferrer';
+        videoEl.appendChild(a);
+      }
+    }
 
-      infoEl.innerHTML = '';
-      const a = document.createElement('div');
-      a.innerHTML = `Ditemukan di <b>${sumber}</b> · oleh <b>@${penulis}</b>`;
-      infoEl.appendChild(a);
-      if (video.caption) {
-        const c = document.createElement('div');
-        c.textContent = video.caption.split('\n')[0].slice(0, 90);
+    function renderAuthor(r) {
+      const u = r.user || {};
+      const av = mk('img');
+      av.src = u.avatar || '';
+      av.referrerPolicy = 'no-referrer';
+      av.onerror = () => { av.style.display = 'none'; };
+      const txt = mk('div');
+      txt.appendChild(mk('div', 'am-name', u.display_name || u.username || '-'));
+      txt.appendChild(mk('div', 'am-user', '@' + (u.username || '-')));
+      authorEl.append(av, txt);
+      if (r.video && r.video.caption) {
+        const c = mk('div', 'am-caption', r.video.caption);
         infoEl.appendChild(c);
       }
+    }
+
+    function renderStats(v) {
+      const items = [
+        { icon: '#i-eye', label: 'VIEWS', val: v.views },
+        { icon: '#i-heart', label: 'LIKES', val: v.likes },
+        { icon: '#i-msg', label: 'KOMEN', val: v.comments },
+        { icon: '#i-share', label: 'SHARE', val: v.shares }
+      ];
+      items.forEach(it => {
+        const card = mk('div', 'am-stat');
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('viewBox', '0 0 24 24');
+        svg.setAttribute('class', 'ic');
+        const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+        use.setAttribute('href', it.icon);
+        svg.appendChild(use);
+        const val = mk('b', null, '0');
+        card.append(svg, val, mk('small', null, it.label));
+        statsEl.appendChild(card);
+        countUp(val, Number(it.val) || 0);
+      });
+    }
+
+    function renderPresets(r) {
+      const presets = (r.presets || []).filter(p => p && p.url);
+      const sumber = { comment: 'komentar', description: 'deskripsi', bio: 'bio akun' }[r.found_in] || r.found_in || '-';
+      const pi = r.preset_info || {};
+      const info = mk('div', null, 'Preset ditemukan di ' + sumber + ' · oleh @' + (pi.username || '-') + (pi.likes != null ? ' · ' + fmt(pi.likes) + ' likes' : ''));
+      infoEl.appendChild(info);
 
       presets.forEach((p, idx) => {
-        const item = document.createElement('div');
-        item.className = 'am-item';
-
-        const label = document.createElement('div');
-        label.className = 'am-label';
-        label.textContent = 'Preset ' + (idx + 1) + ' · ' + (p.label || 'link');
-        const small = document.createElement('small');
-        small.textContent = p.url;
-        label.appendChild(small);
-
-        const open = document.createElement('a');
-        open.className = 'tt-btn';
-        open.href = p.url;
-        open.target = '_blank';
-        open.rel = 'noopener noreferrer';
-        open.textContent = 'Buka';
-
-        const copy = document.createElement('button');
-        copy.className = 'tt-btn';
+        const item = mk('div', 'am-item');
+        const label = mk('div', 'am-label', 'Preset ' + (idx + 1) + ' · ' + (p.label || 'link'));
+        label.appendChild(mk('small', null, p.url));
+        const open = mk('a', 'tt-btn', 'Buka');
+        open.href = p.url; open.target = '_blank'; open.rel = 'noopener noreferrer';
+        const copy = mk('button', 'tt-btn', 'Salin');
         copy.type = 'button';
-        copy.textContent = 'Salin';
         copy.addEventListener('click', async () => {
           try { await navigator.clipboard.writeText(p.url); copy.textContent = 'Tersalin!'; }
           catch { copy.textContent = 'Gagal'; }
           setTimeout(() => { copy.textContent = 'Salin'; }, 1500);
         });
-
         item.append(label, open, copy);
         listEl.appendChild(item);
       });
-
-      resBox.classList.remove('hidden');
       return presets.length;
+    }
+
+    function renderResult(r) {
+      renderVideo(r.video || {}, r.thumbnail);
+      renderAuthor(r);
+      renderStats(r.video || {});
+      const n = renderPresets(r);
+      resBox.classList.remove('hidden');
+      return n;
     }
 
     submitBtn.addEventListener('click', async () => {
       const url = urlInput.value.trim();
       tClear();
+      stepsEl.hidden = true;
       if (!url) { tLine('✗ Link TikTok belum diisi', 'err'); return; }
       if (!isTiktok(url)) { tLine('✗ Link harus dari TikTok', 'err'); return; }
 
       submitBtn.disabled = true;
       submitText.textContent = 'Lagi nyari...';
+      setSteps(0);
       tLine('> Alight Motion Preset siap...', 'hi');
-      tLine('→ target: ' + url, 'muted');
-      await sleepA(150);
-      tLine('> nyari di komentar, deskripsi, dan bio...', 'muted');
+      await sleepA(250);
+      setSteps(1);
+      tLine('> ngambil data video...', 'muted');
+
+      const ticker = setInterval(() => {
+        const cur = [...stepsEl.children].findIndex(el => el.classList.contains('active'));
+        if (cur >= 0 && cur < 3) setSteps(cur + 1);
+      }, 1400);
 
       try {
         const res = await fetch(AM_API, {
@@ -3069,23 +3213,29 @@ header { position: relative; display: flex; align-items: center; justify-content
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ url })
         });
+        clearInterval(ticker);
         let data = null;
         try { data = await res.json(); } catch (e) {}
         if (!res.ok || !data || data.status === false) {
+          stepsEl.hidden = true;
           tLine('✗ ' + ((data && (data.error || data.message)) || ('HTTP ' + res.status)), 'err');
           return;
         }
         if (!data.found || !data.result) {
+          setSteps(0, true);
           tLine('⚠ ' + (data.message || 'Preset nggak ketemu di video itu'), 'warn');
           return;
         }
+        setSteps(0, true);
         const n = renderResult(data.result);
-        if (n > 0) tLine('✓ ' + n + ' preset ketemu', 'ok');
-        else tLine('⚠ Preset nggak ketemu di video itu', 'warn');
+        tLine(n > 0 ? '✓ ' + n + ' preset ketemu' : '⚠ Preset nggak ketemu di video itu', n > 0 ? 'ok' : 'warn');
       } catch (err) {
+        clearInterval(ticker);
+        stepsEl.hidden = true;
         tLine('✗ koneksi ke server putus', 'err');
         tLine('⚠ coba lagi sebentar lagi', 'warn');
       } finally {
+        clearInterval(ticker);
         submitBtn.disabled = false;
         submitText.textContent = 'Cari Preset';
       }
