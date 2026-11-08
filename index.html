@@ -610,10 +610,8 @@ header { position: relative; display: flex; align-items: center; justify-content
 :root[data-theme="brutal"] .tools-title { background: none; color: var(--text); animation: none; }
 @keyframes titleShine { to { background-position: -200% 0; } }
 
-/* Input: fokus nyala halus */
 .tools-input:focus { transform: translateY(-1px); }
 
-/* Tombol vote: pas loading jadi kayak kartu suara ke-stamp */
 .tools-submit { position: relative; overflow: hidden; }
 .tools-submit::before, .tools-submit::after {
   content: ""; position: absolute; left: 50%; top: 50%; width: 10px; height: 10px;
@@ -629,7 +627,6 @@ header { position: relative; display: flex; align-items: center; justify-content
 :root[data-theme="brutal"] .tools-submit.spinning { background-image: repeating-linear-gradient(45deg, #111 0 8px, transparent 8px 16px); animation: stripeMove .8s linear infinite; background-size: 28px 28px; }
 @keyframes sweep { from { background-position: 150% 0; } to { background-position: -150% 0; } }
 
-/* Terminal vote: grid latar + scanline, log masuk dari kanan */
 .tools-terminal {
   background-image: linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px);
   background-size: 100% 22px;
@@ -645,8 +642,8 @@ header { position: relative; display: flex; align-items: center; justify-content
 :root[data-theme="brutal"] .tools-terminal .log.ok { text-shadow: none; }
 :root[data-theme="brutal"] .tools-terminal .log.err { text-shadow: none; }
 :root[data-theme="brutal"] .tools-terminal::before { text-shadow: none; }
-  
-/* ===== MENU TOOLS + HD UPSCALE ===== */
+
+/* ===== MENU TOOLS ===== */
 .tool-menu { margin-bottom: 16px; }
 .tool-menu-label { font-size: 10.5px; font-weight: 800; letter-spacing: 1.2px; color: var(--muted); margin-bottom: 8px; }
 .tool-chips { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -657,6 +654,8 @@ header { position: relative; display: flex; align-items: center; justify-content
 .tool-sec { display: none; }
 .tool-sec.open { display: block; animation: tabIn .3s ease both; }
 .tool-sec.open + .tool-sec.open { margin-top: 22px; padding-top: 18px; border-top: var(--bw) dashed var(--line-strong); }
+
+/* ===== HD UPSCALE ===== */
 .hd-seg { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 4px; background: var(--bg); border: var(--bw) solid var(--line-strong); border-radius: 13px; }
 .hd-src-btn { height: 38px; border: none; border-radius: 9px; background: transparent; color: var(--muted); font-size: 12.5px; font-weight: 800; cursor: pointer; transition: background .2s, color .2s; }
 .hd-src-btn.active { background: var(--accent); color: var(--accent-text); }
@@ -666,61 +665,6 @@ header { position: relative; display: flex; align-items: center; justify-content
 .hd-drop.has-file { color: var(--text); }
 .hd-drop small { font-size: 11px; color: var(--dim); font-weight: 600; word-break: break-all; }
 .hd-scales { display: flex; flex-wrap: wrap; gap: 8px; }
-.tool-chip:last-child:nth-child(odd) { grid-column: 1 / -1; }
-.am-result { display: flex; flex-direction: column; gap: 12px; margin-top: 14px; }
-.am-info { font-size: 12px; font-weight: 700; color: var(--muted); line-height: 1.6; }
-.am-info b { color: var(--text); }
-.am-list { display: flex; flex-direction: column; gap: 10px; }
-.am-item { display: flex; align-items: center; gap: 10px; padding: 12px; background: var(--surface-2); border: var(--bw) solid var(--line-strong); border-radius: var(--radius-sm); box-shadow: var(--shadow); }
-.am-item .am-label { flex: 1; min-width: 0; font-weight: 800; font-size: 14px; }
-.am-item .am-label small { display: block; font-weight: 600; font-size: 11px; color: var(--dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.am-item .tt-btn { flex: none; text-decoration: none; }
-
-/* langkah proses */
-.am-steps { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 14px; }
-.am-steps[hidden] { display: none; }
-.am-step { display: flex; align-items: center; gap: 8px; padding: 9px 10px; font-size: 12px; font-weight: 700; color: var(--dim); background: var(--surface-2); border: var(--bw) solid var(--line); border-radius: var(--radius-sm); transition: color .3s, border-color .3s, background .3s; }
-.am-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--dim); opacity: .4; flex: none; }
-.am-step.active { color: var(--text); border-color: var(--line-strong); }
-.am-step.active .am-dot { background: var(--accent); opacity: 1; animation: amPulse 1s ease-in-out infinite; }
-.am-step.done { color: var(--text); }
-.am-step.done .am-dot { background: var(--ok); opacity: 1; }
-@keyframes amPulse { 50% { transform: scale(1.5); } }
-.am-bar { grid-column: 1 / -1; height: 5px; border-radius: 999px; background: var(--surface-2); border: var(--bw) solid var(--line); overflow: hidden; }
-.am-bar span { display: block; height: 100%; width: 0; background: var(--accent); border-radius: 999px; transition: width .5s cubic-bezier(.2,.8,.2,1); }
-.am-done { display: none; grid-column: 1 / -1; align-items: center; justify-content: center; gap: 8px; height: 38px; border-radius: 999px; background: rgba(52,211,153,.12); color: var(--ok); font-size: 12.5px; font-weight: 800; border: var(--bw) solid var(--ok); }
-.am-steps.finished .am-step, .am-steps.finished .am-bar { display: none; }
-.am-steps.finished .am-done { display: flex; animation: amIn .45s cubic-bezier(.2,1.2,.4,1) both; }
-.am-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
-.am-chip { font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 999px; background: var(--surface-2); border: var(--bw) solid var(--line-strong); color: var(--text); }
-
-/* hasil: video */
-.am-result { gap: 14px; }
-.am-video { display: flex; flex-direction: column; gap: 10px; }
-.am-player { position: relative; width: 100%; max-width: 280px; margin: 0 auto; aspect-ratio: 9 / 16; border-radius: 18px; overflow: hidden; background: #000; border: var(--bw) solid var(--line-strong); box-shadow: var(--shadow-lg); }
-.am-player video, .am-player img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.am-player .am-fallback { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(0,0,0,.55); color: #fff; font-size: 12px; font-weight: 700; text-align: center; padding: 16px; }
-.am-open { align-self: center; text-decoration: none; height: 42px; padding: 0 20px; display: inline-flex; align-items: center; justify-content: center; border-radius: var(--radius-sm); background: var(--accent); color: var(--accent-text); border: var(--bw) solid var(--line-strong); font-weight: 800; font-size: 13px; box-shadow: var(--shadow); }
-
-/* hasil: penulis */
-.am-author { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--surface-2); border: var(--bw) solid var(--line-strong); border-radius: var(--radius-sm); }
-.am-author img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: var(--bw) solid var(--line-strong); flex: none; }
-.am-author .am-name { font-weight: 800; font-size: 13.5px; }
-.am-author .am-user { font-size: 11.5px; color: var(--muted); font-weight: 700; }
-.am-caption { margin-top: 2px; font-size: 12.5px; color: var(--muted); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-
-/* hasil: statistik */
-.am-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-.am-stat { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 4px; background: var(--surface-2); border: var(--bw) solid var(--line-strong); border-radius: var(--radius-sm); box-shadow: var(--shadow); animation: amIn .45s cubic-bezier(.2,.8,.2,1) both; }
-.am-stat:nth-child(2) { animation-delay: .06s; }
-.am-stat:nth-child(3) { animation-delay: .12s; }
-.am-stat:nth-child(4) { animation-delay: .18s; }
-.am-stat .ic { width: 16px; height: 16px; color: var(--text); }
-.am-stat b { font-family: var(--font-head); font-size: 14px; font-weight: var(--weight); }
-.am-stat small { font-size: 10px; color: var(--dim); font-weight: 700; letter-spacing: .4px; }
-@keyframes amIn { from { opacity: 0; transform: translateY(10px) scale(.96); } to { opacity: 1; transform: none; } }
-.am-result .tt-btn { text-align: center; text-decoration: none; }
-.am-box { white-space: pre-wrap; word-break: break-all; font-family: var(--mono); font-size: 12px; line-height: 1.6; padding: 12px; margin: 0; max-height: 220px; overflow-y: auto; background: var(--bg); color: var(--text); border: var(--bw) solid var(--line-strong); border-radius: var(--radius-sm); }
 .hd-modes { display: flex; gap: 8px; margin-bottom: 12px; }
 .hd-mode { flex: 1; height: 38px; border-radius: var(--radius-sm); border: var(--bw) solid var(--line-strong); background: var(--surface-2); color: var(--muted); font-size: 12.5px; font-weight: 800; cursor: pointer; transition: background .2s, color .2s; }
 .hd-mode.active { background: var(--accent); color: var(--accent-text); }
@@ -743,11 +687,11 @@ header { position: relative; display: flex; align-items: center; justify-content
 .hd-handle:focus-visible span { box-shadow: 0 0 0 3px rgba(255,255,255,.6); }
 .hd-hint { margin-top: 8px; text-align: center; font-size: 11px; color: var(--dim); font-weight: 700; }
 
-/* ===== LOGO FOTO (opsional, dari LOGO_URL) ===== */
+/* ===== LOGO FOTO ===== */
 .brand-mark.has-logo, .splash-mark.has-logo { padding: 0; overflow: hidden; }
 .has-logo img { display: block; width: 100%; height: 100%; object-fit: cover; }
 
-/* ===== GEMBOK PASSWORD (kartu kecil) ===== */
+/* ===== GEMBOK PASSWORD ===== */
 .vote-lock { position: absolute; inset: 0; z-index: 20; background: rgba(0,0,0,.55); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); display: flex; align-items: center; justify-content: center; padding: 18px; animation: tabIn .25s ease both; }
 .vote-lock.hidden { display: none !important; }
 .vl-card { width: 100%; max-width: 250px; background: var(--surface); border: var(--bw) solid var(--line-strong); border-radius: 18px; padding: 18px 16px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 7px; box-shadow: var(--shadow-lg); }
@@ -761,7 +705,7 @@ header { position: relative; display: flex; align-items: center; justify-content
 .vl-row { display: flex; gap: 8px; width: 100%; }
 .vl-row .ghost-btn { flex: 1; height: 38px; font-size: 12px; justify-content: center; padding: 0 8px; }
 
-/* ===== WEBTOZIP: daftar file + lihat code ===== */
+/* ===== WEBTOZIP ===== */
 .zip-list { margin-top: 14px; }
 .zip-bar { display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-weight: 700; color: var(--muted); margin-bottom: 8px; }
 .zip-all { display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
@@ -773,8 +717,6 @@ header { position: relative; display: flex; align-items: center; justify-content
 .zip-code-head { display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; background: var(--surface-2); font-family: var(--mono); font-size: 11px; gap: 8px; }
 .zip-code-head .ghost-btn { height: 28px; padding: 0 8px; font-size: 11px; }
 .zip-code pre { margin: 0; padding: 12px; max-height: 260px; overflow: auto; background: var(--term-bg); color: #d4d4d8; font-family: var(--mono); font-size: 11px; line-height: 1.5; white-space: pre; }
-
-/* ===== WEBTOZIP: daftar rapi per folder + loader ===== */
 .zip-group { font-size: 10.5px; font-weight: 800; letter-spacing: 1.2px; color: var(--muted); margin: 16px 0 8px; }
 .zip-grid { display: grid; grid-template-columns: 1fr; gap: 8px; }
 @media (min-width: 520px) { .zip-grid { grid-template-columns: 1fr 1fr; } }
@@ -798,7 +740,7 @@ header { position: relative; display: flex; align-items: center; justify-content
 .zip-stage.swap { animation: zipSwap .35s ease both; }
 @keyframes zipSwap { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
 
-/* ===== SPLASH PREMIUM (mono) ===== */
+/* ===== SPLASH PREMIUM ===== */
 .splash::before { content: ""; position: absolute; inset: 0; margin: auto; width: 380px; height: 380px; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,.10), transparent 68%); animation: splashGlow 3.2s ease-in-out infinite; pointer-events: none; }
 @keyframes splashGlow { 0%, 100% { transform: scale(.85); opacity: .55; } 50% { transform: scale(1.08); opacity: 1; } }
 :root:not([data-theme="brutal"]) .splash-mark { position: relative; animation: markIn .9s cubic-bezier(.2,1,.3,1) both, markGlow 2.2s ease-in-out 1s infinite; }
@@ -813,8 +755,6 @@ header { position: relative; display: flex; align-items: center; justify-content
 @keyframes barShine { to { left: 100%; } }
 :root:not([data-theme="brutal"]) .splash-sub { letter-spacing: .6px; color: var(--muted); }
 :root[data-theme="brutal"] .splash::before, :root[data-theme="brutal"] .splash-mark::before, :root[data-theme="brutal"] .splash-mark::after { display: none; }
-
-/* ===== SPLASH PREMIUM v2 (mono) ===== */
 :root:not([data-theme="brutal"]) .splash::after { content: ""; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px); background-size: 56px 56px; -webkit-mask-image: radial-gradient(ellipse at center, #000 15%, transparent 68%); mask-image: radial-gradient(ellipse at center, #000 15%, transparent 68%); animation: gridFade 4.5s ease-in-out infinite; pointer-events: none; }
 @keyframes gridFade { 0%, 100% { opacity: .25; } 50% { opacity: .75; } }
 :root:not([data-theme="brutal"]) .splash-inner { position: relative; }
@@ -825,8 +765,6 @@ header { position: relative; display: flex; align-items: center; justify-content
 :root:not([data-theme="brutal"]) .splash-bar span { background: linear-gradient(90deg, #52525b, #fafafa); box-shadow: 0 0 12px rgba(255,255,255,.5); }
 :root:not([data-theme="brutal"]) .splash-word span { text-shadow: 0 0 18px rgba(255,255,255,.3); }
 :root[data-theme="brutal"] .splash::after, :root[data-theme="brutal"] .splash-inner::before { display: none; }
-
-/* ===== SPLASH NEO BRUTALISM v2 ===== */
 :root[data-theme="brutal"] .splash::before { content: ""; display: block; position: absolute; left: 8%; top: 12%; width: 120px; height: 120px; background: #FF5CA8; border: 3px solid #111; box-shadow: 6px 6px 0 #111; border-radius: 18px; transform: rotate(-12deg); animation: brutFloatA 4s ease-in-out infinite; pointer-events: none; }
 :root[data-theme="brutal"] .splash::after { content: ""; display: block; position: absolute; right: 9%; bottom: 14%; width: 96px; height: 96px; background: #A6E3D0; border: 3px solid #111; box-shadow: 6px 6px 0 #111; border-radius: 50%; animation: brutFloatB 5s ease-in-out infinite; pointer-events: none; }
 @keyframes brutFloatA { 0%, 100% { transform: rotate(-12deg) translateY(0); } 50% { transform: rotate(-6deg) translateY(-14px); } }
@@ -837,17 +775,13 @@ header { position: relative; display: flex; align-items: center; justify-content
 :root[data-theme="brutal"] .splash-word span { text-shadow: 3px 3px 0 #FF5CA8; }
 :root[data-theme="brutal"] .splash-bar { overflow: hidden; }
 :root[data-theme="brutal"] .splash-sub { display: inline-block; background: #fff; border: 2px solid #111; box-shadow: 3px 3px 0 #111; padding: 5px 12px; border-radius: 8px; color: #111; margin-top: 18px; font-weight: 800; }
-
-/* ===== SPLASH NEO BRUTALISM v3 (tanpa blok dekor) ===== */
 :root[data-theme="brutal"] .splash::before, :root[data-theme="brutal"] .splash::after, :root[data-theme="brutal"] .splash-mark::after { display: none !important; }
 :root[data-theme="brutal"] .splash-mark { animation: markStomp .8s cubic-bezier(.2,1.5,.4,1) both, brutWobble 3.2s steps(4, end) 1s infinite, brutPress 1.6s steps(2, end) 1s infinite; }
 @keyframes brutPress { 0%, 100% { box-shadow: 8px 8px 0 #111; } 50% { box-shadow: 3px 3px 0 #111; } }
 :root[data-theme="brutal"] .splash-bar span { background: repeating-linear-gradient(45deg, #111 0 10px, #FFC93C 10px 20px); background-size: 28px 28px; animation: barFill 1.7s cubic-bezier(.6,0,.2,1) .25s forwards, stripeMove .5s linear infinite; }
 :root[data-theme="brutal"] .splash-word span { text-shadow: 3px 3px 0 #FF5CA8; }
 
-
-
-/* ===== TIKTOK DOWNLOAD ===== */
+/* ===== TIKTOK ===== */
 .tt-result { margin-top: 16px; display: flex; flex-direction: column; gap: 12px; }
 .tt-result.hidden { display: none; }
 .tt-preview { width: 100%; border-radius: var(--radius-sm); overflow: hidden; background: #000; border: var(--bw) solid var(--line-strong); }
@@ -858,19 +792,17 @@ header { position: relative; display: flex; align-items: center; justify-content
 .tt-stats { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
 .tt-stat { font-family: var(--mono); font-size: 11px; padding: 5px 9px; border: var(--bw) solid var(--line-strong); border-radius: 999px; color: var(--text); }
 .tt-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; }
-.tt-btn { display: flex; align-items: center; justify-content: center; height: 42px; padding: 0 10px; border-radius: var(--radius-sm); border: var(--bw) solid var(--line-strong); background: var(--accent); color: var(--accent-text); font-size: 13px; font-weight: 800; text-decoration: none; }
+.tt-btn { display: flex; align-items: center; justify-content: center; height: 42px; padding: 0 10px; border-radius: var(--radius-sm); border: var(--bw) solid var(--line-strong); background: var(--accent); color: var(--accent-text); font-size: 13px; font-weight: 800; text-decoration: none; font-family: inherit; cursor: pointer; }
 .tt-btn[hidden] { display: none; }
 .tt-btn:active { transform: translate(var(--press-x), var(--press-y)); }
-.tt-images { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 6px; }
-.tt-images:empty { display: none; }
-.tt-img img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: var(--radius-sm); border: var(--bw) solid var(--line); display: block; }
-
-/* ===== TIKTOK DOWNLOAD (v2) ===== */
-.tt-btn { font-family: inherit; cursor: pointer; }
 .tt-btn:disabled { opacity: .5; cursor: not-allowed; }
 .tt-btn-sm { height: 36px; width: 100%; margin-top: 6px; font-size: 12px; }
+.tt-images { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 6px; }
+.tt-images:empty { display: none; }
 .tt-img { display: flex; flex-direction: column; }
-.tt-images { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+.tt-img img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: var(--radius-sm); border: var(--bw) solid var(--line); display: block; }
+
+/* ===== PINTEREST ===== */
 .pt-search-row { display: flex; gap: 8px; align-items: stretch; }
 .pt-search-row .tools-input { flex: 1; min-width: 0; }
 .pt-search-btn { width: auto; padding: 0 18px; flex-shrink: 0; }
@@ -900,8 +832,7 @@ header { position: relative; display: flex; align-items: center; justify-content
 .uc-media:empty { display: none; }
 .uc-media video, .uc-media img { display: block; width: 100%; max-height: 320px; object-fit: contain; background: #000; border-radius: var(--radius-sm); }
 
-
-/* ===== rapihin layout tools (override) ===== */
+/* rapihin layout tools */
 .pt-search-row { align-items: center; margin-top: 0; }
 .pt-search-row .tools-input { height: 48px; }
 .pt-search-btn { height: 48px; margin-top: 0; border-radius: 14px; font-size: 14px; padding: 0 20px; }
@@ -921,7 +852,7 @@ header { position: relative; display: flex; align-items: center; justify-content
   .tt-actions { grid-template-columns: 1fr; }
 }
 
-/* ===== POLISH v4: rapihin menu tools + kredit ===== */
+/* POLISH v4 */
 .tool-menu { margin-bottom: 18px; }
 .tool-menu-label { margin-bottom: 10px; }
 .tool-chips { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
@@ -942,7 +873,7 @@ header { position: relative; display: flex; align-items: center; justify-content
   .tool-chips { grid-template-columns: 1fr; }
 }
 
-/* ===== ALIGHT MOTION PREMIUM ANIMATION ===== */
+/* ===== ALIGHT MOTION PREMIUM (BARU - GABUNG TEMPMAIL) ===== */
 .amv-anim { display: none; margin-top: 14px; padding: 16px; border: var(--bw) solid var(--line-strong); border-radius: var(--radius-sm); background: var(--surface-2); box-shadow: var(--shadow); position: relative; overflow: hidden; }
 .amv-anim.show { display: block; animation: tabIn .3s ease both; }
 .amv-anim::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,.06) 50%, transparent 70%); background-size: 250% 100%; animation: amvSweep 3s linear infinite; }
@@ -978,15 +909,25 @@ header { position: relative; display: flex; align-items: center; justify-content
 .amv-anim.verified .amv-verified { display: flex; animation: amvPop .5s cubic-bezier(.2,1.2,.4,1) both; }
 .amv-anim.verified .amv-steps, .amv-anim.verified .amv-bar { display: none; }
 
-.amv-batch { margin-top: 14px; display: none; }
-.amv-batch.show { display: block; }
-.amv-batch-info { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 10.5px; color: var(--muted); font-weight: 700; letter-spacing: .8px; margin-bottom: 6px; }
-.amv-batch-track { height: 8px; background: var(--surface-2); border: var(--bw) solid var(--line-strong); border-radius: 999px; overflow: hidden; }
-.amv-batch-fill { height: 100%; width: 0%; background: var(--accent); border-radius: 999px; transition: width .5s cubic-bezier(.2,.8,.2,1); position: relative; overflow: hidden; }
-.amv-batch-fill::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,.4), transparent); animation: amvShine 1.5s linear infinite; }
-
 #amvList .am-item { animation: amvCardIn .4s cubic-bezier(.2,.8,.2,1) both; }
 @keyframes amvCardIn { from { opacity: 0; transform: translateY(10px) scale(.96); } to { opacity: 1; transform: none; } }
+
+/* Mode toggle Auto/Manual di AM Premium */
+.amv-modes { display: flex; gap: 8px; margin-bottom: 14px; }
+.amv-mode { flex: 1; height: 40px; border-radius: var(--radius-sm); border: var(--bw) solid var(--line-strong); background: var(--surface-2); color: var(--muted); font-size: 12.5px; font-weight: 800; cursor: pointer; transition: background .2s, color .2s; }
+.amv-mode.active { background: var(--accent); color: var(--accent-text); }
+.amv-panel { display: none; }
+.amv-panel.active { display: block; animation: tabIn .3s ease both; }
+
+/* TempMail box di dalam AM Premium */
+.amv-mailbox { margin-top: 10px; padding: 12px; border: var(--bw) dashed var(--line-strong); border-radius: var(--radius-sm); background: var(--bg); }
+.amv-mailbox.hidden { display: none !important; }
+.amv-mail-label { font-family: var(--mono); font-size: 10.5px; font-weight: 800; letter-spacing: 1px; color: var(--muted); margin-bottom: 6px; }
+.amv-mail-row { display: flex; gap: 8px; align-items: stretch; }
+.amv-mail-row input { flex: 1; min-width: 0; height: 42px; padding: 0 12px; background: var(--surface-2); color: var(--text); border: var(--bw) solid var(--line-strong); border-radius: var(--radius-sm); font-family: var(--mono); font-size: 12.5px; outline: none; }
+.amv-mail-row button { height: 42px; padding: 0 14px; border-radius: var(--radius-sm); border: var(--bw) solid var(--line-strong); background: var(--surface-2); color: var(--text); font-size: 12px; font-weight: 800; cursor: pointer; white-space: nowrap; }
+.amv-mail-row button.primary { background: var(--accent); color: var(--accent-text); }
+.amv-mail-row button:disabled { opacity: .5; cursor: not-allowed; }
 </style>
 <style>.sp-on{outline:var(--bw) solid var(--text);outline-offset:2px}</style>
 </head>
@@ -1421,7 +1362,6 @@ header { position: relative; display: flex; align-items: center; justify-content
               <h2 class="tools-title">Pinterest Download</h2>
               <p class="tools-sub">Cari pin lalu pilih, atau tempel link pin langsung</p>
             </div>
-
             <label class="tools-label" for="ptQ"><svg class="ic"><use href="#i-bolt"/></svg> CARI PIN</label>
             <div class="pt-search-row">
               <input id="ptQ" class="tools-input" type="text" placeholder="contoh: meme " autocomplete="off" spellcheck="false" />
@@ -1429,14 +1369,12 @@ header { position: relative; display: flex; align-items: center; justify-content
             </div>
             <div id="ptGrid" class="pt-grid"></div>
             <button id="ptMore" class="tools-submit pt-more" type="button" hidden>Muat lagi</button>
-
             <div class="pt-divider">ATAU TEMPEL URL PIN</div>
             <input id="ptUrl" class="tools-input" type="url" placeholder="https://pin.it/... atau https://www.pinterest.com/pin/..." autocomplete="off" spellcheck="false" />
             <button id="ptSubmit" class="tools-submit" type="button">
               <svg class="ic"><use href="#i-bolt"/></svg>
               <span>Ambil Data</span>
             </button>
-
             <div id="ptTerminal" class="tools-terminal" aria-live="polite"></div>
             <div id="ptResult" class="tt-result hidden">
               <div class="tt-preview">
@@ -1512,29 +1450,76 @@ header { position: relative; display: flex; align-items: center; justify-content
             </div>
           </div>
 
-          <!-- SECTION: ALIGHT MOTION PREMIUM VERIFY -->
+          <!-- SECTION: ALIGHT MOTION PREMIUM (GABUNG TEMPMAIL) -->
           <div class="tool-sec" data-sec="amverify">
             <div class="tools-header">
               <div class="modal-tag">EGAA TOOLS</div>
               <h2 class="tools-title">Alight Motion Premium</h2>
-              <p class="tools-sub">Auto verify premium via email sementara</p>
+              <p class="tools-sub">Auto aktivasi VIP Pro pakai TempMail, atau manual pakai email sendiri</p>
             </div>
 
-            <label class="tools-label" for="amvCount"><svg class="ic"><use href="#i-bolt"/></svg> JUMLAH AKUN</label>
-            <input id="amvCount" class="tools-input" type="number" min="1" max="20" value="1" inputmode="numeric" />
+            <!-- TOGGLE MODE -->
+            <div class="amv-modes">
+              <button type="button" class="amv-mode active" data-amv-mode="auto">Auto (TempMail)</button>
+              <button type="button" class="amv-mode" data-amv-mode="manual">Manual</button>
+            </div>
 
-            <label class="tools-label" for="amvPass"><svg class="ic"><use href="#i-key"/></svg>PASSWORD</label>
-            <input id="amvPass" class="tools-input" type="password" placeholder="kosong in aja" autocomplete="off" />
+            <!-- PANEL AUTO -->
+            <div class="amv-panel active" data-amv-panel="auto">
+              <label class="tools-label" for="amvEmailUser"><svg class="ic"><use href="#i-msg"/></svg> 1. EMAIL SEMENTARA</label>
+              <div class="input-row">
+                <div class="input-wrap">
+                  <svg class="ic"><use href="#i-msg"/></svg>
+                  <input id="amvEmailUser" type="text" placeholder="kosongkan untuk random" autocomplete="off" spellcheck="false" />
+                </div>
+                <button id="amvGenEmail" class="paste-btn" type="button">Generate</button>
+              </div>
 
-            <button id="amvSubmit" class="tools-submit" type="button">
-              <svg class="ic"><use href="#i-bolt"/></svg>
-              <span>Gas Verify</span>
-            </button>
+              <div id="amvMailbox" class="amv-mailbox hidden">
+                <div class="amv-mail-label">EMAIL AKTIF</div>
+                <div class="amv-mail-row">
+                  <input id="amvEmailOutput" type="text" readonly />
+                  <button id="amvCopyEmail" type="button">Salin</button>
+                </div>
+              </div>
 
+              <button id="amvSendAuto" class="tools-submit" type="button" disabled>
+                <svg class="ic"><use href="#i-bolt"/></svg>
+                <span id="amvSendAutoText">2. Kirim Magic Link</span>
+              </button>
+
+              <button id="amvCheckAuto" class="tools-submit" type="button" disabled>
+                <svg class="ic"><use href="#i-check"/></svg>
+                <span id="amvCheckAutoText">3. Cek Inbox &amp; Aktifkan</span>
+              </button>
+
+              <p class="tools-sub" style="margin-top:10px;text-align:center">Email temp ini otomatis kepakai buat aktivasi. Klik "Cek Inbox &amp; Aktifkan" — sistem cari link, verif, selesai.</p>
+            </div>
+
+            <!-- PANEL MANUAL -->
+            <div class="amv-panel" data-amv-panel="manual">
+              <label class="tools-label" for="amvEmailManual"><svg class="ic"><use href="#i-msg"/></svg> 1. EMAIL KAMU</label>
+              <input id="amvEmailManual" class="tools-input" type="email" placeholder="emailkamu@gmail.com" autocomplete="off" spellcheck="false" />
+
+              <button id="amvSendManual" class="tools-submit" type="button">
+                <svg class="ic"><use href="#i-bolt"/></svg>
+                <span id="amvSendManualText">Kirim Magic Link</span>
+              </button>
+
+              <label class="tools-label" for="amvLinkManual" style="margin-top:16px"><svg class="ic"><use href="#i-link"/></svg> 2. MAGIC LINK (dari email)</label>
+              <input id="amvLinkManual" class="tools-input" type="url" placeholder="https://alight-creative.firebaseapp.com/...oobCode=..." autocomplete="off" spellcheck="false" />
+
+              <button id="amvVerifyManual" class="tools-submit" type="button">
+                <svg class="ic"><use href="#i-shield"/></svg>
+                <span id="amvVerifyManualText">Verifikasi &amp; Aktifkan</span>
+              </button>
+            </div>
+
+            <!-- ANIMASI -->
             <div id="amvAnim" class="amv-anim">
               <div class="amv-row">
                 <span class="amv-label">ALIGHT MOTION · VERIFY</span>
-                <span class="amv-count" id="amvAccIdx">1 / 1</span>
+                <span class="amv-count" id="amvAccIdx">Step 1</span>
               </div>
               <div class="amv-steps">
                 <div class="amv-step" data-step="0">
@@ -1547,22 +1532,14 @@ header { position: relative; display: flex; align-items: center; justify-content
                 </div>
                 <div class="amv-step" data-step="2">
                   <span class="amv-ico"><svg class="ic"><use href="#i-shield"/></svg></span>
-                  Premium
+                  VIP Pro
                 </div>
               </div>
               <div class="amv-bar"><span id="amvBarFill"></span></div>
               <div class="amv-verified">
                 <svg class="ic"><use href="#i-check"/></svg>
-                <span>PREMIUM AKTIF</span>
+                <span>VIP PRO AKTIF</span>
               </div>
-            </div>
-
-            <div id="amvBatch" class="amv-batch">
-              <div class="amv-batch-info">
-                <span>PROGRESS BATCH</span>
-                <span id="amvBatchText">0 / 1</span>
-              </div>
-              <div class="amv-batch-track"><div id="amvBatchFill" class="amv-batch-fill"></div></div>
             </div>
 
             <div id="amvTerminal" class="tools-terminal" aria-live="polite"></div>
@@ -2079,7 +2056,7 @@ header { position: relative; display: flex; align-items: center; justify-content
     else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
   });
 
-  /* ================= 8b. MENU TOOLS (password dicek di server) ================= */
+  /* ================= 8b. MENU TOOLS ================= */
   (function initToolMenu() {
     const chips = [...document.querySelectorAll('.tool-chip')];
     const lock = $('voteLock');
@@ -2504,7 +2481,6 @@ header { position: relative; display: flex; align-items: center; justify-content
       return DL + '?src=' + encodeURIComponent(src) + '&name=' + encodeURIComponent(name) + (inline ? '&mode=inline' : '');
     }
 
-    // Simpan file lewat proxy TANPA pindah halaman: fetch -> blob -> klik link download
     async function saveFile(src, name) {
       tLine('> download ' + name + '...', 'muted');
       const res = await fetch(dlHref(src, name, false));
@@ -2742,7 +2718,6 @@ header { position: relative; display: flex; align-items: center; justify-content
       }
     }
 
-    // Simpan file lewat proxy TANPA pindah halaman: fetch -> blob -> klik link download
     async function saveFile(src, name) {
       tLine('> download ' + name + '...', 'muted');
       const res = await fetch(dlHref(src, name, false));
@@ -2804,7 +2779,6 @@ header { position: relative; display: flex; align-items: center; justify-content
       resultBox.classList.remove('hidden');
     }
 
-    // Thumbnail lewat proxy (hotlink Pinterest sering diblok), kalau gagal coba sumber lain
     function makeCard(item) {
       const card = document.createElement('button');
       card.type = 'button';
@@ -2846,7 +2820,6 @@ header { position: relative; display: flex; align-items: center; justify-content
       return card;
     }
 
-    // Tambah kartu, buang pin yang sudah tampil (biar gak dobel)
     function addCards(list) {
       let added = 0;
       list.forEach(item => {
@@ -2926,7 +2899,6 @@ header { position: relative; display: flex; align-items: center; justify-content
       try {
         await saveFile(src, name);
       } catch (err) {
-        // resolusi asli kadang ga ada, fallback ke versi standar
         if (!cur.image_fallback || cur.image_fallback === src) throw err;
         tLine('> resolusi asli gagal, pakai versi standar', 'muted');
         await saveFile(cur.image_fallback, name);
@@ -2989,7 +2961,6 @@ header { position: relative; display: flex; align-items: center; justify-content
       return isNaN(d) ? '' : d.toLocaleString('id-ID');
     }
 
-    // Simpan file lewat proxy TANPA pindah halaman: fetch -> blob -> klik link download
     async function saveFile(src, name) {
       tLine('> download ' + name + '...', 'muted');
       const res = await fetch(dlHref(src, name, false));
@@ -3379,78 +3350,29 @@ header { position: relative; display: flex; align-items: center; justify-content
     });
   })();
 
-  /* ================= 8d. WEBTOZIP ================= */
-  const CRC_T = (() => {
-    const t = new Uint32Array(256);
-    for (let n = 0; n < 256; n++) {
-      let c = n;
-      for (let k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
-      t[n] = c >>> 0;
-    }
-    return t;
-  })();
-  function crc32u(b) {
-    let c = 0xFFFFFFFF;
-    for (let i = 0; i < b.length; i++) c = CRC_T[(c ^ b[i]) & 0xFF] ^ (c >>> 8);
-    return (c ^ 0xFFFFFFFF) >>> 0;
-  }
-  function makeZip(files) {
-    const enc = new TextEncoder();
-    const parts = [], central = [];
-    let offset = 0;
-    for (const f of files) {
-      const name = enc.encode(f.name);
-      const data = f.bytes;
-      const crc = crc32u(data);
-      const lh = new DataView(new ArrayBuffer(30));
-      lh.setUint32(0, 0x04034b50, true); lh.setUint16(4, 20, true); lh.setUint16(6, 0x0800, true);
-      lh.setUint16(8, 0, true); lh.setUint16(10, 0, true); lh.setUint16(12, 0x21, true);
-      lh.setUint32(14, crc, true); lh.setUint32(18, data.length, true); lh.setUint32(22, data.length, true);
-      lh.setUint16(26, name.length, true); lh.setUint16(28, 0, true);
-      parts.push(new Uint8Array(lh.buffer), name, data);
-      const ch = new DataView(new ArrayBuffer(46));
-      ch.setUint32(0, 0x02014b50, true); ch.setUint16(4, 20, true); ch.setUint16(6, 20, true);
-      ch.setUint16(8, 0x0800, true); ch.setUint16(10, 0, true); ch.setUint16(12, 0, true); ch.setUint16(14, 0x21, true);
-      ch.setUint32(16, crc, true); ch.setUint32(20, data.length, true); ch.setUint32(24, data.length, true);
-      ch.setUint16(28, name.length, true); ch.setUint16(30, 0, true); ch.setUint16(32, 0, true);
-      ch.setUint16(34, 0, true); ch.setUint16(36, 0, true); ch.setUint32(38, 0, true); ch.setUint32(42, offset, true);
-      central.push(new Uint8Array(ch.buffer), name);
-      offset += 30 + name.length + data.length;
-    }
-    const cdSize = central.reduce((a, b) => a + b.length, 0);
-    const end = new DataView(new ArrayBuffer(22));
-    end.setUint32(0, 0x06054b50, true); end.setUint16(8, files.length, true); end.setUint16(10, files.length, true);
-    end.setUint32(12, cdSize, true); end.setUint32(16, offset, true);
-    return new Blob([...parts, ...central, new Uint8Array(end.buffer)], { type: 'application/zip' });
-  }
+  /* ================= 8f. SPOTIFY DOWNLOAD ================= */
+  (function initSpotifyTool() {
+    const API = '/api/spotify';
+    const TIMEOUT_MS = 90000;
+    const SPOTIFY_RE = /open\.spotify\.com\/(?:intl-[a-z]+\/)?track\//i;
 
-  (function initZipTool() {
-    const ZIP_API = '/api/webtozip';
-    const STAGES = [
-      'Ngambil HTML utama...',
-      'Nyari CSS, JS, dan gambar...',
-      'Ngunduh asset satu-satu...',
-      'Ngerapihin hasil...'
-    ];
-    const urlInput = $('zipUrl');
-    const btn = $('zipSubmit');
-    const btnText = $('zipSubmitText');
-    const term = $('zipTerminal');
-    const loader = $('zipLoader');
-    const stageEl = $('zipStage');
-    const listBox = $('zipList');
-    const rowsBox = $('zipRows');
-    const allBox = $('zipAll');
-    const countEl = $('zipCount');
-    const dlSel = $('zipDownloadSel');
-    const codeBox = $('zipCode');
-    const codeName = $('zipCodeName');
-    const codeBody = $('zipCodeBody');
-    const codeClose = $('zipCodeClose');
+    const input = $('spUrl');
+    const submitBtn = $('spSubmit');
+    const term = $('spTerminal');
+    const resultBox = $('spResult');
+    const cover = $('spCover');
+    const titleEl = $('spTitle');
+    const artistEl = $('spArtist');
+    const statsEl = $('spStats');
+    const audio = $('spAudio');
+    const speedBox = $('spSpeed');
+    const dlMp3 = $('spDlMp3');
+    const lyrBtn = $('spLyr');
+    const lyrBox = $('spLyrics');
+
     let busy = false;
-    let files = [];
-    let checked = new Set();
-    let stageTimer = null;
+    let dlBusy = false;
+    let cur = null;
 
     function tClear() { term.innerHTML = ''; term.classList.add('show'); }
     function tLine(msg, cls = '') {
@@ -3460,185 +3382,583 @@ header { position: relative; display: flex; align-items: center; justify-content
       term.appendChild(d);
       term.scrollTop = term.scrollHeight;
     }
-    function fmt(n) {
-      return n < 1024 ? n + ' B' : n < 1048576 ? (n / 1024).toFixed(1) + ' KB' : (n / 1048576).toFixed(2) + ' MB';
-    }
-    function setStage(text) {
-      stageEl.textContent = text;
-      stageEl.classList.remove('swap');
-      void stageEl.offsetWidth;
-      stageEl.classList.add('swap');
-    }
-    function startLoader() {
-      loader.classList.remove('hidden');
-      let i = 0;
-      setStage(STAGES[0]);
-      clearInterval(stageTimer);
-      stageTimer = setInterval(() => {
-        i = Math.min(i + 1, STAGES.length - 1);
-        setStage(STAGES[i]);
-      }, 1800);
-    }
-    function stopLoader() {
-      clearInterval(stageTimer);
-      loader.classList.add('hidden');
-    }
     function setBusy(on) {
       busy = on;
-      btn.disabled = on;
-      btn.classList.toggle('spinning', on);
-      btnText.textContent = on ? 'Lagi ambil file...' : 'Ambil Daftar File';
+      submitBtn.disabled = on;
+      submitBtn.classList.toggle('spinning', on);
     }
-    function toBytes(f) {
-      if (f.text !== null && f.text !== undefined) return new TextEncoder().encode(f.text);
-      const bin = atob(f.b64 || '');
-      const u = new Uint8Array(bin.length);
-      for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i);
-      return u;
+    function setBtns(on) {
+      dlBusy = on;
+      dlMp3.disabled = on;
     }
-    function saveBlob(blob, name) {
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = name;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      setTimeout(() => URL.revokeObjectURL(url), 10000);
+    function fmtDur(sec) {
+      if (!sec) return '';
+      const m = Math.floor(sec / 60), s = String(sec % 60).padStart(2, '0');
+      return m + ':' + s;
     }
-    function updateCount() {
-      countEl.textContent = checked.size + ' / ' + files.length + ' dipilih';
-      dlSel.disabled = checked.size === 0;
-      allBox.checked = files.length > 0 && checked.size === files.length;
-    }
-    function showCode(i) {
-      const f = files[i];
-      codeName.textContent = f.name;
-      codeBody.textContent = f.text !== null ? f.text : '(file biner ' + fmt(f.size) + ', gak bisa ditampilin sebagai teks)';
-      codeBox.classList.remove('hidden');
-      codeBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
-    function makeCard(i) {
-      const f = files[i];
-      const card = document.createElement('div');
-      card.className = 'zip-card';
-      const top = document.createElement('div');
-      top.className = 'zip-card-top';
-      const cb = document.createElement('input');
-      cb.type = 'checkbox';
-      cb.checked = checked.has(i);
-      cb.addEventListener('change', () => {
-        if (cb.checked) checked.add(i); else checked.delete(i);
-        updateCount();
-      });
-      const name = document.createElement('div');
-      name.className = 'zip-card-name';
-      name.textContent = f.name.includes('/') ? f.name.split('/').slice(1).join('/') : f.name;
-      top.append(cb, name);
-      const bot = document.createElement('div');
-      bot.className = 'zip-card-bot';
-      const size = document.createElement('span');
-      size.className = 'zsize';
-      size.textContent = fmt(f.size);
-      const btns = document.createElement('div');
-      btns.className = 'btns';
-      const view = document.createElement('button');
-      view.type = 'button';
-      view.className = 'ghost-btn';
-      view.textContent = 'Lihat';
-      view.addEventListener('click', () => showCode(i));
-      const dl = document.createElement('button');
-      dl.type = 'button';
-      dl.className = 'ghost-btn';
-      dl.textContent = 'Unduh';
-      dl.addEventListener('click', () => saveBlob(new Blob([toBytes(f)]), f.name.split('/').pop()));
-      btns.append(view, dl);
-      bot.append(size, btns);
-      card.append(top, bot);
-      return card;
-    }
-    function renderList() {
-      rowsBox.innerHTML = '';
-      const groups = new Map();
-      files.forEach((f, i) => {
-        const g = f.name.includes('/') ? f.name.split('/')[0] : 'root';
-        if (!groups.has(g)) groups.set(g, []);
-        groups.get(g).push(i);
-      });
-      groups.forEach((idxs, g) => {
-        const head = document.createElement('div');
-        head.className = 'zip-group';
-        head.textContent = (g === 'root' ? 'ROOT' : g.toUpperCase()) + ' · ' + idxs.length + ' file';
-        rowsBox.appendChild(head);
-        const grid = document.createElement('div');
-        grid.className = 'zip-grid';
-        idxs.forEach(i => grid.appendChild(makeCard(i)));
-        rowsBox.appendChild(grid);
-      });
-      listBox.classList.remove('hidden');
-      updateCount();
+    function cleanLyrics(t) {
+      if (t.lyrics) return t.lyrics;
+      return (t.synced_lyrics || '').replace(/\[\d{1,2}:\d{2}(?:[.:]\d{1,3})?\]/g, '').trim();
     }
 
-    allBox.addEventListener('change', () => {
-      checked = allBox.checked ? new Set(files.map((_, i) => i)) : new Set();
-      renderList();
-    });
-    codeClose.addEventListener('click', () => codeBox.classList.add('hidden'));
+    if (speedBox && !speedBox.childElementCount) {
+      [0.5, 0.75, 1, 1.25, 1.5, 2].forEach(s => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'tt-btn' + (s === 1 ? ' sp-on' : '');
+        b.textContent = s + 'x';
+        b.onclick = () => {
+          audio.playbackRate = s;
+          speedBox.querySelectorAll('button').forEach(x => x.classList.remove('sp-on'));
+          b.classList.add('sp-on');
+          tLine('> speed ' + s + 'x', 'muted');
+        };
+        speedBox.appendChild(b);
+      });
+    }
 
-    dlSel.addEventListener('click', () => {
-      const picked = [...checked].sort((a, b) => a - b).map(i => ({ name: files[i].name, bytes: toBytes(files[i]) }));
-      if (!picked.length) return;
-      saveBlob(makeZip(picked), 'website.zip');
-    });
+    function render(t, dlErr, elapsed) {
+      cur = t;
+      cover.src = t.thumbnail || '';
+      cover.hidden = !t.thumbnail;
+      titleEl.textContent = t.title || '-';
+      artistEl.textContent = t.artist || '';
+      const bits = [];
+      if (t.album) bits.push('Album: ' + t.album);
+      if (t.duration) bits.push('Durasi: ' + fmtDur(t.duration));
+      if (elapsed) bits.push('⏱ ' + (elapsed / 1000).toFixed(1) + 's');
+      statsEl.textContent = bits.join(' · ');
 
-    async function scan() {
+      if (t.download) {
+        audio.src = t.download;
+        audio.hidden = false;
+        audio.playbackRate = 1;
+        speedBox.querySelectorAll('button').forEach(x => x.classList.toggle('sp-on', x.textContent === '1x'));
+        dlMp3.hidden = false;
+      } else {
+        audio.removeAttribute('src');
+        audio.hidden = true;
+        dlMp3.hidden = true;
+      }
+
+      lyrBox.hidden = true;
+      lyrBox.textContent = '';
+      lyrBtn.textContent = 'Lirik';
+      lyrBtn.disabled = false;
+      resultBox.classList.remove('hidden');
+
+      tLine(t.download ? '✓ MP3 siap, preview dulu sebelum download' : '✗ MP3 belum ada buat lagu ini', t.download ? 'ok' : 'err');
+      if (dlErr) tLine('! ' + dlErr, 'warn');
+      tLine(cleanLyrics(t) ? '✓ lirik ketemu' : '· lirik ga ketemu', cleanLyrics(t) ? 'ok' : 'muted');
+    }
+
+    async function save(url, name) {
+      if (dlBusy) return;
+      setBtns(true);
+      tLine('> download ' + name + '...', 'muted');
+      try {
+        const r = await fetch(url);
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        const blob = await r.blob();
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = name.replace(/[\\/:*?"<>|]/g, '');
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(a.href), 60000);
+        tLine('✓ ' + name + ' tersimpan', 'ok');
+      } catch (err) {
+        tLine('! download langsung gagal, buka di tab baru', 'warn');
+        window.open(url, '_blank');
+      } finally {
+        setBtns(false);
+      }
+    }
+
+    async function run() {
       if (busy) return;
       tClear();
-      listBox.classList.add('hidden');
-      codeBox.classList.add('hidden');
-      const u = urlInput.value.trim();
-      try {
-        const p = new URL(u);
-        if (!/^https?:$/.test(p.protocol)) throw new Error('protocol');
-      } catch (e) {
-        tLine('✗ Format URL tidak valid', 'err');
+      const v = input.value.trim();
+      if (!v) {
+        tLine('✗ Search lagu atau link Spotify dulu', 'err');
         return;
       }
-      tLine('> WebToZip siap...', 'hi');
-      tLine('→ target: ' + u, 'muted');
+      if (/open\.spotify\.com/i.test(v) && !SPOTIFY_RE.test(v)) {
+        tLine('✗ link Spotify harus link track (open.spotify.com/track/...)', 'err');
+        return;
+      }
+
+      tLine(SPOTIFY_RE.test(v) ? '> link Spotify kebaca, ambil judulnya...' : '> nyari lagu "' + v + '"...', 'muted');
       setBusy(true);
-      startLoader();
+      resultBox.classList.add('hidden');
+      const started = Date.now();
       const ctrl = new AbortController();
-      const timer = setTimeout(() => ctrl.abort(), 180000);
+      const timer = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
       try {
-        const res = await fetch(ZIP_API, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ url: u, password: VOTE_GATE.zipPw }),
-          signal: ctrl.signal
-        });
-        if (!res.ok) {
-          const t = await res.text().catch(() => '');
-          throw new Error('HTTP ' + res.status + (t ? ' — ' + t.slice(0, 140) : ''));
-        }
-        const data = await res.json();
-        if (!data.files || !data.files.length) throw new Error('gak ada file yang kebaca');
-        files = data.files;
-        checked = new Set(files.map((_, i) => i));
-        const total = files.reduce((a, f) => a + (f.size || 0), 0);
-        renderList();
-        tLine('✓ ' + files.length + ' file ketemu (' + fmt(total) + '). Pilih file lalu download', 'ok');
+        tLine('> cari di Spotify + ambil MP3 + lirik...', 'muted');
+        const res = await fetch(API + '?q=' + encodeURIComponent(v), { signal: ctrl.signal });
+        const j = await res.json().catch(() => null);
+        if (!j || !j.status) throw new Error((j && j.message) || 'server error (HTTP ' + res.status + ')');
+        tLine('> data ketemu, nyiapin preview...', 'muted');
+        render(j.result, j.download_error, Date.now() - started);
       } catch (err) {
-        if (err.name === 'AbortError') tLine('✗ timeout, website kelamaan diproses', 'err');
+        if (err.name === 'AbortError') tLine('✗ timeout, coba lagi', 'err');
         else tLine('✗ ' + err.message, 'err');
       } finally {
         clearTimeout(timer);
-        stopLoader();
         setBusy(false);
       }
     }
 
-    btn.addEventListener('click', scan);
+    submitBtn.addEventListener('click', run);
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); run(); } });
+
+    dlMp3.addEventListener('click', () => {
+      if (!cur || !cur.download) return;
+      const name = (cur.artist ? cur.artist + ' - ' : '') + (cur.title || 'lagu') + '.mp3';
+      save(cur.download, name);
+    });
+
+    lyrBtn.addEventListener('click', () => {
+      if (!cur) return;
+      const text = cleanLyrics(cur);
+      if (!lyrBox.textContent) lyrBox.textContent = text || 'Lirik ga ketemu';
+      lyrBox.hidden = !lyrBox.hidden;
+      lyrBtn.textContent = lyrBox.hidden ? 'Lirik' : 'Tutup Lirik';
+    });
+  })();
+
+  /* ================= 8g. ALIGHT MOTION PREMIUM (AUTO + TEMPMAIL + MANUAL) ================= */
+  (function initAmVerifyTool() {
+    const MAIL_API = '/akunlama';
+    const API_SEND = '/api/am-preset?action=send-link';
+    const API_VERIFY = '/api/am-preset?action=verify-link';
+    const TIMEOUT_SEND = 30000;
+    const TIMEOUT_VERIFY = 40000;
+
+    // Mode toggle
+    const modeBtns = [...document.querySelectorAll('.amv-mode')];
+    const panels = [...document.querySelectorAll('.amv-panel')];
+
+    // Auto mode elems
+    const emailUser = $('amvEmailUser');
+    const genBtn = $('amvGenEmail');
+    const genBtnText = genBtn ? genBtn.textContent : '';
+    const mailbox = $('amvMailbox');
+    const emailOutput = $('amvEmailOutput');
+    const copyEmailBtn = $('amvCopyEmail');
+    const sendAuto = $('amvSendAuto');
+    const sendAutoText = $('amvSendAutoText');
+    const checkAuto = $('amvCheckAuto');
+    const checkAutoText = $('amvCheckAutoText');
+
+    // Manual mode elems
+    const emailManual = $('amvEmailManual');
+    const sendManual = $('amvSendManual');
+    const sendManualText = $('amvSendManualText');
+    const linkManual = $('amvLinkManual');
+    const verifyManual = $('amvVerifyManual');
+    const verifyManualText = $('amvVerifyManualText');
+
+    // Common
+    const term = $('amvTerminal');
+    const resultBox = $('amvResult');
+    const summary = $('amvSummary');
+    const listBox = $('amvList');
+    const animBox = $('amvAnim');
+    const accIdx = $('amvAccIdx');
+    const barFill = $('amvBarFill');
+    const stepsEl = [...document.querySelectorAll('.amv-step')];
+
+    let autoEmail = '';
+    let busyGen = false;
+    let busySend = false;
+    let busyVerify = false;
+
+    function tClear() { term.innerHTML = ''; term.classList.add('show'); }
+    function tLine(msg, cls = '') {
+      const d = document.createElement('div');
+      d.className = 'log ' + cls;
+      d.textContent = msg;
+      term.appendChild(d);
+      term.scrollTop = term.scrollHeight;
+    }
+
+    function setMode(mode) {
+      modeBtns.forEach(b => b.classList.toggle('active', b.dataset.amvMode === mode));
+      panels.forEach(p => p.classList.toggle('active', p.dataset.amvPanel === mode));
+      tClear();
+    }
+    modeBtns.forEach(b => b.addEventListener('click', () => setMode(b.dataset.amvMode)));
+
+    function setStep(idx) {
+      stepsEl.forEach((s, i) => {
+        s.classList.remove('active', 'done', 'error');
+        if (i < idx) s.classList.add('done');
+        else if (i === idx) s.classList.add('active');
+      });
+      barFill.style.width = Math.round((idx / stepsEl.length) * 100) + '%';
+    }
+    function markDone(idx) {
+      const s = stepsEl[idx];
+      if (!s) return;
+      s.classList.remove('active');
+      s.classList.add('done');
+      barFill.style.width = Math.round(((idx + 1) / stepsEl.length) * 100) + '%';
+    }
+    function markErr(idx) {
+      const s = stepsEl[idx];
+      if (!s) return;
+      s.classList.remove('active');
+      s.classList.add('error');
+    }
+    function resetAnim() {
+      animBox.classList.add('show');
+      animBox.classList.remove('verified');
+      stepsEl.forEach(s => s.classList.remove('active', 'done', 'error'));
+      barFill.style.width = '0%';
+    }
+    function finishSuccess() {
+      stepsEl.forEach(s => { s.classList.remove('active'); s.classList.add('done'); });
+      barFill.style.width = '100%';
+      setTimeout(() => { animBox.classList.add('verified'); }, 300);
+    }
+
+    function validateEmail(v) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+    }
+
+    // Extract link dari HTML email (dari TempMail)
+    function extractLinksFromHtml(raw) {
+      if (!raw) return [];
+      let src = typeof raw === 'string' ? raw : JSON.stringify(raw);
+      src = src.replace(/\\\//g, '/').replace(/\\u0026/gi, '&').replace(/\\u003d/gi, '=').replace(/\\u003c/gi, '<').replace(/\\u003e/gi, '>');
+      try {
+        const t = document.createElement('textarea');
+        t.innerHTML = src;
+        src = t.value;
+      } catch (e) {}
+      const found = new Set();
+      try {
+        const doc = new DOMParser().parseFromString(src, 'text/html');
+        doc.querySelectorAll('a[href]').forEach(a => {
+          const h = a.getAttribute('href');
+          if (h && /^https?:\/\//i.test(h)) found.add(h.split(/&quot;|&gt;|&lt;|&#39;|"|'|<|>/)[0].replace(/&amp;/gi, '&').replace(/[.,;)\]]+$/, ''));
+        });
+      } catch (e) {}
+      (src.match(/https?:\/\/[^\s"'<>\\]+/gi) || []).forEach(u => {
+        found.add(u.split(/&quot;|&gt;|&lt;|&#39;|"|'|<|>/)[0].replace(/&amp;/gi, '&').replace(/[.,;)\]]+$/, ''));
+      });
+      const all = [...found].filter(u => u.length > 12 && !/\.(png|jpe?g|gif|css|svg|webp|ico)(\?|$)/i.test(u));
+      const verify = all.filter(u => /alight|firebaseapp|auth|verif|oobcode|mode=|magic|token|signin|confirm|activ/i.test(u));
+      return [...new Set(verify.length ? verify : all)].slice(0, 5);
+    }
+
+    // ============ AUTO: GENERATE EMAIL ============
+    genBtn.addEventListener('click', async () => {
+      if (busyGen) return;
+      busyGen = true;
+      const origText = genBtn.textContent;
+      genBtn.disabled = true;
+      genBtn.textContent = '...';
+      tClear();
+
+      try {
+        let user = emailUser.value.trim();
+        if (!user) user = 'am' + Math.random().toString(36).substring(2, 8);
+
+        const res = await fetch(`${MAIL_API}/list?recipient=${encodeURIComponent(user)}`);
+        if (!res.ok) throw new Error('Gagal konek ke TempMail');
+
+        autoEmail = `${user}@akunlama.com`;
+        emailOutput.value = autoEmail;
+        mailbox.classList.remove('hidden');
+        sendAuto.disabled = false;
+        checkAuto.disabled = true;
+        tLine('✓ Email dibuat: ' + autoEmail, 'ok');
+        tLine('→ Klik "2. Kirim Magic Link"', 'muted');
+      } catch (e) {
+        tLine('✗ ' + e.message, 'err');
+      } finally {
+        busyGen = false;
+        genBtn.disabled = false;
+        genBtn.textContent = origText;
+      }
+    });
+
+    copyEmailBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(emailOutput.value);
+        copyEmailBtn.textContent = 'Tersalin!';
+        setTimeout(() => { copyEmailBtn.textContent = 'Salin'; }, 1500);
+      } catch (e) {
+        copyEmailBtn.textContent = 'Gagal';
+        setTimeout(() => { copyEmailBtn.textContent = 'Salin'; }, 1500);
+      }
+    });
+
+    // ============ AUTO: KIRIM LINK ============
+    sendAuto.addEventListener('click', async () => {
+      if (busySend || !autoEmail) return;
+      busySend = true;
+      sendAuto.disabled = true;
+      sendAutoText.textContent = 'Lagi kirim...';
+      tClear();
+      resetAnim();
+      tLine('> Kirim magic link ke ' + autoEmail, 'hi');
+      setStep(0);
+
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), TIMEOUT_SEND);
+      try {
+        const res = await fetch(API_SEND, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: autoEmail }),
+          signal: ctrl.signal
+        });
+        const j = await res.json().catch(() => null);
+        if (!j || !j.ok) {
+          const msg = (j && (j.error || j.message)) || ('HTTP ' + res.status);
+          throw new Error(msg);
+        }
+        markDone(0);
+        setStep(1);
+        tLine('✓ Magic link terkirim', 'ok');
+        tLine('→ Klik "3. Cek Inbox & Aktifkan"', 'muted');
+        checkAuto.disabled = false;
+      } catch (err) {
+        markErr(0);
+        if (err.name === 'AbortError') tLine('✗ timeout kirim', 'err');
+        else tLine('✗ ' + err.message, 'err');
+      } finally {
+        clearTimeout(timer);
+        busySend = false;
+        sendAuto.disabled = false;
+        sendAutoText.textContent = '2. Kirim Magic Link';
+      }
+    });
+
+    // ============ AUTO: CEK INBOX & VERIF ============
+    checkAuto.addEventListener('click', async () => {
+      if (busyVerify || !autoEmail) return;
+      busyVerify = true;
+      checkAuto.disabled = true;
+      checkAutoText.textContent = 'Cek inbox...';
+      resetAnim();
+      setStep(1);
+      tLine('> Cek inbox ' + autoEmail, 'hi');
+
+      try {
+        const user = autoEmail.split('@')[0];
+        let magicLink = null;
+
+        for (let attempt = 1; attempt <= 8; attempt++) {
+          tLine('→ percobaan ' + attempt + '/8...', 'muted');
+          const res = await fetch(`${MAIL_API}/list?recipient=${encodeURIComponent(user)}`);
+          const data = await res.json().catch(() => null);
+          const messages = (data && (data.data || data.messages || (Array.isArray(data) ? data : []))) || [];
+
+          if (messages.length > 0) {
+            for (const msg of messages) {
+              let html = typeof msg.message === 'string' ? msg.message : (msg.message ? JSON.stringify(msg.message) : '');
+              const st = msg.storage;
+              const key = (typeof st === 'string' ? st : (st && (st.key || st.id || st.storageKey))) || msg.storageKey || msg.key || msg.id || null;
+
+              let links = extractLinksFromHtml(html);
+              if (links.length === 0 && key) {
+                try {
+                  const r = await fetch(`${MAIL_API}/getHtml?region=us&key=${encodeURIComponent(key)}`);
+                  const t = await r.text();
+                  if (t) links = extractLinksFromHtml(t + '\n' + html);
+                } catch (e) {}
+              }
+              if (links.length === 0 && key) {
+                try {
+                  const r = await fetch(`${MAIL_API}/getKey?region=us&key=${encodeURIComponent(key)}`);
+                  const t = await r.text();
+                  if (t) links = extractLinksFromHtml(t + '\n' + html);
+                } catch (e) {}
+              }
+              if (links.length > 0) { magicLink = links[0]; break; }
+            }
+            if (magicLink) break;
+          }
+          await new Promise(r => setTimeout(r, 3000));
+        }
+
+        if (!magicLink) throw new Error('Link belum masuk. Tunggu 10-30 detik, coba lagi.');
+
+        markDone(1);
+        setStep(2);
+        tLine('✓ Link ketemu', 'ok');
+        tLine('> Verifikasi...', 'muted');
+
+        const vres = await fetch(API_VERIFY, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: autoEmail, magicLink })
+        });
+        const vdata = await vres.json().catch(() => null);
+        if (!vdata || !vdata.ok) {
+          const msg = (vdata && (vdata.error || vdata.message)) || ('HTTP ' + vres.status);
+          throw new Error(msg);
+        }
+
+        const r = vdata.data && vdata.data.result ? vdata.data.result : (vdata.data || vdata);
+        finishSuccess();
+        accIdx.textContent = '✓ Done';
+
+        tLine('✓ Premium aktif!', 'ok');
+        tLine('→ Email : ' + autoEmail, 'ok');
+        if (r.uid) tLine('→ UID   : ' + r.uid, 'muted');
+        if (r.orderId) tLine('→ Order : ' + r.orderId, 'muted');
+        if (r.validUntil) tLine('→ s/d   : ' + r.validUntil, 'muted');
+
+        const item = document.createElement('div');
+        item.className = 'am-item';
+        const label = document.createElement('div');
+        label.className = 'am-label';
+        label.textContent = autoEmail;
+        const sub = document.createElement('small');
+        const bits = [];
+        if (r.uid) bits.push('uid ' + r.uid);
+        if (r.orderId) bits.push('order ' + r.orderId);
+        if (r.validUntil) bits.push('s/d ' + r.validUntil);
+        sub.textContent = bits.join(' · ') || 'VIP Pro aktif';
+        label.appendChild(sub);
+        item.appendChild(label);
+        listBox.appendChild(item);
+
+        summary.innerHTML = '<b>Premium aktif!</b> Email: <b>' + autoEmail + '</b>';
+        resultBox.classList.remove('hidden');
+        checkAuto.disabled = true;
+      } catch (err) {
+        markErr(2);
+        tLine('✗ ' + err.message, 'err');
+      } finally {
+        busyVerify = false;
+        checkAutoText.textContent = '3. Cek Inbox & Aktifkan';
+      }
+    });
+
+    // ============ MANUAL: KIRIM ============
+    sendManual.addEventListener('click', async () => {
+      if (busySend) return;
+      const email = emailManual.value.trim();
+      if (!validateEmail(email)) { tClear(); tLine('✗ Email tidak valid', 'err'); return; }
+
+      busySend = true;
+      sendManual.disabled = true;
+      sendManualText.textContent = 'Lagi kirim...';
+      tClear();
+      resetAnim();
+      setStep(0);
+      tLine('> Kirim magic link ke ' + email, 'hi');
+
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), TIMEOUT_SEND);
+      try {
+        const res = await fetch(API_SEND, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email }),
+          signal: ctrl.signal
+        });
+        const j = await res.json().catch(() => null);
+        if (!j || !j.ok) {
+          const msg = (j && (j.error || j.message)) || ('HTTP ' + res.status);
+          throw new Error(msg);
+        }
+        markDone(0);
+        tLine('✓ Magic link terkirim', 'ok');
+        tLine('→ Cek inbox/spam di ' + email, 'muted');
+        accIdx.textContent = 'Step 2';
+        linkManual.focus();
+      } catch (err) {
+        markErr(0);
+        if (err.name === 'AbortError') tLine('✗ timeout kirim', 'err');
+        else tLine('✗ ' + err.message, 'err');
+      } finally {
+        clearTimeout(timer);
+        busySend = false;
+        sendManual.disabled = false;
+        sendManualText.textContent = 'Kirim Magic Link';
+      }
+    });
+
+    // ============ MANUAL: VERIF ============
+    verifyManual.addEventListener('click', async () => {
+      if (busyVerify) return;
+      const email = emailManual.value.trim();
+      const magicLink = linkManual.value.trim();
+      if (!validateEmail(email)) { tLine('✗ Isi email dulu', 'err'); return; }
+      if (!magicLink || !/^https?:\/\//i.test(magicLink)) { tLine('✗ Magic link tidak valid', 'err'); return; }
+
+      busyVerify = true;
+      verifyManual.disabled = true;
+      verifyManualText.textContent = 'Verif...';
+      tClear();
+      resetAnim();
+      setStep(1);
+      resultBox.classList.add('hidden');
+      tLine('> Verifikasi magic link...', 'hi');
+
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), TIMEOUT_VERIFY);
+      try {
+        const res = await fetch(API_VERIFY, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, magicLink }),
+          signal: ctrl.signal
+        });
+        const j = await res.json().catch(() => null);
+        if (!j || !j.ok) {
+          const msg = (j && (j.error || j.message)) || ('HTTP ' + res.status);
+          throw new Error(msg);
+        }
+
+        const r = j.data && j.data.result ? j.data.result : (j.data || j);
+        markDone(1);
+        finishSuccess();
+        accIdx.textContent = '✓ Done';
+
+        tLine('✓ Verifikasi berhasil', 'ok');
+        tLine('→ Email : ' + email, 'ok');
+        if (r.uid) tLine('→ UID   : ' + r.uid, 'muted');
+        if (r.orderId) tLine('→ Order : ' + r.orderId, 'muted');
+        if (r.validUntil) tLine('→ s/d   : ' + r.validUntil, 'muted');
+
+        const item = document.createElement('div');
+        item.className = 'am-item';
+        const label = document.createElement('div');
+        label.className = 'am-label';
+        label.textContent = email;
+        const sub = document.createElement('small');
+        const bits = [];
+        if (r.uid) bits.push('uid ' + r.uid);
+        if (r.orderId) bits.push('order ' + r.orderId);
+        if (r.validUntil) bits.push('s/d ' + r.validUntil);
+        sub.textContent = bits.join(' · ') || 'VIP Pro aktif';
+        label.appendChild(sub);
+        item.appendChild(label);
+        listBox.appendChild(item);
+
+        summary.innerHTML = '<b>Premium aktif!</b> Email: <b>' + email + '</b>';
+        resultBox.classList.remove('hidden');
+      } catch (err) {
+        markErr(2);
+        if (err.name === 'AbortError') tLine('✗ timeout verif', 'err');
+        else tLine('✗ ' + err.message, 'err');
+      } finally {
+        clearTimeout(timer);
+        busyVerify = false;
+        verifyManual.disabled = false;
+        verifyManualText.textContent = 'Verifikasi & Aktifkan';
+      }
+    });
   })();
 
   /* ================= 9. SPLASH ================= */
@@ -3874,387 +4194,6 @@ header { position: relative; display: flex; align-items: center; justify-content
     }
     refresh();
     setInterval(refresh, 15 * 60 * 1000);
-  })();
-
-  /* ================= SPOTIFY DOWNLOAD ================= */
-  (function initSpotifyTool() {
-    const API = '/api/spotify';
-    const TIMEOUT_MS = 90000;
-    const SPOTIFY_RE = /open\.spotify\.com\/(?:intl-[a-z]+\/)?track\//i;
-
-    const input = $('spUrl');
-    const submitBtn = $('spSubmit');
-    const term = $('spTerminal');
-    const resultBox = $('spResult');
-    const cover = $('spCover');
-    const titleEl = $('spTitle');
-    const artistEl = $('spArtist');
-    const statsEl = $('spStats');
-    const audio = $('spAudio');
-    const speedBox = $('spSpeed');
-    const dlMp3 = $('spDlMp3');
-    const lyrBtn = $('spLyr');
-    const lyrBox = $('spLyrics');
-
-    let busy = false;
-    let dlBusy = false;
-    let cur = null;
-
-    function tClear() { term.innerHTML = ''; term.classList.add('show'); }
-    function tLine(msg, cls = '') {
-      const d = document.createElement('div');
-      d.className = 'log ' + cls;
-      d.textContent = msg;
-      term.appendChild(d);
-      term.scrollTop = term.scrollHeight;
-    }
-    function setBusy(on) {
-      busy = on;
-      submitBtn.disabled = on;
-      submitBtn.classList.toggle('spinning', on);
-    }
-    function setBtns(on) {
-      dlBusy = on;
-      dlMp3.disabled = on;
-    }
-    function fmtDur(sec) {
-      if (!sec) return '';
-      const m = Math.floor(sec / 60), s = String(sec % 60).padStart(2, '0');
-      return m + ':' + s;
-    }
-    function cleanLyrics(t) {
-      if (t.lyrics) return t.lyrics;
-      return (t.synced_lyrics || '').replace(/\[\d{1,2}:\d{2}(?:[.:]\d{1,3})?\]/g, '').trim();
-    }
-
-    // Bikin speed buttons sekali aja
-    if (speedBox && !speedBox.childElementCount) {
-      [0.5, 0.75, 1, 1.25, 1.5, 2].forEach(s => {
-        const b = document.createElement('button');
-        b.type = 'button';
-        b.className = 'tt-btn' + (s === 1 ? ' sp-on' : '');
-        b.textContent = s + 'x';
-        b.onclick = () => {
-          audio.playbackRate = s;
-          speedBox.querySelectorAll('button').forEach(x => x.classList.remove('sp-on'));
-          b.classList.add('sp-on');
-          tLine('> speed ' + s + 'x', 'muted');
-        };
-        speedBox.appendChild(b);
-      });
-    }
-
-    function render(t, dlErr, elapsed) {
-      cur = t;
-      cover.src = t.thumbnail || '';
-      cover.hidden = !t.thumbnail;
-      titleEl.textContent = t.title || '-';
-      artistEl.textContent = t.artist || '';
-      const bits = [];
-      if (t.album) bits.push('Album: ' + t.album);
-      if (t.duration) bits.push('Durasi: ' + fmtDur(t.duration));
-      if (elapsed) bits.push('⏱ ' + (elapsed / 1000).toFixed(1) + 's');
-      statsEl.textContent = bits.join(' · ');
-
-      if (t.download) {
-        audio.src = t.download;
-        audio.hidden = false;
-        audio.playbackRate = 1;
-        speedBox.querySelectorAll('button').forEach(x => x.classList.toggle('sp-on', x.textContent === '1x'));
-        dlMp3.hidden = false;
-      } else {
-        audio.removeAttribute('src');
-        audio.hidden = true;
-        dlMp3.hidden = true;
-      }
-
-      lyrBox.hidden = true;
-      lyrBox.textContent = '';
-      lyrBtn.textContent = 'Lirik';
-      lyrBtn.disabled = false;
-      resultBox.classList.remove('hidden');
-
-      tLine(t.download ? '✓ MP3 siap, preview dulu sebelum download' : '✗ MP3 belum ada buat lagu ini', t.download ? 'ok' : 'err');
-      if (dlErr) tLine('! ' + dlErr, 'warn');
-      tLine(cleanLyrics(t) ? '✓ lirik ketemu' : '· lirik ga ketemu', cleanLyrics(t) ? 'ok' : 'muted');
-    }
-
-    async function save(url, name) {
-      if (dlBusy) return;
-      setBtns(true);
-      tLine('> download ' + name + '...', 'muted');
-      try {
-        const r = await fetch(url);
-        if (!r.ok) throw new Error('HTTP ' + r.status);
-        const blob = await r.blob();
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = name.replace(/[\\/:*?"<>|]/g, '');
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        setTimeout(() => URL.revokeObjectURL(a.href), 60000);
-        tLine('✓ ' + name + ' tersimpan', 'ok');
-      } catch (err) {
-        tLine('! download langsung gagal, buka di tab baru', 'warn');
-        window.open(url, '_blank');
-      } finally {
-        setBtns(false);
-      }
-    }
-
-    async function run() {
-      if (busy) return;
-      tClear();
-      const v = input.value.trim();
-      if (!v) {
-        tLine('✗ Search lagu atau link Spotify dulu', 'err');
-        return;
-      }
-      if (/open\.spotify\.com/i.test(v) && !SPOTIFY_RE.test(v)) {
-        tLine('✗ link Spotify harus link track (open.spotify.com/track/...)', 'err');
-        return;
-      }
-
-      tLine(SPOTIFY_RE.test(v) ? '> link Spotify kebaca, ambil judulnya...' : '> nyari lagu "' + v + '"...', 'muted');
-      setBusy(true);
-      resultBox.classList.add('hidden');
-      const started = Date.now();
-      const ctrl = new AbortController();
-      const timer = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
-      try {
-        tLine('> cari di Spotify + ambil MP3 + lirik...', 'muted');
-        const res = await fetch(API + '?q=' + encodeURIComponent(v), { signal: ctrl.signal });
-        const j = await res.json().catch(() => null);
-        if (!j || !j.status) throw new Error((j && j.message) || 'server error (HTTP ' + res.status + ')');
-        tLine('> data ketemu, nyiapin preview...', 'muted');
-        render(j.result, j.download_error, Date.now() - started);
-      } catch (err) {
-        if (err.name === 'AbortError') tLine('✗ timeout, coba lagi', 'err');
-        else tLine('✗ ' + err.message, 'err');
-      } finally {
-        clearTimeout(timer);
-        setBusy(false);
-      }
-    }
-
-    submitBtn.addEventListener('click', run);
-    input.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); run(); } });
-
-    dlMp3.addEventListener('click', () => {
-      if (!cur || !cur.download) return;
-      const name = (cur.artist ? cur.artist + ' - ' : '') + (cur.title || 'lagu') + '.mp3';
-      save(cur.download, name);
-    });
-
-    lyrBtn.addEventListener('click', () => {
-      if (!cur) return;
-      const text = cleanLyrics(cur);
-      if (!lyrBox.textContent) lyrBox.textContent = text || 'Lirik ga ketemu';
-      lyrBox.hidden = !lyrBox.hidden;
-      lyrBtn.textContent = lyrBox.hidden ? 'Lirik' : 'Tutup Lirik';
-    });
-  })();
-
-  /* ================= ALIGHT MOTION PREMIUM VERIFY ================= */
-  (function initAmVerifyTool() {
-    const API = '/api/am-preset?action=bulk-verify';
-    const TIMEOUT_MS = 120000;
-
-    const countInput = $('amvCount');
-    const passInput = $('amvPass');
-    const submitBtn = $('amvSubmit');
-    const submitText = submitBtn.querySelector('span');
-    const term = $('amvTerminal');
-    const resultBox = $('amvResult');
-    const summary = $('amvSummary');
-    const listBox = $('amvList');
-
-    const animBox = $('amvAnim');
-    const accIdx = $('amvAccIdx');
-    const barFill = $('amvBarFill');
-    const stepsEl = [...document.querySelectorAll('.amv-step')];
-    const batchBox = $('amvBatch');
-    const batchText = $('amvBatchText');
-    const batchFill = $('amvBatchFill');
-
-    let busy = false;
-    let animTimers = [];
-
-    function tClear() { term.innerHTML = ''; term.classList.add('show'); }
-    function tLine(msg, cls = '') {
-      const d = document.createElement('div');
-      d.className = 'log ' + cls;
-      d.textContent = msg;
-      term.appendChild(d);
-      term.scrollTop = term.scrollHeight;
-    }
-    function setBusy(on) {
-      busy = on;
-      submitBtn.disabled = on;
-      submitBtn.classList.toggle('spinning', on);
-      submitText.textContent = on ? 'Lagi ngegas...' : 'Gas Verify';
-    }
-    function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
-
-    function resetAnim() {
-      animTimers.forEach(clearTimeout);
-      animTimers = [];
-      animBox.classList.add('show');
-      animBox.classList.remove('verified');
-      stepsEl.forEach(s => s.classList.remove('active', 'done', 'error'));
-      barFill.style.width = '0%';
-    }
-    function setStepAnim(idx) {
-      stepsEl.forEach((s, i) => {
-        s.classList.remove('active');
-        if (i < idx) s.classList.add('done');
-        else if (i === idx) s.classList.add('active');
-      });
-      barFill.style.width = Math.round((idx / stepsEl.length) * 100) + '%';
-    }
-    function markStepDone(idx) {
-      const s = stepsEl[idx];
-      if (!s) return;
-      s.classList.remove('active');
-      s.classList.add('done');
-      barFill.style.width = Math.round(((idx + 1) / stepsEl.length) * 100) + '%';
-    }
-    function markStepError(idx) {
-      const s = stepsEl[idx];
-      if (!s) return;
-      s.classList.remove('active');
-      s.classList.add('error');
-    }
-    function finishAnimSuccess() {
-      stepsEl.forEach(s => { s.classList.remove('active'); s.classList.add('done'); });
-      barFill.style.width = '100%';
-      animTimers.push(setTimeout(() => { animBox.classList.add('verified'); }, 350));
-    }
-    function hideAnimAfter(ms = 1800) {
-      animTimers.push(setTimeout(() => {
-        animBox.classList.remove('show');
-        animBox.classList.remove('verified');
-      }, ms));
-    }
-    function autoplayWaitStages() {
-      animTimers.push(setTimeout(() => setStepAnim(1), 1200));
-      animTimers.push(setTimeout(() => markStepDone(0), 2200));
-      animTimers.push(setTimeout(() => setStepAnim(2), 3500));
-      animTimers.push(setTimeout(() => markStepDone(1), 5000));
-    }
-    function setBatch(cur, total) {
-      batchBox.classList.add('show');
-      batchText.textContent = cur + ' / ' + total;
-      batchFill.style.width = Math.round((cur / total) * 100) + '%';
-    }
-
-    function renderRow(acc, idx) {
-      const item = document.createElement('div');
-      item.className = 'am-item';
-      const label = document.createElement('div');
-      label.className = 'am-label';
-      label.textContent = (idx + 1) + '. ' + (acc.email || '-');
-      const sub = document.createElement('small');
-      sub.textContent = [acc.planName, acc.membershipStatus, acc.validUntil ? 'exp ' + acc.validUntil : '']
-        .filter(Boolean).join(' · ');
-      label.appendChild(sub);
-      const copy = document.createElement('button');
-      copy.type = 'button';
-      copy.className = 'tt-btn';
-      copy.textContent = 'Salin';
-      copy.addEventListener('click', async () => {
-        try {
-          await navigator.clipboard.writeText(acc.email);
-          copy.textContent = 'Tersalin!';
-        } catch { copy.textContent = 'Gagal'; }
-        setTimeout(() => { copy.textContent = 'Salin'; }, 1500);
-      });
-      item.append(label, copy);
-      return item;
-    }
-
-    async function run() {
-      if (busy) return;
-      tClear();
-      resultBox.classList.add('hidden');
-      summary.textContent = '';
-      listBox.innerHTML = '';
-      resetAnim();
-      accIdx.textContent = '1 / 1';
-      batchBox.classList.remove('show');
-
-      const total = Math.max(1, Math.min(Number(countInput.value) || 1, 20));
-      const password = passInput.value;
-
-      tLine('> Alight Motion Premium verify siap...', 'hi');
-      tLine('→ target: ' + total + ' akun', 'muted');
-      setBusy(true);
-
-      const ok = [];
-      const fail = [];
-
-      for (let i = 0; i < total; i++) {
-        accIdx.textContent = (i + 1) + ' / ' + total;
-        setBatch(i, total);
-        tLine('> [' + (i + 1) + '/' + total + '] nyiapin email sementara...', 'muted');
-
-        stepsEl.forEach(s => s.classList.remove('active', 'done', 'error'));
-        barFill.style.width = '0%';
-        animBox.classList.remove('verified');
-
-        autoplayWaitStages();
-
-        const started = Date.now();
-        const ctrl = new AbortController();
-        const timer = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
-        try {
-          const res = await fetch(API, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ password }),
-            signal: ctrl.signal
-          });
-          const j = await res.json().catch(() => null);
-          const elapsed = ((Date.now() - started) / 1000).toFixed(1);
-
-          if (!j || !j.ok) {
-            const msg = (j && (j.error || j.message)) || ('HTTP ' + res.status);
-            throw new Error(msg);
-          }
-          const acc = j.data;
-          ok.push(acc);
-          finishAnimSuccess();
-          tLine('✓ [' + (i + 1) + '/' + total + '] ' + acc.email + ' — ' + elapsed + 's', 'ok');
-          listBox.appendChild(renderRow(acc, ok.length - 1));
-        } catch (err) {
-          markStepError(2);
-          if (err.name === 'AbortError') tLine('✗ [' + (i + 1) + '/' + total + '] timeout ' + TIMEOUT_MS / 1000 + 's', 'err');
-          else tLine('✗ [' + (i + 1) + '/' + total + '] ' + err.message, 'err');
-          fail.push({ idx: i + 1, error: err.message });
-        } finally {
-          clearTimeout(timer);
-          animTimers.forEach(clearTimeout);
-          animTimers = [];
-        }
-
-        setBatch(i + 1, total);
-        if (i < total - 1) await sleep(1200);
-      }
-
-      const succ = ok.length;
-      const failN = fail.length;
-      tLine('', 'muted');
-      tLine('=== SELESAI ===', 'hi');
-      tLine('✓ sukses : ' + succ, 'ok');
-      tLine('✗ gagal  : ' + failN, failN ? 'err' : 'muted');
-      if (succ) summary.innerHTML = '<b>' + succ + '/' + total + '</b> akun premium aktif. Salin email di bawah.';
-      resultBox.classList.remove('hidden');
-      hideAnimAfter(2400);
-      setBusy(false);
-    }
-
-    submitBtn.addEventListener('click', run);
   })();
 </script>
 </body>
