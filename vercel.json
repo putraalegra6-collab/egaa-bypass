@@ -26,6 +26,9 @@
     },
     "api/hd-upscale.js": {
       "maxDuration": 60
+    },
+    "api/am-preset.js": {
+      "maxDuration": 30
     }
   },
   "rewrites": [
