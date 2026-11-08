@@ -686,6 +686,13 @@ header { position: relative; display: flex; align-items: center; justify-content
 .am-step.done { color: var(--text); }
 .am-step.done .am-dot { background: var(--ok); opacity: 1; }
 @keyframes amPulse { 50% { transform: scale(1.5); } }
+.am-bar { grid-column: 1 / -1; height: 5px; border-radius: 999px; background: var(--surface-2); border: var(--bw) solid var(--line); overflow: hidden; }
+.am-bar span { display: block; height: 100%; width: 0; background: var(--accent); border-radius: 999px; transition: width .5s cubic-bezier(.2,.8,.2,1); }
+.am-done { display: none; grid-column: 1 / -1; align-items: center; justify-content: center; gap: 8px; height: 38px; border-radius: 999px; background: rgba(52,211,153,.12); color: var(--ok); font-size: 12.5px; font-weight: 800; border: var(--bw) solid var(--ok); }
+.am-steps.finished .am-step, .am-steps.finished .am-bar { display: none; }
+.am-steps.finished .am-done { display: flex; animation: amIn .45s cubic-bezier(.2,1.2,.4,1) both; }
+.am-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.am-chip { font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 999px; background: var(--surface-2); border: var(--bw) solid var(--line-strong); color: var(--text); }
 
 /* hasil: video */
 .am-result { gap: 14px; }
@@ -693,7 +700,7 @@ header { position: relative; display: flex; align-items: center; justify-content
 .am-player { position: relative; width: 100%; max-width: 280px; margin: 0 auto; aspect-ratio: 9 / 16; border-radius: 18px; overflow: hidden; background: #000; border: var(--bw) solid var(--line-strong); box-shadow: var(--shadow-lg); }
 .am-player video, .am-player img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .am-player .am-fallback { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(0,0,0,.55); color: #fff; font-size: 12px; font-weight: 700; text-align: center; padding: 16px; }
-.am-open { align-self: center; text-decoration: none; }
+.am-open { align-self: center; text-decoration: none; height: 42px; padding: 0 20px; display: inline-flex; align-items: center; justify-content: center; border-radius: var(--radius-sm); background: var(--accent); color: var(--accent-text); border: var(--bw) solid var(--line-strong); font-weight: 800; font-size: 13px; box-shadow: var(--shadow); }
 
 /* hasil: penulis */
 .am-author { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--surface-2); border: var(--bw) solid var(--line-strong); border-radius: var(--radius-sm); }
@@ -934,6 +941,52 @@ header { position: relative; display: flex; align-items: center; justify-content
 @media (max-width: 360px) {
   .tool-chips { grid-template-columns: 1fr; }
 }
+
+/* ===== ALIGHT MOTION PREMIUM ANIMATION ===== */
+.amv-anim { display: none; margin-top: 14px; padding: 16px; border: var(--bw) solid var(--line-strong); border-radius: var(--radius-sm); background: var(--surface-2); box-shadow: var(--shadow); position: relative; overflow: hidden; }
+.amv-anim.show { display: block; animation: tabIn .3s ease both; }
+.amv-anim::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,.06) 50%, transparent 70%); background-size: 250% 100%; animation: amvSweep 3s linear infinite; }
+:root[data-theme="brutal"] .amv-anim::before { display: none; }
+@keyframes amvSweep { from { background-position: 150% 0; } to { background-position: -150% 0; } }
+
+.amv-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 12px; position: relative; z-index: 1; }
+.amv-label { font-family: var(--mono); font-size: 11px; font-weight: 800; letter-spacing: 1.4px; color: var(--muted); }
+.amv-count { font-family: var(--mono); font-size: 11px; font-weight: 800; color: var(--text); background: var(--bg); border: var(--bw) solid var(--line-strong); padding: 3px 9px; border-radius: 999px; }
+
+.amv-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; position: relative; z-index: 1; }
+.amv-step { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 6px; background: var(--bg); border: var(--bw) solid var(--line); border-radius: var(--radius-sm); font-size: 10.5px; font-weight: 700; color: var(--dim); text-align: center; transition: color .3s, border-color .3s, background .3s; }
+.amv-step .amv-ico { width: 22px; height: 22px; display: grid; place-items: center; border-radius: 7px; background: var(--surface-2); color: var(--dim); transition: background .3s, color .3s, transform .3s; }
+.amv-step .amv-ico .ic { width: 13px; height: 13px; }
+.amv-step.active { color: var(--text); border-color: var(--line-strong); background: var(--surface); }
+.amv-step.active .amv-ico { background: var(--accent); color: var(--accent-text); animation: amvPulse 1s ease-in-out infinite; }
+.amv-step.done { color: var(--text); border-color: var(--ok); }
+.amv-step.done .amv-ico { background: var(--ok); color: #000; animation: amvPop .4s cubic-bezier(.2,1.4,.4,1); }
+.amv-step.error { color: var(--err); border-color: var(--err); }
+.amv-step.error .amv-ico { background: var(--err); color: #fff; }
+
+@keyframes amvPulse { 50% { transform: scale(1.15); } }
+@keyframes amvPop { from { transform: scale(.5); } to { transform: scale(1); } }
+
+.amv-bar { margin-top: 12px; height: 6px; background: var(--bg); border: var(--bw) solid var(--line-strong); border-radius: 999px; overflow: hidden; position: relative; z-index: 1; }
+.amv-bar span { display: block; height: 100%; width: 0%; background: var(--accent); border-radius: 999px; transition: width .6s cubic-bezier(.2,.8,.2,1); position: relative; overflow: hidden; }
+.amv-bar span::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,.55), transparent); animation: amvShine 1.3s linear infinite; }
+:root[data-theme="brutal"] .amv-bar span { background: repeating-linear-gradient(45deg, #111 0 6px, #FFC93C 6px 12px); background-size: 17px 17px; animation: stripeMove .6s linear infinite; }
+:root[data-theme="brutal"] .amv-bar span::after { display: none; }
+@keyframes amvShine { from { transform: translateX(-100%); } to { transform: translateX(200%); } }
+
+.amv-verified { display: none; margin-top: 12px; padding: 10px 12px; border-radius: var(--radius-sm); background: rgba(52,211,153,.12); border: var(--bw) solid var(--ok); color: var(--ok); font-size: 12.5px; font-weight: 800; align-items: center; justify-content: center; gap: 8px; position: relative; z-index: 1; }
+.amv-anim.verified .amv-verified { display: flex; animation: amvPop .5s cubic-bezier(.2,1.2,.4,1) both; }
+.amv-anim.verified .amv-steps, .amv-anim.verified .amv-bar { display: none; }
+
+.amv-batch { margin-top: 14px; display: none; }
+.amv-batch.show { display: block; }
+.amv-batch-info { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 10.5px; color: var(--muted); font-weight: 700; letter-spacing: .8px; margin-bottom: 6px; }
+.amv-batch-track { height: 8px; background: var(--surface-2); border: var(--bw) solid var(--line-strong); border-radius: 999px; overflow: hidden; }
+.amv-batch-fill { height: 100%; width: 0%; background: var(--accent); border-radius: 999px; transition: width .5s cubic-bezier(.2,.8,.2,1); position: relative; overflow: hidden; }
+.amv-batch-fill::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,.4), transparent); animation: amvShine 1.5s linear infinite; }
+
+#amvList .am-item { animation: amvCardIn .4s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes amvCardIn { from { opacity: 0; transform: translateY(10px) scale(.96); } to { opacity: 1; transform: none; } }
 </style>
 <style>.sp-on{outline:var(--bw) solid var(--text);outline-offset:2px}</style>
 </head>
@@ -1214,6 +1267,7 @@ header { position: relative; display: flex; align-items: center; justify-content
               <button type="button" class="tool-chip" data-tool="pinterest" aria-pressed="false">Pinterest Download</button>
               <button type="button" class="tool-chip" data-tool="ucdl" aria-pressed="false">UC Download</button>
               <button type="button" class="tool-chip" data-tool="spotify" aria-pressed="false"><svg class="ic"><use href="#i-bolt"/></svg> Spotify Download</button>
+              <button type="button" class="tool-chip" data-tool="amverify" aria-pressed="false"><svg class="ic"><use href="#i-wand"/></svg> Alight Motion Premium</button>
             </div>
           </div>
 
@@ -1348,6 +1402,7 @@ header { position: relative; display: flex; align-items: center; justify-content
               <div class="am-step"><span class="am-dot"></span>Ambil video</div>
               <div class="am-step"><span class="am-dot"></span>Scan komentar</div>
               <div class="am-step"><span class="am-dot"></span>Cocokin preset</div>
+              <div id="amDoneBadge" class="am-done"></div>
             </div>
             <div id="amTerminal" class="tools-terminal" aria-live="polite"></div>
             <div id="amResult" class="am-result hidden">
@@ -1454,6 +1509,67 @@ header { position: relative; display: flex; align-items: center; justify-content
                 <button id="spLyr" class="tt-btn" type="button">Lirik</button>
               </div>
               <div id="spLyrics" style="white-space:pre-wrap;max-height:260px;overflow:auto;font-size:13px;line-height:1.6;margin-top:10px" hidden></div>
+            </div>
+          </div>
+
+          <!-- SECTION: ALIGHT MOTION PREMIUM VERIFY -->
+          <div class="tool-sec" data-sec="amverify">
+            <div class="tools-header">
+              <div class="modal-tag">EGAA TOOLS</div>
+              <h2 class="tools-title">Alight Motion Premium</h2>
+              <p class="tools-sub">Auto verify premium via email sementara</p>
+            </div>
+
+            <label class="tools-label" for="amvCount"><svg class="ic"><use href="#i-bolt"/></svg> JUMLAH AKUN</label>
+            <input id="amvCount" class="tools-input" type="number" min="1" max="20" value="1" inputmode="numeric" />
+
+            <label class="tools-label" for="amvPass"><svg class="ic"><use href="#i-key"/></svg>PASSWORD</label>
+            <input id="amvPass" class="tools-input" type="password" placeholder="kosong in aja" autocomplete="off" />
+
+            <button id="amvSubmit" class="tools-submit" type="button">
+              <svg class="ic"><use href="#i-bolt"/></svg>
+              <span>Gas Verify</span>
+            </button>
+
+            <div id="amvAnim" class="amv-anim">
+              <div class="amv-row">
+                <span class="amv-label">ALIGHT MOTION · VERIFY</span>
+                <span class="amv-count" id="amvAccIdx">1 / 1</span>
+              </div>
+              <div class="amv-steps">
+                <div class="amv-step" data-step="0">
+                  <span class="amv-ico"><svg class="ic"><use href="#i-msg"/></svg></span>
+                  Email
+                </div>
+                <div class="amv-step" data-step="1">
+                  <span class="amv-ico"><svg class="ic"><use href="#i-link"/></svg></span>
+                  Magic Link
+                </div>
+                <div class="amv-step" data-step="2">
+                  <span class="amv-ico"><svg class="ic"><use href="#i-shield"/></svg></span>
+                  Premium
+                </div>
+              </div>
+              <div class="amv-bar"><span id="amvBarFill"></span></div>
+              <div class="amv-verified">
+                <svg class="ic"><use href="#i-check"/></svg>
+                <span>PREMIUM AKTIF</span>
+              </div>
+            </div>
+
+            <div id="amvBatch" class="amv-batch">
+              <div class="amv-batch-info">
+                <span>PROGRESS BATCH</span>
+                <span id="amvBatchText">0 / 1</span>
+              </div>
+              <div class="amv-batch-track"><div id="amvBatchFill" class="amv-batch-fill"></div></div>
+            </div>
+
+            <div id="amvTerminal" class="tools-terminal" aria-live="polite"></div>
+
+            <div id="amvResult" class="am-result hidden">
+              <div class="am-info" id="amvSummary"></div>
+              <div class="am-list" id="amvList"></div>
             </div>
           </div>
 
@@ -3065,12 +3181,30 @@ header { position: relative; display: flex; align-items: center; justify-content
     function isTiktok(u) {
       try { return /(^|\.)tiktok\.com$/i.test(new URL(u).hostname); } catch { return false; }
     }
+    function ensureBar() {
+      if (!stepsEl.querySelector('.am-bar')) {
+        const b = mk('div', 'am-bar');
+        b.appendChild(mk('span'));
+        stepsEl.insertBefore(b, $('amDoneBadge'));
+      }
+    }
     function setSteps(active, done = false) {
       stepsEl.hidden = false;
-      [...stepsEl.children].forEach((el, i) => {
+      stepsEl.classList.remove('finished');
+      ensureBar();
+      const items = [...stepsEl.querySelectorAll('.am-step')];
+      items.forEach((el, i) => {
         el.classList.toggle('done', done || i < active);
         el.classList.toggle('active', !done && i === active);
       });
+      const pct = done ? 100 : Math.round((active / items.length) * 100);
+      stepsEl.querySelector('.am-bar span').style.width = pct + '%';
+    }
+    function finishSteps(n) {
+      ensureBar();
+      stepsEl.querySelector('.am-bar span').style.width = '100%';
+      $('amDoneBadge').textContent = n > 0 ? '✓ ' + n + ' preset ketemu' : '⚠ Preset nggak ketemu';
+      stepsEl.classList.add('finished');
     }
     function countUp(el, to) {
       const t0 = performance.now(), dur = 900;
@@ -3156,8 +3290,11 @@ header { position: relative; display: flex; align-items: center; justify-content
       const presets = (r.presets || []).filter(p => p && p.url);
       const sumber = { comment: 'komentar', description: 'deskripsi', bio: 'bio akun' }[r.found_in] || r.found_in || '-';
       const pi = r.preset_info || {};
-      const info = mk('div', null, 'Preset ditemukan di ' + sumber + ' · oleh @' + (pi.username || '-') + (pi.likes != null ? ' · ' + fmt(pi.likes) + ' likes' : ''));
-      infoEl.appendChild(info);
+      const chips = mk('div', 'am-chips');
+      chips.appendChild(mk('span', 'am-chip', 'dari ' + sumber));
+      chips.appendChild(mk('span', 'am-chip', '@' + (pi.username || '-')));
+      if (pi.likes != null) chips.appendChild(mk('span', 'am-chip', fmt(pi.likes) + (Number(pi.likes) === 1 ? ' like' : ' likes')));
+      infoEl.appendChild(chips);
 
       presets.forEach((p, idx) => {
         const item = mk('div', 'am-item');
@@ -3203,7 +3340,7 @@ header { position: relative; display: flex; align-items: center; justify-content
       tLine('> ngambil data video...', 'muted');
 
       const ticker = setInterval(() => {
-        const cur = [...stepsEl.children].findIndex(el => el.classList.contains('active'));
+        const cur = [...stepsEl.querySelectorAll('.am-step')].findIndex(el => el.classList.contains('active'));
         if (cur >= 0 && cur < 3) setSteps(cur + 1);
       }, 1400);
 
@@ -3222,12 +3359,12 @@ header { position: relative; display: flex; align-items: center; justify-content
           return;
         }
         if (!data.found || !data.result) {
-          setSteps(0, true);
+          finishSteps(0);
           tLine('⚠ ' + (data.message || 'Preset nggak ketemu di video itu'), 'warn');
           return;
         }
-        setSteps(0, true);
         const n = renderResult(data.result);
+        finishSteps(n);
         tLine(n > 0 ? '✓ ' + n + ' preset ketemu' : '⚠ Preset nggak ketemu di video itu', n > 0 ? 'ok' : 'warn');
       } catch (err) {
         clearInterval(ticker);
@@ -3917,6 +4054,207 @@ header { position: relative; display: flex; align-items: center; justify-content
       lyrBox.hidden = !lyrBox.hidden;
       lyrBtn.textContent = lyrBox.hidden ? 'Lirik' : 'Tutup Lirik';
     });
+  })();
+
+  /* ================= ALIGHT MOTION PREMIUM VERIFY ================= */
+  (function initAmVerifyTool() {
+    const API = '/api/am-preset?action=bulk-verify';
+    const TIMEOUT_MS = 120000;
+
+    const countInput = $('amvCount');
+    const passInput = $('amvPass');
+    const submitBtn = $('amvSubmit');
+    const submitText = submitBtn.querySelector('span');
+    const term = $('amvTerminal');
+    const resultBox = $('amvResult');
+    const summary = $('amvSummary');
+    const listBox = $('amvList');
+
+    const animBox = $('amvAnim');
+    const accIdx = $('amvAccIdx');
+    const barFill = $('amvBarFill');
+    const stepsEl = [...document.querySelectorAll('.amv-step')];
+    const batchBox = $('amvBatch');
+    const batchText = $('amvBatchText');
+    const batchFill = $('amvBatchFill');
+
+    let busy = false;
+    let animTimers = [];
+
+    function tClear() { term.innerHTML = ''; term.classList.add('show'); }
+    function tLine(msg, cls = '') {
+      const d = document.createElement('div');
+      d.className = 'log ' + cls;
+      d.textContent = msg;
+      term.appendChild(d);
+      term.scrollTop = term.scrollHeight;
+    }
+    function setBusy(on) {
+      busy = on;
+      submitBtn.disabled = on;
+      submitBtn.classList.toggle('spinning', on);
+      submitText.textContent = on ? 'Lagi ngegas...' : 'Gas Verify';
+    }
+    function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+    function resetAnim() {
+      animTimers.forEach(clearTimeout);
+      animTimers = [];
+      animBox.classList.add('show');
+      animBox.classList.remove('verified');
+      stepsEl.forEach(s => s.classList.remove('active', 'done', 'error'));
+      barFill.style.width = '0%';
+    }
+    function setStepAnim(idx) {
+      stepsEl.forEach((s, i) => {
+        s.classList.remove('active');
+        if (i < idx) s.classList.add('done');
+        else if (i === idx) s.classList.add('active');
+      });
+      barFill.style.width = Math.round((idx / stepsEl.length) * 100) + '%';
+    }
+    function markStepDone(idx) {
+      const s = stepsEl[idx];
+      if (!s) return;
+      s.classList.remove('active');
+      s.classList.add('done');
+      barFill.style.width = Math.round(((idx + 1) / stepsEl.length) * 100) + '%';
+    }
+    function markStepError(idx) {
+      const s = stepsEl[idx];
+      if (!s) return;
+      s.classList.remove('active');
+      s.classList.add('error');
+    }
+    function finishAnimSuccess() {
+      stepsEl.forEach(s => { s.classList.remove('active'); s.classList.add('done'); });
+      barFill.style.width = '100%';
+      animTimers.push(setTimeout(() => { animBox.classList.add('verified'); }, 350));
+    }
+    function hideAnimAfter(ms = 1800) {
+      animTimers.push(setTimeout(() => {
+        animBox.classList.remove('show');
+        animBox.classList.remove('verified');
+      }, ms));
+    }
+    function autoplayWaitStages() {
+      animTimers.push(setTimeout(() => setStepAnim(1), 1200));
+      animTimers.push(setTimeout(() => markStepDone(0), 2200));
+      animTimers.push(setTimeout(() => setStepAnim(2), 3500));
+      animTimers.push(setTimeout(() => markStepDone(1), 5000));
+    }
+    function setBatch(cur, total) {
+      batchBox.classList.add('show');
+      batchText.textContent = cur + ' / ' + total;
+      batchFill.style.width = Math.round((cur / total) * 100) + '%';
+    }
+
+    function renderRow(acc, idx) {
+      const item = document.createElement('div');
+      item.className = 'am-item';
+      const label = document.createElement('div');
+      label.className = 'am-label';
+      label.textContent = (idx + 1) + '. ' + (acc.email || '-');
+      const sub = document.createElement('small');
+      sub.textContent = [acc.planName, acc.membershipStatus, acc.validUntil ? 'exp ' + acc.validUntil : '']
+        .filter(Boolean).join(' · ');
+      label.appendChild(sub);
+      const copy = document.createElement('button');
+      copy.type = 'button';
+      copy.className = 'tt-btn';
+      copy.textContent = 'Salin';
+      copy.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(acc.email);
+          copy.textContent = 'Tersalin!';
+        } catch { copy.textContent = 'Gagal'; }
+        setTimeout(() => { copy.textContent = 'Salin'; }, 1500);
+      });
+      item.append(label, copy);
+      return item;
+    }
+
+    async function run() {
+      if (busy) return;
+      tClear();
+      resultBox.classList.add('hidden');
+      summary.textContent = '';
+      listBox.innerHTML = '';
+      resetAnim();
+      accIdx.textContent = '1 / 1';
+      batchBox.classList.remove('show');
+
+      const total = Math.max(1, Math.min(Number(countInput.value) || 1, 20));
+      const password = passInput.value;
+
+      tLine('> Alight Motion Premium verify siap...', 'hi');
+      tLine('→ target: ' + total + ' akun', 'muted');
+      setBusy(true);
+
+      const ok = [];
+      const fail = [];
+
+      for (let i = 0; i < total; i++) {
+        accIdx.textContent = (i + 1) + ' / ' + total;
+        setBatch(i, total);
+        tLine('> [' + (i + 1) + '/' + total + '] nyiapin email sementara...', 'muted');
+
+        stepsEl.forEach(s => s.classList.remove('active', 'done', 'error'));
+        barFill.style.width = '0%';
+        animBox.classList.remove('verified');
+
+        autoplayWaitStages();
+
+        const started = Date.now();
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
+        try {
+          const res = await fetch(API, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password }),
+            signal: ctrl.signal
+          });
+          const j = await res.json().catch(() => null);
+          const elapsed = ((Date.now() - started) / 1000).toFixed(1);
+
+          if (!j || !j.ok) {
+            const msg = (j && (j.error || j.message)) || ('HTTP ' + res.status);
+            throw new Error(msg);
+          }
+          const acc = j.data;
+          ok.push(acc);
+          finishAnimSuccess();
+          tLine('✓ [' + (i + 1) + '/' + total + '] ' + acc.email + ' — ' + elapsed + 's', 'ok');
+          listBox.appendChild(renderRow(acc, ok.length - 1));
+        } catch (err) {
+          markStepError(2);
+          if (err.name === 'AbortError') tLine('✗ [' + (i + 1) + '/' + total + '] timeout ' + TIMEOUT_MS / 1000 + 's', 'err');
+          else tLine('✗ [' + (i + 1) + '/' + total + '] ' + err.message, 'err');
+          fail.push({ idx: i + 1, error: err.message });
+        } finally {
+          clearTimeout(timer);
+          animTimers.forEach(clearTimeout);
+          animTimers = [];
+        }
+
+        setBatch(i + 1, total);
+        if (i < total - 1) await sleep(1200);
+      }
+
+      const succ = ok.length;
+      const failN = fail.length;
+      tLine('', 'muted');
+      tLine('=== SELESAI ===', 'hi');
+      tLine('✓ sukses : ' + succ, 'ok');
+      tLine('✗ gagal  : ' + failN, failN ? 'err' : 'muted');
+      if (succ) summary.innerHTML = '<b>' + succ + '/' + total + '</b> akun premium aktif. Salin email di bawah.';
+      resultBox.classList.remove('hidden');
+      hideAnimAfter(2400);
+      setBusy(false);
+    }
+
+    submitBtn.addEventListener('click', run);
   })();
 </script>
 </body>
