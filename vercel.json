@@ -9,9 +9,13 @@
     "api/spotify.js": { "maxDuration": 60 },
     "api/hd-ai.js": { "maxDuration": 60 },
     "api/hd-upscale.js": { "maxDuration": 60 },
-    "api/am-preset.js": { "maxDuration": 60 }
+    "api/am-preset.js": { "maxDuration": 60 },
+    "api/check.js": { "maxDuration": 10 }
   },
   "rewrites": [
-    { "source": "/api/pinterest", "destination": "/api/tiktok?p=pinterest" }
+    {
+      "source": "/api/pinterest",
+      "destination": "/api/tiktok?p=pinterest"
+    }
   ]
 }
