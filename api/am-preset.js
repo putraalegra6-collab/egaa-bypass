@@ -1,7 +1,10 @@
-// Alight Motion Preset (proxy TikTok) + Bulk Verify (Satriam + Generator.email)
+// Alight Motion Preset (proxy TikTok) + Premium Activator (am-premiumms.ai.studio)
+// Creator: IzzXd — diadaptasi untuk EgaaBypass
 // Satu file biar gak kena limit 12 function Hobby.
 module.exports = async (req, res) => {
-  if (req.method !== 'POST') return res.status(405).json({ error: 'method tidak diizinkan' });
+  if (req.method !== 'POST' && req.method !== 'GET') {
+    return res.status(405).json({ ok: false, error: 'method tidak diizinkan' });
+  }
 
   let body = req.body;
   if (typeof body === 'string') {
@@ -11,30 +14,46 @@ module.exports = async (req, res) => {
 
   const action = String((req.query || {}).action || '').toLowerCase();
 
-  // ===== MODE BULK VERIFY =====
-  if (action === 'bulk-verify') {
-    if (process.env.AM_PASSWORD) {
-      if (typeof body.password !== 'string' || body.password !== process.env.AM_PASSWORD) {
-        return res.status(401).json({ ok: false, error: 'password salah' });
-      }
-    }
-
+  // ===== MODE AUTO ACTIVATE =====
+  if (action === 'activate') {
     try {
-      const account = await createAndVerifySingleAccount();
-      return res.status(200).json({ ok: true, data: account });
+      const { autoActivate } = require('../lib/am-premium');
+      const result = await autoActivate();
+      if (!result || !result.status) {
+        return res.status(502).json({ ok: false, error: (result && result.error) || 'gagal aktivasi premium' });
+      }
+      return res.status(200).json({ ok: true, data: result });
     } catch (e) {
-      return res.status(502).json({ ok: false, error: e.message || 'gagal bikin akun' });
+      return res.status(500).json({ ok: false, error: e.message || 'internal error' });
     }
   }
 
-  // ===== MODE PRESET TIKTOK (logic lama) =====
+  // ===== MODE STATS =====
+  if (action === 'stats') {
+    try {
+      const { getStats } = require('../lib/am-premium');
+      const result = await getStats();
+      if (!result || !result.status) {
+        return res.status(502).json({ ok: false, error: (result && result.error) || 'gagal ambil stats' });
+      }
+      return res.status(200).json({ ok: true, data: result });
+    } catch (e) {
+      return res.status(500).json({ ok: false, error: e.message || 'internal error' });
+    }
+  }
+
+  // ===== MODE PRESET TIKTOK (default) =====
+  if (req.method !== 'POST') {
+    return res.status(405).json({ ok: false, error: 'method tidak diizinkan' });
+  }
+
   try {
     const { url } = body;
 
     let host = '';
     try { host = new URL(url).hostname; } catch {}
     if (!/^https?:\/\//i.test(url || '') || !/(^|\.)tiktok\.com$/i.test(host)) {
-      return res.status(400).json({ error: 'link harus dari TikTok' });
+      return res.status(400).json({ ok: false, error: 'link harus dari TikTok' });
     }
 
     const up = await fetch('https://api.zyvor.my.id/api/am/presetv2', {
@@ -46,106 +65,6 @@ module.exports = async (req, res) => {
     res.setHeader('Content-Type', up.headers.get('content-type') || 'application/json');
     return res.status(up.status).send(buf);
   } catch (e) {
-    return res.status(502).json({ error: 'proxy gagal: ' + e.message });
+    return res.status(502).json({ ok: false, error: 'proxy gagal: ' + e.message });
   }
 };
-
-// ===== Logic bulk verify (dari am-bulk.js) =====
-const BASE_SATRIAM = 'https://satriam.satriadeveloperz.workers.dev';
-const BASE_GENEMAIL = 'https://generator.email';
-const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36';
-const sleep = ms => new Promise(r => setTimeout(r, ms));
-
-async function getGeneratorEmailSession() {
-  const init = await fetch(`${BASE_GENEMAIL}/`, {
-    headers: { 'User-Agent': UA },
-    signal: AbortSignal.timeout(10000)
-  });
-  const setCookies = init.headers.getSetCookie ? init.headers.getSetCookie() : [init.headers.get('set-cookie') || ''];
-  const hpCookie = setCookies.find(c => c && c.startsWith('__Host-ab_hp='));
-  const rawCtx = setCookies.find(c => c && c.startsWith('inbox_ctx='));
-
-  let domain = 'heyzalo.vn';
-  if (rawCtx) {
-    try {
-      const dec = decodeURIComponent(rawCtx.split(';')[0].split('=')[1]);
-      const extracted = dec.split('/')[0];
-      if (extracted) domain = extracted;
-    } catch {}
-  }
-  const hpCookieHeader = hpCookie ? hpCookie.split(';')[0] : '';
-  return { domain, hpCookieHeader };
-}
-
-function generateRandomUser() {
-  const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-  let user = 'am';
-  for (let i = 0; i < 6; i++) user += chars.charAt(Math.floor(Math.random() * chars.length));
-  user += Math.floor(Math.random() * 89 + 10);
-  return user;
-}
-
-async function sendSatriamLink(email) {
-  const res = await fetch(`${BASE_SATRIAM}/api/satriam/send-link`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'User-Agent': UA },
-    body: JSON.stringify({ email }),
-    signal: AbortSignal.timeout(15000)
-  });
-  return await res.json();
-}
-
-async function verifySatriamLink(email, magicLink) {
-  const res = await fetch(`${BASE_SATRIAM}/api/satriam/verify-link`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'User-Agent': UA },
-    body: JSON.stringify({ email, magicLink }),
-    signal: AbortSignal.timeout(15000)
-  });
-  return await res.json();
-}
-
-async function fetchMagicLink(domain, user, hpCookieHeader, maxAttempts = 8) {
-  const ctx = encodeURIComponent(`${domain}/${user}/`);
-  const cookies = `inbox_ctx=${ctx}; ${hpCookieHeader}`;
-  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-    await sleep(attempt === 1 ? 5000 : 3000);
-    try {
-      const res = await fetch(`${BASE_GENEMAIL}/inbox1/`, {
-        headers: { 'User-Agent': UA, 'Cookie': cookies },
-        signal: AbortSignal.timeout(10000)
-      });
-      const html = await res.text();
-      const links = html.match(/https?:\/\/[^\s"'<>]+/gi) || [];
-      const magicLink = links.find(l =>
-        (l.includes('alight-creative.firebaseapp.com') || l.includes('alightcreative.com')) &&
-        (l.includes('signInWithEmailLink') || l.includes('auth_action') || l.includes('links?link='))
-      );
-      if (magicLink) return magicLink.replace(/&amp;/g, '&');
-    } catch {}
-  }
-  throw new Error('Timeout menunggu email magic link dari Alight Motion');
-}
-
-async function createAndVerifySingleAccount() {
-  const { domain, hpCookieHeader } = await getGeneratorEmailSession();
-  const user = generateRandomUser();
-  const email = `${user}@${domain}`;
-
-  const sendRes = await sendSatriamLink(email);
-  if (!sendRes?.success) throw new Error(sendRes?.message || sendRes?.error || 'Gagal mengirim link ke email');
-
-  const magicLink = await fetchMagicLink(domain, user, hpCookieHeader);
-  const verifyRes = await verifySatriamLink(email, magicLink);
-  if (!verifyRes?.success) throw new Error(verifyRes?.message || verifyRes?.error || 'Gagal verifikasi magic link');
-
-  return {
-    email,
-    status: true,
-    membershipStatus: verifyRes.membershipStatus || 'PREMIUM_ACTIVE',
-    planName: verifyRes.planName || 'Alight Motion Pro / Member',
-    orderId: verifyRes.orderId || null,
-    validUntil: verifyRes.validUntil || null,
-    features: verifyRes.features || []
-  };
-}
