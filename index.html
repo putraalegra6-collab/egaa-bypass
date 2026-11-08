@@ -874,6 +874,43 @@ header { position: relative; display: flex; align-items: center; justify-content
 }
 
 /* ===== ALIGHT MOTION PREMIUM (BARU - GABUNG TEMPMAIL) ===== */
+
+/* Tab switcher AM Premium */
+.amv-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.amv-tabs .tab {
+  height: 40px; border-radius: var(--radius-sm); border: var(--bw) solid var(--line-strong);
+  background: var(--surface-2); color: var(--muted); font-size: 12.5px; font-weight: 800; cursor: pointer;
+  transition: background .2s, color .2s;
+}
+.amv-tabs .tab.active { background: var(--accent); color: var(--accent-text); }
+.amv-tab-panel { display: none; }
+.amv-tab-panel.active { display: block; animation: tabIn .3s ease both; }
+
+.auto-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 12px; }
+.auto-row .btn, .auto-row .btn-ghost {
+  height: 36px; padding: 0 14px; border-radius: var(--radius-sm); border: var(--bw) solid var(--line-strong);
+  background: var(--surface-2); color: var(--text); font-size: 12px; font-weight: 800; cursor: pointer;
+}
+#amvAutoStatus { font-family: var(--mono); font-size: 11px; color: var(--muted); font-weight: 700; }
+
+.mail-empty { padding: 16px; text-align: center; font-size: 12.5px; color: var(--muted); font-weight: 700; line-height: 1.5; border: var(--bw) dashed var(--line-strong); border-radius: var(--radius-sm); background: var(--bg); }
+.mail-item { margin-top: 10px; padding: 12px; border: var(--bw) solid var(--line-strong); border-radius: var(--radius-sm); background: var(--surface-2); box-shadow: var(--shadow); }
+.mail-from { font-size: 12px; font-weight: 800; color: var(--text); word-break: break-word; }
+.mail-subject { font-size: 12.5px; font-weight: 700; color: var(--text); margin-top: 4px; word-break: break-word; }
+.mail-meta { font-family: var(--mono); font-size: 10.5px; color: var(--dim); margin-top: 4px; }
+.mail-body { margin-top: 10px; }
+.mail-label { font-family: var(--mono); font-size: 10px; font-weight: 800; letter-spacing: 1px; color: var(--muted); margin-bottom: 6px; }
+.mail-link { font-family: var(--mono); font-size: 11px; color: var(--text); word-break: break-all; background: var(--bg); border: var(--bw) solid var(--line); border-radius: 8px; padding: 8px; margin-bottom: 8px; }
+.mail-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.ib-btn {
+  height: 32px; padding: 0 12px; border-radius: 999px; border: var(--bw) solid var(--line-strong);
+  background: var(--surface); color: var(--text); font-size: 11.5px; font-weight: 800; cursor: pointer;
+}
+.ib-btn.primary { background: var(--accent); color: var(--accent-text); }
+.mail-retry {
+  height: 34px; padding: 0 12px; border-radius: var(--radius-sm); border: var(--bw) solid var(--line-strong);
+  background: var(--surface); color: var(--text); font-size: 12px; font-weight: 800; cursor: pointer; margin-top: 6px;
+}
 .amv-anim { display: none; margin-top: 14px; padding: 16px; border: var(--bw) solid var(--line-strong); border-radius: var(--radius-sm); background: var(--surface-2); box-shadow: var(--shadow); position: relative; overflow: hidden; }
 .amv-anim.show { display: block; animation: tabIn .3s ease both; }
 .amv-anim::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,.06) 50%, transparent 70%); background-size: 250% 100%; animation: amvSweep 3s linear infinite; }
@@ -1450,32 +1487,32 @@ header { position: relative; display: flex; align-items: center; justify-content
             </div>
           </div>
 
-          <!-- SECTION: ALIGHT MOTION PREMIUM (GABUNG TEMPMAIL) -->
+          <!-- SECTION: ALIGHT MOTION PREMIUM -->
           <div class="tool-sec" data-sec="amverify">
             <div class="tools-header">
               <div class="modal-tag">EGAA TOOLS</div>
               <h2 class="tools-title">Alight Motion Premium</h2>
-              <p class="tools-sub">Auto aktivasi VIP Pro pakai TempMail, atau manual pakai email sendiri</p>
+              <p class="tools-sub">Buat email sementara → Cek inbox → Pakai link → Aktivasi</p>
             </div>
 
-            <!-- TOGGLE MODE -->
-            <div class="amv-modes">
-              <button type="button" class="amv-mode active" data-amv-mode="auto">Auto (TempMail)</button>
-              <button type="button" class="amv-mode" data-amv-mode="manual">Manual</button>
+            <!-- TAB SWITCHER -->
+            <div class="tabs amv-tabs" style="margin-bottom:18px">
+              <button class="tab active" id="amvTabMail" type="button">TempMail</button>
+              <button class="tab" id="amvTabAct" type="button">Aktivasi</button>
             </div>
 
-            <!-- PANEL AUTO -->
-            <div class="amv-panel active" data-amv-panel="auto">
-              <label class="tools-label" for="amvEmailUser"><svg class="ic"><use href="#i-msg"/></svg> 1. EMAIL SEMENTARA</label>
-              <div class="input-row">
-                <div class="input-wrap">
-                  <svg class="ic"><use href="#i-msg"/></svg>
-                  <input id="amvEmailUser" type="text" placeholder="kosongkan untuk random" autocomplete="off" spellcheck="false" />
-                </div>
-                <button id="amvGenEmail" class="paste-btn" type="button">Generate</button>
-              </div>
+            <!-- ============ TAB 1: TEMPMAIL ============ -->
+            <div class="amv-tab-panel active" id="amvPanelMail">
 
-              <div id="amvMailbox" class="amv-mailbox hidden">
+              <label class="tools-label" for="amvEmailUser"><svg class="ic"><use href="#i-msg"/></svg> USERNAME (KOSONGKAN UNTUK RANDOM)</label>
+              <input id="amvEmailUser" class="tools-input" type="text" placeholder="contoh: Egaa" autocomplete="off" spellcheck="false" />
+
+              <button id="amvGenEmail" class="tools-submit" type="button">
+                <svg class="ic"><use href="#i-bolt"/></svg>
+                <span id="amvGenEmailText">Generate Email</span>
+              </button>
+
+              <div id="amvMailbox" class="amv-mailbox hidden" style="margin-top:14px">
                 <div class="amv-mail-label">EMAIL AKTIF</div>
                 <div class="amv-mail-row">
                   <input id="amvEmailOutput" type="text" readonly />
@@ -1483,21 +1520,24 @@ header { position: relative; display: flex; align-items: center; justify-content
                 </div>
               </div>
 
-              <button id="amvSendAuto" class="tools-submit" type="button" disabled>
-                <svg class="ic"><use href="#i-bolt"/></svg>
-                <span id="amvSendAutoText">2. Kirim Magic Link</span>
+              <button id="amvCheckInbox" class="tools-submit" type="button" disabled>
+                <svg class="ic"><use href="#i-msg"/></svg>
+                <span id="amvCheckInboxText">Cek Inbox</span>
               </button>
 
-              <button id="amvCheckAuto" class="tools-submit" type="button" disabled>
-                <svg class="ic"><use href="#i-check"/></svg>
-                <span id="amvCheckAutoText">3. Cek Inbox &amp; Aktifkan</span>
-              </button>
+              <div class="auto-row">
+                <button class="btn btn-ghost" id="amvAutoRefresh" type="button">Auto refresh</button>
+                <span id="amvAutoStatus">idle</span>
+              </div>
 
-              <p class="tools-sub" style="margin-top:10px;text-align:center">Email temp ini otomatis kepakai buat aktivasi. Klik "Cek Inbox &amp; Aktifkan" — sistem cari link, verif, selesai.</p>
+              <div id="amvInboxWrap" class="hidden" style="margin-top:18px">
+                <div class="amv-mail-label">INBOX</div>
+                <div id="amvInboxList"></div>
+              </div>
             </div>
 
-            <!-- PANEL MANUAL -->
-            <div class="amv-panel" data-amv-panel="manual">
+            <!-- ============ TAB 2: AKTIVASI ============ -->
+            <div class="amv-tab-panel" id="amvPanelActivate">
               <label class="tools-label" for="amvEmailManual"><svg class="ic"><use href="#i-msg"/></svg> 1. EMAIL KAMU</label>
               <input id="amvEmailManual" class="tools-input" type="email" placeholder="emailkamu@gmail.com" autocomplete="off" spellcheck="false" />
 
@@ -1513,42 +1553,44 @@ header { position: relative; display: flex; align-items: center; justify-content
                 <svg class="ic"><use href="#i-shield"/></svg>
                 <span id="amvVerifyManualText">Verifikasi &amp; Aktifkan</span>
               </button>
-            </div>
 
-            <!-- ANIMASI -->
-            <div id="amvAnim" class="amv-anim">
-              <div class="amv-row">
-                <span class="amv-label">ALIGHT MOTION · VERIFY</span>
-                <span class="amv-count" id="amvAccIdx">Step 1</span>
-              </div>
-              <div class="amv-steps">
-                <div class="amv-step" data-step="0">
-                  <span class="amv-ico"><svg class="ic"><use href="#i-msg"/></svg></span>
-                  Email
+              <!-- ANIMASI -->
+              <div id="amvAnim" class="amv-anim">
+                <div class="amv-row">
+                  <span class="amv-label">ALIGHT MOTION · VERIFY</span>
+                  <span class="amv-count" id="amvAccIdx">Step 1</span>
                 </div>
-                <div class="amv-step" data-step="1">
-                  <span class="amv-ico"><svg class="ic"><use href="#i-link"/></svg></span>
-                  Magic Link
+                <div class="amv-steps">
+                  <div class="amv-step" data-step="0">
+                    <span class="amv-ico"><svg class="ic"><use href="#i-msg"/></svg></span>
+                    Email
+                  </div>
+                  <div class="amv-step" data-step="1">
+                    <span class="amv-ico"><svg class="ic"><use href="#i-link"/></svg></span>
+                    Magic Link
+                  </div>
+                  <div class="amv-step" data-step="2">
+                    <span class="amv-ico"><svg class="ic"><use href="#i-shield"/></svg></span>
+                    VIP Pro
+                  </div>
                 </div>
-                <div class="amv-step" data-step="2">
-                  <span class="amv-ico"><svg class="ic"><use href="#i-shield"/></svg></span>
-                  VIP Pro
+                <div class="amv-bar"><span id="amvBarFill"></span></div>
+                <div class="amv-verified">
+                  <svg class="ic"><use href="#i-check"/></svg>
+                  <span>VIP PRO AKTIF</span>
                 </div>
               </div>
-              <div class="amv-bar"><span id="amvBarFill"></span></div>
-              <div class="amv-verified">
-                <svg class="ic"><use href="#i-check"/></svg>
-                <span>VIP PRO AKTIF</span>
-              </div>
-            </div>
 
-            <div id="amvTerminal" class="tools-terminal" aria-live="polite"></div>
+              <div id="amvTerminal" class="tools-terminal" aria-live="polite"></div>
 
-            <div id="amvResult" class="am-result hidden">
-              <div class="am-info" id="amvSummary"></div>
-              <div class="am-list" id="amvList"></div>
+              <div id="amvResult" class="am-result hidden">
+                <div class="am-info" id="amvSummary"></div>
+                <div class="am-list" id="amvList"></div>
+              </div>
             </div>
           </div>
+
+
 
         </div>
       </div>
@@ -3529,7 +3571,7 @@ header { position: relative; display: flex; align-items: center; justify-content
     });
   })();
 
-  /* ================= 8g. ALIGHT MOTION PREMIUM (AUTO + TEMPMAIL + MANUAL) ================= */
+  /* ================= 8g. ALIGHT MOTION PREMIUM ================= */
   (function initAmVerifyTool() {
     const MAIL_API = '/akunlama';
     const API_SEND = '/api/am-preset?action=send-link';
@@ -3537,23 +3579,55 @@ header { position: relative; display: flex; align-items: center; justify-content
     const TIMEOUT_SEND = 30000;
     const TIMEOUT_VERIFY = 40000;
 
-    // Mode toggle
-    const modeBtns = [...document.querySelectorAll('.amv-mode')];
-    const panels = [...document.querySelectorAll('.amv-panel')];
+    let currentEmail = '';
+    let autoInterval = null;
+    let busyGen = false;
+    let busySend = false;
+    let busyVerify = false;
 
-    // Auto mode elems
+    // ===== TOAST (fallback kalau belum ada) =====
+    function toast(msg) {
+      if (typeof window.egaaToast === 'function') return window.egaaToast(msg);
+      let el = document.getElementById('egaaToast');
+      if (!el) {
+        el = document.createElement('div');
+        el.id = 'egaaToast';
+        el.style.cssText = 'position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:9999;background:var(--text);color:var(--bg);padding:10px 16px;border-radius:999px;font-size:13px;font-weight:800;box-shadow:var(--shadow-lg);opacity:0;transition:opacity .2s;pointer-events:none;max-width:90vw;text-align:center';
+        document.body.appendChild(el);
+      }
+      el.textContent = msg;
+      el.style.opacity = '1';
+      clearTimeout(el._t);
+      el._t = setTimeout(() => { el.style.opacity = '0'; }, 2200);
+    }
+
+    // ===== TAB SWITCHER =====
+    function switchAmvTab(tab) {
+      const isMail = tab === 'mail';
+      document.getElementById('amvTabMail').classList.toggle('active', isMail);
+      document.getElementById('amvTabAct').classList.toggle('active', !isMail);
+      document.getElementById('amvPanelMail').classList.toggle('active', isMail);
+      document.getElementById('amvPanelActivate').classList.toggle('active', !isMail);
+    }
+    window.switchAmvTab = switchAmvTab;
+    document.getElementById('amvTabMail').addEventListener('click', () => switchAmvTab('mail'));
+    document.getElementById('amvTabAct').addEventListener('click', () => switchAmvTab('activate'));
+    document.getElementById('amvAutoRefresh').addEventListener('click', () => toggleAmvAutoRefresh());
+
+    // ===== ELEMENTS =====
     const emailUser = $('amvEmailUser');
     const genBtn = $('amvGenEmail');
-    const genBtnText = genBtn ? genBtn.textContent : '';
+    const genBtnText = $('amvGenEmailText');
     const mailbox = $('amvMailbox');
     const emailOutput = $('amvEmailOutput');
     const copyEmailBtn = $('amvCopyEmail');
-    const sendAuto = $('amvSendAuto');
-    const sendAutoText = $('amvSendAutoText');
-    const checkAuto = $('amvCheckAuto');
-    const checkAutoText = $('amvCheckAutoText');
+    const checkInboxBtn = $('amvCheckInbox');
+    const checkInboxText = $('amvCheckInboxText');
+    const autoRefreshBtn = $('amvAutoRefresh');
+    const autoStatus = $('amvAutoStatus');
+    const inboxWrap = $('amvInboxWrap');
+    const inboxList = $('amvInboxList');
 
-    // Manual mode elems
     const emailManual = $('amvEmailManual');
     const sendManual = $('amvSendManual');
     const sendManualText = $('amvSendManualText');
@@ -3561,7 +3635,6 @@ header { position: relative; display: flex; align-items: center; justify-content
     const verifyManual = $('amvVerifyManual');
     const verifyManualText = $('amvVerifyManualText');
 
-    // Common
     const term = $('amvTerminal');
     const resultBox = $('amvResult');
     const summary = $('amvSummary');
@@ -3571,11 +3644,7 @@ header { position: relative; display: flex; align-items: center; justify-content
     const barFill = $('amvBarFill');
     const stepsEl = [...document.querySelectorAll('.amv-step')];
 
-    let autoEmail = '';
-    let busyGen = false;
-    let busySend = false;
-    let busyVerify = false;
-
+    // ===== HELPERS =====
     function tClear() { term.innerHTML = ''; term.classList.add('show'); }
     function tLine(msg, cls = '') {
       const d = document.createElement('div');
@@ -3584,14 +3653,14 @@ header { position: relative; display: flex; align-items: center; justify-content
       term.appendChild(d);
       term.scrollTop = term.scrollHeight;
     }
-
-    function setMode(mode) {
-      modeBtns.forEach(b => b.classList.toggle('active', b.dataset.amvMode === mode));
-      panels.forEach(p => p.classList.toggle('active', p.dataset.amvPanel === mode));
-      tClear();
+    function validateEmail(v) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
     }
-    modeBtns.forEach(b => b.addEventListener('click', () => setMode(b.dataset.amvMode)));
+    function escHtml(s) {
+      return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
 
+    // ===== ANIMASI =====
     function setStep(idx) {
       stepsEl.forEach((s, i) => {
         s.classList.remove('active', 'done', 'error');
@@ -3625,19 +3694,15 @@ header { position: relative; display: flex; align-items: center; justify-content
       setTimeout(() => { animBox.classList.add('verified'); }, 300);
     }
 
-    function validateEmail(v) {
-      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-    }
-
-    // Extract link dari HTML email (dari TempMail)
+    // ===== EKSTRAK LINK DARI EMAIL =====
     function extractLinksFromHtml(raw) {
       if (!raw) return [];
       let src = typeof raw === 'string' ? raw : JSON.stringify(raw);
       src = src.replace(/\\\//g, '/').replace(/\\u0026/gi, '&').replace(/\\u003d/gi, '=').replace(/\\u003c/gi, '<').replace(/\\u003e/gi, '>');
       try {
-        const t = document.createElement('textarea');
-        t.innerHTML = src;
-        src = t.value;
+        const ta = document.createElement('textarea');
+        ta.innerHTML = src;
+        src = ta.value;
       } catch (e) {}
       const found = new Set();
       try {
@@ -3655,13 +3720,114 @@ header { position: relative; display: flex; align-items: center; justify-content
       return [...new Set(verify.length ? verify : all)].slice(0, 5);
     }
 
-    // ============ AUTO: GENERATE EMAIL ============
+    // ===== BUKA DI APK ALIGHT MOTION =====
+    function openAlightApp(url) {
+      const isAndroid = /Android/i.test(navigator.userAgent);
+      if (isAndroid) {
+        const cleanUrl = url.replace(/^https?:\/\//, '').replace(/#.*$/, '');
+        const fallback = encodeURIComponent(url);
+        window.location.href = `intent://${cleanUrl}#Intent;scheme=https;package=com.alightcreative.motion;S.browser_fallback_url=${fallback};end`;
+      } else {
+        window.open(url, '_blank', 'noopener');
+      }
+    }
+
+    // ===== COPY =====
+    function copyText(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(() => toast('Link disalin')).catch(() => fallbackCopy(text));
+      } else fallbackCopy(text);
+    }
+    function fallbackCopy(text) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); toast('Tersalin'); } catch (e) { toast('Gagal menyalin'); }
+      document.body.removeChild(ta);
+    }
+
+    // ===== RENDER INBOX =====
+    function renderInbox(emails) {
+      inboxList.innerHTML = '';
+      if (!emails.length) {
+        inboxList.innerHTML = '<div class="mail-empty">Belum ada pesan masuk.<br>Tunggu 10 sampai 30 detik, lalu cek lagi.</div>';
+        inboxWrap.classList.remove('hidden');
+        return;
+      }
+
+      emails.forEach((m) => {
+        const links = m.links || [];
+        const card = document.createElement('div');
+        card.className = 'mail-item';
+
+        const timeStr = m.date instanceof Date
+          ? m.date.toLocaleString('id-ID', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })
+          : '-';
+
+        let html = `
+          <div class="mail-head">
+            <div class="mail-from">${escHtml(m.from)}</div>
+            <div class="mail-subject">${escHtml(m.subject)}</div>
+            <div class="mail-meta">${escHtml(timeStr)}</div>
+          </div>`;
+
+        if (links.length > 0) {
+          html += `<div class="mail-body"><div class="mail-label">LINK VERIFIKASI</div>`;
+          links.forEach((link) => {
+            html += `
+              <div class="mail-link">${escHtml(link)}</div>
+              <div class="mail-actions">
+                <button type="button" class="ib-btn" data-amv-act="copy" data-link="${escHtml(link)}">Salin</button>
+                <button type="button" class="ib-btn" data-amv-act="open" data-link="${escHtml(link)}">Buka</button>
+                <button type="button" class="ib-btn primary" data-amv-act="use" data-link="${escHtml(link)}">Pakai</button>
+              </div>`;
+          });
+          html += `</div>`;
+        } else {
+          html += `
+            <div class="mail-body">
+              <div class="mail-label">Link verifikasi belum ditemukan</div>
+              <button type="button" class="mail-retry" data-amv-act="refresh">Refresh inbox</button>
+            </div>`;
+        }
+        card.innerHTML = html;
+        inboxList.appendChild(card);
+      });
+
+      inboxWrap.classList.remove('hidden');
+    }
+
+    // ===== AKSI INBOX (pakai event delegation) =====
+    inboxList.addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-amv-act]');
+      if (!btn) return;
+      const act = btn.dataset.amvAct;
+      if (act === 'refresh') { handleCheckInbox(); return; }
+      const link = btn.dataset.link;
+      if (!link) return;
+      if (act === 'copy') copyText(link);
+      if (act === 'open') openAlightApp(link);
+      if (act === 'use') useLinkToActivate(link);
+    });
+
+    // ===== "PAKAI" → Kirim ke Tab Aktivasi =====
+    function useLinkToActivate(link) {
+      emailManual.value = currentEmail || '';
+      linkManual.value = link;
+      switchAmvTab('activate');
+      toast('Link siap diverifikasi');
+      setTimeout(() => verifyManual.focus(), 300);
+    }
+
+    // ===== TAB 1: GENERATE EMAIL =====
     genBtn.addEventListener('click', async () => {
       if (busyGen) return;
       busyGen = true;
-      const origText = genBtn.textContent;
       genBtn.disabled = true;
-      genBtn.textContent = '...';
+      genBtnText.textContent = '...';
       tClear();
 
       try {
@@ -3671,179 +3837,106 @@ header { position: relative; display: flex; align-items: center; justify-content
         const res = await fetch(`${MAIL_API}/list?recipient=${encodeURIComponent(user)}`);
         if (!res.ok) throw new Error('Gagal konek ke TempMail');
 
-        autoEmail = `${user}@akunlama.com`;
-        emailOutput.value = autoEmail;
+        currentEmail = `${user}@akunlama.com`;
+        emailOutput.value = currentEmail;
         mailbox.classList.remove('hidden');
-        sendAuto.disabled = false;
-        checkAuto.disabled = true;
-        tLine('✓ Email dibuat: ' + autoEmail, 'ok');
-        tLine('→ Klik "2. Kirim Magic Link"', 'muted');
+        checkInboxBtn.disabled = false;
+        tLine('✓ Email dibuat: ' + currentEmail, 'ok');
+        tLine('→ Klik "Cek Inbox" setelah kirim magic link', 'muted');
+        toast('Email dibuat');
       } catch (e) {
         tLine('✗ ' + e.message, 'err');
+        toast(e.message);
       } finally {
         busyGen = false;
         genBtn.disabled = false;
-        genBtn.textContent = origText;
+        genBtnText.textContent = 'Generate Email';
       }
     });
 
-    copyEmailBtn.addEventListener('click', async () => {
-      try {
-        await navigator.clipboard.writeText(emailOutput.value);
-        copyEmailBtn.textContent = 'Tersalin!';
-        setTimeout(() => { copyEmailBtn.textContent = 'Salin'; }, 1500);
-      } catch (e) {
-        copyEmailBtn.textContent = 'Gagal';
-        setTimeout(() => { copyEmailBtn.textContent = 'Salin'; }, 1500);
-      }
+    // ===== COPY EMAIL =====
+    copyEmailBtn.addEventListener('click', () => {
+      copyText(emailOutput.value);
+      copyEmailBtn.textContent = 'Tersalin!';
+      setTimeout(() => { copyEmailBtn.textContent = 'Salin'; }, 1500);
     });
 
-    // ============ AUTO: KIRIM LINK ============
-    sendAuto.addEventListener('click', async () => {
-      if (busySend || !autoEmail) return;
-      busySend = true;
-      sendAuto.disabled = true;
-      sendAutoText.textContent = 'Lagi kirim...';
-      tClear();
-      resetAnim();
-      tLine('> Kirim magic link ke ' + autoEmail, 'hi');
-      setStep(0);
-
-      const ctrl = new AbortController();
-      const timer = setTimeout(() => ctrl.abort(), TIMEOUT_SEND);
-      try {
-        const res = await fetch(API_SEND, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: autoEmail }),
-          signal: ctrl.signal
-        });
-        const j = await res.json().catch(() => null);
-        if (!j || !j.ok) {
-          const msg = (j && (j.error || j.message)) || ('HTTP ' + res.status);
-          throw new Error(msg);
-        }
-        markDone(0);
-        setStep(1);
-        tLine('✓ Magic link terkirim', 'ok');
-        tLine('→ Klik "3. Cek Inbox & Aktifkan"', 'muted');
-        checkAuto.disabled = false;
-      } catch (err) {
-        markErr(0);
-        if (err.name === 'AbortError') tLine('✗ timeout kirim', 'err');
-        else tLine('✗ ' + err.message, 'err');
-      } finally {
-        clearTimeout(timer);
-        busySend = false;
-        sendAuto.disabled = false;
-        sendAutoText.textContent = '2. Kirim Magic Link';
-      }
-    });
-
-    // ============ AUTO: CEK INBOX & VERIF ============
-    checkAuto.addEventListener('click', async () => {
-      if (busyVerify || !autoEmail) return;
-      busyVerify = true;
-      checkAuto.disabled = true;
-      checkAutoText.textContent = 'Cek inbox...';
-      resetAnim();
-      setStep(1);
-      tLine('> Cek inbox ' + autoEmail, 'hi');
+    // ===== CEK INBOX =====
+    async function handleCheckInbox() {
+      if (!currentEmail) { toast('Generate email dulu'); return; }
+      checkInboxBtn.disabled = true;
+      checkInboxText.textContent = 'Cek...';
 
       try {
-        const user = autoEmail.split('@')[0];
-        let magicLink = null;
+        const user = currentEmail.split('@')[0];
+        const res = await fetch(`${MAIL_API}/list?recipient=${encodeURIComponent(user)}`);
+        const data = await res.json().catch(() => null);
+        const messages = (data && (data.data || data.messages || (Array.isArray(data) ? data : []))) || [];
 
-        for (let attempt = 1; attempt <= 8; attempt++) {
-          tLine('→ percobaan ' + attempt + '/8...', 'muted');
-          const res = await fetch(`${MAIL_API}/list?recipient=${encodeURIComponent(user)}`);
-          const data = await res.json().catch(() => null);
-          const messages = (data && (data.data || data.messages || (Array.isArray(data) ? data : []))) || [];
+        const emails = [];
+        for (const msg of messages) {
+          let html = typeof msg.message === 'string' ? msg.message : (msg.message ? JSON.stringify(msg.message) : '');
+          const st = msg.storage;
+          const key = (typeof st === 'string' ? st : (st && (st.key || st.id || st.storageKey))) || msg.storageKey || msg.key || msg.id || null;
 
-          if (messages.length > 0) {
-            for (const msg of messages) {
-              let html = typeof msg.message === 'string' ? msg.message : (msg.message ? JSON.stringify(msg.message) : '');
-              const st = msg.storage;
-              const key = (typeof st === 'string' ? st : (st && (st.key || st.id || st.storageKey))) || msg.storageKey || msg.key || msg.id || null;
-
-              let links = extractLinksFromHtml(html);
-              if (links.length === 0 && key) {
-                try {
-                  const r = await fetch(`${MAIL_API}/getHtml?region=us&key=${encodeURIComponent(key)}`);
-                  const t = await r.text();
-                  if (t) links = extractLinksFromHtml(t + '\n' + html);
-                } catch (e) {}
-              }
-              if (links.length === 0 && key) {
-                try {
-                  const r = await fetch(`${MAIL_API}/getKey?region=us&key=${encodeURIComponent(key)}`);
-                  const t = await r.text();
-                  if (t) links = extractLinksFromHtml(t + '\n' + html);
-                } catch (e) {}
-              }
-              if (links.length > 0) { magicLink = links[0]; break; }
-            }
-            if (magicLink) break;
+          let links = extractLinksFromHtml(html);
+          if (links.length === 0 && key) {
+            try {
+              const r = await fetch(`${MAIL_API}/getHtml?region=us&key=${encodeURIComponent(key)}`);
+              const tt = await r.text();
+              if (tt) links = extractLinksFromHtml(tt + '\n' + html);
+            } catch (e) {}
           }
-          await new Promise(r => setTimeout(r, 3000));
+          if (links.length === 0 && key) {
+            try {
+              const r = await fetch(`${MAIL_API}/getKey?region=us&key=${encodeURIComponent(key)}`);
+              const tt = await r.text();
+              if (tt) links = extractLinksFromHtml(tt + '\n' + html);
+            } catch (e) {}
+          }
+
+          emails.push({
+            subject: (msg.message && msg.message.headers && msg.message.headers.subject) || msg.subject || msg.title || 'Tanpa subjek',
+            from: (msg.message && msg.message.headers && msg.message.headers.from) || msg.from || 'Tidak diketahui',
+            date: msg.timestamp ? new Date(msg.timestamp * 1000) : (msg.date || new Date()),
+            links
+          });
         }
 
-        if (!magicLink) throw new Error('Link belum masuk. Tunggu 10-30 detik, coba lagi.');
+        renderInbox(emails);
+        if (emails.some(m => m.links.length > 0)) toast('Link verifikasi ketemu');
+        else if (emails.length === 0) toast('Inbox kosong');
+        else toast('Belum ada link');
 
-        markDone(1);
-        setStep(2);
-        tLine('✓ Link ketemu', 'ok');
-        tLine('> Verifikasi...', 'muted');
-
-        const vres = await fetch(API_VERIFY, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: autoEmail, magicLink })
-        });
-        const vdata = await vres.json().catch(() => null);
-        if (!vdata || !vdata.ok) {
-          const msg = (vdata && (vdata.error || vdata.message)) || ('HTTP ' + vres.status);
-          throw new Error(msg);
-        }
-
-        const r = vdata.data && vdata.data.result ? vdata.data.result : (vdata.data || vdata);
-        finishSuccess();
-        accIdx.textContent = '✓ Done';
-
-        tLine('✓ Premium aktif!', 'ok');
-        tLine('→ Email : ' + autoEmail, 'ok');
-        if (r.uid) tLine('→ UID   : ' + r.uid, 'muted');
-        if (r.orderId) tLine('→ Order : ' + r.orderId, 'muted');
-        if (r.validUntil) tLine('→ s/d   : ' + r.validUntil, 'muted');
-
-        const item = document.createElement('div');
-        item.className = 'am-item';
-        const label = document.createElement('div');
-        label.className = 'am-label';
-        label.textContent = autoEmail;
-        const sub = document.createElement('small');
-        const bits = [];
-        if (r.uid) bits.push('uid ' + r.uid);
-        if (r.orderId) bits.push('order ' + r.orderId);
-        if (r.validUntil) bits.push('s/d ' + r.validUntil);
-        sub.textContent = bits.join(' · ') || 'VIP Pro aktif';
-        label.appendChild(sub);
-        item.appendChild(label);
-        listBox.appendChild(item);
-
-        summary.innerHTML = '<b>Premium aktif!</b> Email: <b>' + autoEmail + '</b>';
-        resultBox.classList.remove('hidden');
-        checkAuto.disabled = true;
-      } catch (err) {
-        markErr(2);
-        tLine('✗ ' + err.message, 'err');
+      } catch (e) {
+        toast('Gagal cek inbox: ' + e.message);
+        inboxList.innerHTML = `<div class="mail-empty">Gagal: ${escHtml(e.message)}</div>`;
+        inboxWrap.classList.remove('hidden');
       } finally {
-        busyVerify = false;
-        checkAutoText.textContent = '3. Cek Inbox & Aktifkan';
+        checkInboxBtn.disabled = false;
+        checkInboxText.textContent = 'Cek Inbox';
       }
-    });
+    }
+    checkInboxBtn.addEventListener('click', handleCheckInbox);
 
-    // ============ MANUAL: KIRIM ============
+    // ===== AUTO REFRESH =====
+    function toggleAmvAutoRefresh() {
+      if (autoInterval) {
+        clearInterval(autoInterval);
+        autoInterval = null;
+        autoStatus.textContent = 'idle';
+        toast('Auto refresh mati');
+        return;
+      }
+      if (!currentEmail) { toast('Generate email dulu'); return; }
+      autoStatus.textContent = 'auto aktif (5 detik)';
+      toast('Auto refresh aktif');
+      autoInterval = setInterval(handleCheckInbox, 5000);
+      handleCheckInbox();
+    }
+    window.toggleAmvAutoRefresh = toggleAmvAutoRefresh;
+
+    // ===== TAB 2: KIRIM MAGIC LINK =====
     sendManual.addEventListener('click', async () => {
       if (busySend) return;
       const email = emailManual.value.trim();
@@ -3888,7 +3981,7 @@ header { position: relative; display: flex; align-items: center; justify-content
       }
     });
 
-    // ============ MANUAL: VERIF ============
+    // ===== TAB 2: VERIFIKASI =====
     verifyManual.addEventListener('click', async () => {
       if (busyVerify) return;
       const email = emailManual.value.trim();
@@ -3931,6 +4024,7 @@ header { position: relative; display: flex; align-items: center; justify-content
         if (r.orderId) tLine('→ Order : ' + r.orderId, 'muted');
         if (r.validUntil) tLine('→ s/d   : ' + r.validUntil, 'muted');
 
+        listBox.innerHTML = '';
         const item = document.createElement('div');
         item.className = 'am-item';
         const label = document.createElement('div');
@@ -3960,6 +4054,7 @@ header { position: relative; display: flex; align-items: center; justify-content
       }
     });
   })();
+
 
   /* ================= 9. SPLASH ================= */
   (function initSplash() {
