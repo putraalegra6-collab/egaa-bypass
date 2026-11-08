@@ -1,6 +1,9 @@
-// Alight Motion Preset (proxy TikTok) + Premium Activator (am-premiumms.ai.studio)
+// Alight Motion Preset (proxy TikTok) + Premium Verifier (send-link / verify-link)
 // Creator: IzzXd — diadaptasi untuk EgaaBypass
 // Satu file biar gak kena limit 12 function Hobby.
+const CREATOR = 'IzzXd';
+const SALURAN = 'https://whatsapp.com/channel/0029VbDyL6d9RZAh3JjEM325';
+
 module.exports = async (req, res) => {
   if (req.method !== 'POST' && req.method !== 'GET') {
     return res.status(405).json({ ok: false, error: 'method tidak diizinkan' });
@@ -14,13 +17,17 @@ module.exports = async (req, res) => {
 
   const action = String((req.query || {}).action || '').toLowerCase();
 
-  // ===== MODE AUTO ACTIVATE =====
-  if (action === 'activate') {
+  // ===== MODE 1: KIRIM MAGIC LINK =====
+  if (action === 'send-link') {
+    const email = String(body.email || '').trim();
+    if (!email || !email.includes('@') || !email.includes('.')) {
+      return res.status(400).json({ ok: false, error: 'format email tidak valid' });
+    }
     try {
-      const { autoActivate } = require('../lib/am-premium');
-      const result = await autoActivate();
+      const { sendLink } = require('../lib/am-premium');
+      const result = await sendLink(email);
       if (!result || !result.status) {
-        return res.status(502).json({ ok: false, error: (result && result.error) || 'gagal aktivasi premium' });
+        return res.status(502).json({ ok: false, error: (result && result.error) || 'gagal kirim magic link' });
       }
       return res.status(200).json({ ok: true, data: result });
     } catch (e) {
@@ -28,7 +35,25 @@ module.exports = async (req, res) => {
     }
   }
 
-  // ===== MODE STATS =====
+  // ===== MODE 2: VERIFIKASI MAGIC LINK =====
+  if (action === 'verify-link') {
+    const email = String(body.email || '').trim();
+    const magicLink = String(body.magicLink || '').trim();
+    if (!email) return res.status(400).json({ ok: false, error: 'email wajib diisi' });
+    if (!magicLink) return res.status(400).json({ ok: false, error: 'magic link wajib diisi' });
+    try {
+      const { verifyLink } = require('../lib/am-premium');
+      const result = await verifyLink(email, magicLink);
+      if (!result || !result.status) {
+        return res.status(502).json({ ok: false, error: (result && result.error) || 'verifikasi gagal' });
+      }
+      return res.status(200).json({ ok: true, data: result });
+    } catch (e) {
+      return res.status(500).json({ ok: false, error: e.message || 'internal error' });
+    }
+  }
+
+  // ===== MODE 3: STATS (opsional) =====
   if (action === 'stats') {
     try {
       const { getStats } = require('../lib/am-premium');
@@ -42,14 +67,13 @@ module.exports = async (req, res) => {
     }
   }
 
-  // ===== MODE PRESET TIKTOK (default) =====
+  // ===== MODE 4: PRESET TIKTOK (default) =====
   if (req.method !== 'POST') {
     return res.status(405).json({ ok: false, error: 'method tidak diizinkan' });
   }
 
   try {
     const { url } = body;
-
     let host = '';
     try { host = new URL(url).hostname; } catch {}
     if (!/^https?:\/\//i.test(url || '') || !/(^|\.)tiktok\.com$/i.test(host)) {
