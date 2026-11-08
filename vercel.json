@@ -10,7 +10,8 @@
     "api/hd-ai.js": { "maxDuration": 60 },
     "api/hd-upscale.js": { "maxDuration": 60 },
     "api/am-preset.js": { "maxDuration": 60 },
-    "api/check.js": { "maxDuration": 10 }
+    "api/check.js": { "maxDuration": 10 },
+    "api/weather.js": { "maxDuration": 10 }
   },
   "rewrites": [
     {
